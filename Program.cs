@@ -2,7 +2,11 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static string currentLevel = "levelOne";
+        static int x = 60;
+        static int y = 14;
+
+        static void Main()
         {
             GameIntro();
 
@@ -212,6 +216,10 @@
                 PlayerInventory(inventoryPosition);
                 Console.BackgroundColor = ConsoleColor.Black;
 
+                //Draws the map to the screen
+                SpawnRoom(currentLevel);
+
+                // Draw the player on top of the map
                 Console.SetCursorPosition(x, y);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("X");
@@ -264,9 +272,53 @@
                         break;
                 }
 
+                //If player walks through the door, spawn next map
+                if (x >= 115 || x<= 2 || y >= 17 || y <= 3)
+                {
+                    currentLevel = "levelTwo";
+
+                    //Horizontal transitions 
+                    if (x >= 115)
+                    {
+                        x = 2; //left room to right - spawn on the left edge
+                    }
+                    else if (x <= 2)
+                    {
+                        x = 115; //left room to left - spawn on the right edge
+                    }
+
+                    // Vertical transitions
+                    else if (y >= 16)
+                    {
+                        y = 3;   //Moved up out of the room - spawn at the bottom edge
+                    }
+                    else if (y <= 2)
+                    {
+                        y = 16;  //Moved down out of the room - spawn at the top edge
+                    }
+                }
+
                 //clear the screen to prevent trailing
                 Console.Clear();
             }
+        }
+
+        static void SpawnRoom(string nextLevel)
+        {
+            currentLevel = nextLevel;
+
+            string filePath = $"Assets/{currentLevel}.txt";
+
+            if (File.Exists(filePath))
+            {
+                string levelContents = File.ReadAllText(filePath);
+                Console.WriteLine($"\n{levelContents}");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
+            }
+
         }
     }
 }

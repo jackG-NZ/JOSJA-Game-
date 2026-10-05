@@ -3,8 +3,6 @@
     internal class Program
     {
         static string currentLevel = "levelOne";
-        static int x = 60;
-        static int y = 14;
 
         static void Main()
         {
@@ -24,7 +22,7 @@
 
             char skipDialogue = 'n'; //set this to n, so if the user enters nothing it assumes they don't want to skip the intro dialogue
 
-            Console.SetCursorPosition(24, 14);
+            Console.SetCursorPosition(23, 14);
             Console.WriteLine("JOSJA Game Prototype. WORKS BEST IN WINDOWED MODE. Press [ENTER] to proceed.");
             Console.ReadLine();
             Console.Clear();
@@ -180,7 +178,7 @@
                 [5] = "Item Five"
             };
 
-            Console.Write($"Currently Equipped [{position}]: {inventory[position]}");
+            Console.Write($" Currently Equipped [{position}]: {inventory[position]}");
         }
 
         static void PlayerMovement()
@@ -199,9 +197,9 @@
             {
                 //this big block is for all of the information at the top of the screen
                 Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"==== Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help ====");
+                Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.");
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($"X:{x:D2} Y:{y:D2} | ");
+                Console.WriteLine($"X:{x:D3} Y:{y:D2} | ");
                 Console.SetCursorPosition(12, 1);
                 PlayerInventory(inventoryPosition);
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -229,16 +227,28 @@
                 switch (movement)
                 {
                     case 'w':
-                        y -= 1;
+                        if(y > 4)
+                        {
+                            y -= 1;
+                        }
                         break;
                     case 'a':
-                        x -= 1;
+                        if(x > 4)
+                        {
+                            x -= 1;
+                        }
                         break;
                     case 's':
-                        y += 1;
+                        if(y < 18)
+                        {
+                            y += 1;
+                        }
                         break;
                     case 'd':
-                        x += 1;
+                        if(x < 111)
+                        {
+                            x += 1;
+                        }
                         break;
                     case 'e':
                         isMoving = false;
@@ -262,35 +272,55 @@
                         break;
                 }
 
-                //If player walks through the door, spawn next map
-                if (x >= 115 || x<= 2 || y >= 17 || y <= 3)
-                {
-                    currentLevel = "levelTwo";
+                int[] positions = CheckRoom(x, y);
 
-                    //Horizontal transitions 
-                    if (x >= 115)
-                    {
-                        x = 2; //left room to right - spawn on the left edge
-                    }
-                    else if (x <= 2)
-                    {
-                        x = 115; //left room to left - spawn on the right edge
-                    }
-
-                    // Vertical transitions
-                    else if (y >= 16)
-                    {
-                        y = 3;   //Moved up out of the room - spawn at the bottom edge
-                    }
-                    else if (y <= 2)
-                    {
-                        y = 16;  //Moved down out of the room - spawn at the top edge
-                    }
-                }
+                x = positions[0];
+                y = positions[1];
 
                 //clear the screen to prevent trailing
                 Console.Clear();
             }
+        }
+
+        static int[] CheckRoom(int x, int y)
+        {
+            if (currentLevel == "levelOne")
+            {
+                if (x == 4 && y == 8)
+                {
+                    currentLevel = "levelTwo";
+
+                    return new [] { 108, 8 };
+                }
+                else if (x == 111 && y == 13)
+                {
+                    currentLevel = "levelThree";
+
+                    return new [] { 6, 13 };
+                }
+            }
+
+            if (currentLevel == "levelTwo")
+            {
+                if (x == 109 && y == 8)
+                {
+                    currentLevel = "levelOne";
+
+                    return new [] { 5, 8 };
+                }
+            }
+
+            if (currentLevel == "levelThree")
+            {
+                if (x == 5 && y == 13)
+                {
+                    currentLevel = "levelOne";
+
+                    return new [] { 110, 13 };
+                }
+            }
+
+            return new [] { x, y };
         }
 
         static void SpawnRoom(string nextLevel)
@@ -299,8 +329,21 @@
 
             string filePath = $"Assets/{currentLevel}.txt";
 
+            //this dictionary just gives each level a nice name
+            Dictionary<string, string> RoomNames = new Dictionary<string, string>()
+            {
+                { "levelOne", "Main Chamber"},
+                { "levelTwo", "Left Room"},
+                { "levelThree", "Right Room"},
+            };
+
             if (File.Exists(filePath))
             {
+                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                Console.WriteLine($" | Room: {RoomNames[currentLevel]}");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Gray;
+
                 string levelContents = File.ReadAllText(filePath);
                 Console.WriteLine($"\n{levelContents}");
             }

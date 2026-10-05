@@ -24,12 +24,12 @@
 
             char skipDialogue = 'n'; //set this to n, so if the user enters nothing it assumes they don't want to skip the intro dialogue
 
-            Console.SetCursorPosition(23, 14);
+            Console.SetCursorPosition(24, 14);
             Console.WriteLine("JOSJA Game Prototype. WORKS BEST IN WINDOWED MODE. Press [ENTER] to proceed.");
             Console.ReadLine();
             Console.Clear();
 
-            Console.SetCursorPosition(34, 14);
+            Console.SetCursorPosition(35, 14);
             Console.WriteLine("Would you like to skip the opening dialogue? (y|n): ");
             string input = Console.ReadLine().ToLower();
 
@@ -71,11 +71,6 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(49, 14);
-            Console.WriteLine("All you need to know is...");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear();
-
             Console.SetCursorPosition(55, 14);
             Console.WriteLine("You are");
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -90,7 +85,7 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(34, 14);
+            Console.SetCursorPosition(35, 14);
             Console.WriteLine("But not to worry. Let's start with something simple...");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
@@ -114,13 +109,8 @@
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.SetCursorPosition(54, 14);
-            Console.WriteLine($"Ahh... {playerName}.");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear();
-
-            Console.SetCursorPosition(32, 14);
-            Console.WriteLine($"Well, {playerName}, you're probably wondering why you are here...");
+            Console.SetCursorPosition(33, 14);
+            Console.WriteLine($"Well, {playerName}, you're probably wondering why you're here...");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
@@ -129,18 +119,18 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(27, 14);
-            Console.WriteLine("This is a place of punishment. A place where freedom has no meaning.");
+            Console.SetCursorPosition(46, 14);
+            Console.WriteLine("This is a place of punishment.");
+            Thread.Sleep(dialogueTimer);
+            Console.Clear();
+
+            Console.SetCursorPosition(24, 14);
+            Console.WriteLine("You must have done something truly sinister in your past life to end up here.");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
             Console.SetCursorPosition(23, 14);
-            Console.WriteLine("You must have done something truly sinister in your past life, to end up here.");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear();
-
-            Console.SetCursorPosition(27, 14);
-            Console.WriteLine("With that being said, I would like to offer you a chance at freedom...");
+            Console.WriteLine("With that being said, I would like to offer you a final chance at freedom...");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
@@ -149,8 +139,8 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(35, 14);
-            Console.WriteLine("And I will return you to place from which you came.");
+            Console.SetCursorPosition(33, 14);
+            Console.WriteLine("And I will return you to the place from which you came.");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 

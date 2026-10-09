@@ -424,6 +424,8 @@
                 {
                     Console.WriteLine("Aborted!");
                 }
+                Console.WriteLine("Press [Enter] to continue (or close the window to exit)");
+                Console.ReadLine();
             }
         }
     }

@@ -69,10 +69,10 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(55, 14);
+            Console.SetCursorPosition(54, 14);
             Console.WriteLine("You are");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.SetCursorPosition(63, 14);
+            Console.SetCursorPosition(62, 14);
             Console.WriteLine("dead.");
             Console.ForegroundColor = ConsoleColor.Red;
             Thread.Sleep(dialogueTimer);
@@ -272,6 +272,7 @@
                         break;
                 }
 
+                //the CheckRoom method returns the x, y coordinates of the starting point for each room
                 int[] positions = CheckRoom(x, y);
 
                 x = positions[0];
@@ -284,6 +285,9 @@
 
         static int[] CheckRoom(int x, int y)
         {
+            /*EXPLANATION: This method checks what room the player is in and their current position. If they reach the x,y coordinates of a doorway, the room changes
+            and returns the starting x, y coordinates of the new room in an integer array*/
+
             if (currentLevel == "levelOne")
             {
                 if (x == 4 && y == 8)
@@ -325,6 +329,8 @@
 
         static void SpawnRoom(string nextLevel)
         {
+            /*EXPLANATION: This method handles the printing of each room to the screen*/
+
             currentLevel = nextLevel;
 
             string filePath = $"Assets/{currentLevel}.txt";

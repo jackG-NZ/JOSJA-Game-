@@ -341,6 +341,8 @@
                 { "levelOne", "Main Chamber"},
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
+                { "levelFour", "Cell" }, //CHANGE ONCE IN GAME
+                { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
             };
 
             if (File.Exists(filePath))

@@ -3,6 +3,7 @@
     internal class Program
     {
         static string currentLevel = "levelOne";
+        static int x = 60, y = 14, inventoryPosition = 1;             //center position while windowed is 60, 14
 
         static void Main()
         {
@@ -27,6 +28,9 @@
             Console.ReadLine();
             Console.Clear();
 
+            if (MainMenu()) 
+                return; // continuing a save skips the intro
+
             Console.SetCursorPosition(35, 14);
             Console.WriteLine("Would you like to skip the opening dialogue? (y|n): ");
             string input = Console.ReadLine().ToLower();
@@ -43,6 +47,26 @@
             {
                 IntroDialogue(); //COMMENT OUT THIS METHOD TO SKIP THE INTRO DIALOGUE
             }
+        }
+
+        static bool MainMenu()
+        {
+            Console.SetCursorPosition(35, 13);
+            Console.WriteLine("1. Continue");
+            Console.SetCursorPosition(35, 14);
+            Console.WriteLine("2. New Game");
+            Console.SetCursorPosition(35, 16);
+            Console.Write("Choose (1|2): ");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+
+            if (choice == 1)
+            {
+                SaveAndLoad(true);
+                return true;
+            }
+            return false;
         }
 
         static void IntroDialogue()
@@ -178,16 +202,13 @@
                 [5] = "Item Five"
             };
 
-            Console.Write($" Currently Equipped [{position}]: {inventory[position]}");
+            Console.Write($"\nCurrently Equipped [{position}]: {inventory[position]}");
         }
 
         static void PlayerMovement()
         {
             /*EXPLANATION: This method is a simple WASD movement system. It continuously checks for user input and changes their position accordingly
             TODO: Prevent the game from crashing if the cursor is moved outside of the window (consider the boundaries of the map)*/
-
-            //center position while windowed is 60, 14
-            int x = 60, y = 14, inventoryPosition = 1;
 
             char movement = 'z';
 
@@ -197,7 +218,7 @@
             {
                 //this big block is for all of the information at the top of the screen
                 Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.");
+                Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress.");
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"X:{x:D3} Y:{y:D2} | ");
                 Console.SetCursorPosition(12, 1);
@@ -267,6 +288,9 @@
                         {
                             inventoryPosition += 1;
                         }
+                        break;
+                    case 'p':
+                        SaveAndLoad(false);
                         break;
                     default:
                         break;
@@ -353,13 +377,54 @@
                 Console.ForegroundColor = ConsoleColor.Gray;
 
                 string levelContents = File.ReadAllText(filePath);
-                Console.WriteLine($"\n{levelContents}");
+                Console.WriteLine($"{levelContents}");
             }
             else
             {
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
+        }
+
+        static void SaveAndLoad(bool load)
+        {
+            const string saveFolder = "PlayerData";
+            string savePath = Path.Combine(saveFolder, "save.txt");
+
+            if (load)
+            {
+                if (!File.Exists(savePath)) return;
+
+                StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
+                currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
+                x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     //^
+                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));     //^ 
+                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     //^
+                reader.Close();     //close reader
+            }
+            else
+            {
+                Console.WriteLine("Are you sure you want to overwrite save file? [y/n]");
+                string temp = Console.ReadLine().ToLower();
+
+                if (temp == "y")
+                {
+                    Directory.CreateDirectory(saveFolder);
+
+                    string saveContents =
+                        "Level = " + currentLevel + "\n" +
+                        "X = " + x + "\n" +
+                        "Y = " + y + "\n" +
+                        "Inventory = " + inventoryPosition;
+
+                    File.WriteAllText(savePath, saveContents);
+                    Console.WriteLine("Saved!");
+                }
+                else
+                {
+                    Console.WriteLine("Aborted!");
+                }
+            }
         }
     }
 }

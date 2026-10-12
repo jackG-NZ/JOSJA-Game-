@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
+        static string currentLevel = "enemyEncounter";
         static int x = 60, y = 14, inventoryPosition = 1;             //center position while windowed is 60, 14
 
         static void Main()
@@ -213,7 +213,17 @@
 
             char movement = 'z';
 
-            bool isMoving = true;
+            bool isFighting = false;
+            bool isMoving = false;
+
+            if (currentLevel == "enemyEncounter")
+            {
+                isFighting = true;
+            }
+            else
+            {
+                isMoving = true;
+            }
 
             while (isMoving)
             {
@@ -274,6 +284,71 @@
                         break;
                     case 'e':
                         isMoving = false;
+                        break;
+                    case 'h':
+                        PlayerHelp();
+                        break;
+                    case '-':
+                        if (inventoryPosition > 1)
+                        {
+                            inventoryPosition -= 1;
+                        }
+                        break;
+                    case '=':
+                        if (inventoryPosition < 5)
+                        {
+                            inventoryPosition += 1;
+                        }
+                        break;
+                    case 'p':
+                        SaveAndLoad(false);
+                        break;
+                    default:
+                        break;
+                }
+
+                //the CheckRoom method returns the x, y coordinates of the starting point for each room
+                int[] positions = CheckRoom(x, y);
+
+                x = positions[0];
+                y = positions[1];
+
+                //clear the screen to prevent trailing
+                Console.Clear();
+            }
+
+            while (isFighting)
+            {
+                //this big block is for all of the information at the top of the screen
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($" -@-  Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress. ");
+                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                Console.SetCursorPosition(27, 1);
+                PlayerInventory(inventoryPosition);
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                //Draws the map to the screen
+                SpawnRoom(currentLevel);
+
+                //Draws the input options 
+                Console.SetCursorPosition(21, 21);
+                Console.Write("Fight");
+
+                //this block of code handles user input
+                Console.SetCursorPosition(0, 27);
+                Console.Write("Input: ");
+                string input = Console.ReadLine().ToLower();
+
+                //this if statement prevents a crash from happening if the user inputs nothing
+                if (input.Length > 0)
+                {
+                    movement = Convert.ToChar(input.Substring(0, 1));
+                }
+
+                switch (movement)
+                {
+                    case 'e':
+                        isFighting = false;
                         break;
                     case 'h':
                         PlayerHelp();

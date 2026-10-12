@@ -204,7 +204,7 @@
                 [5] = "Item Five"
             };
 
-            Console.Write($"\nCurrently Equipped [{position}]: {inventory[position]}");
+            Console.Write($"Currently Equipped [{position}]: {inventory[position]}");
         }
 
         static void PlayerMovement()
@@ -219,10 +219,10 @@
             {
                 //this big block is for all of the information at the top of the screen
                 Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress.");
+                Console.Write($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress. ");
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($"X:{x:D3} Y:{y:D2} | ");
-                Console.SetCursorPosition(12, 1);
+                Console.Write($"X:{x:D3} Y:{y:D2} | ");
+                Console.SetCursorPosition(40, 1);
                 PlayerInventory(inventoryPosition);
                 Console.BackgroundColor = ConsoleColor.Black;
 
@@ -249,7 +249,7 @@
                 switch (movement)
                 {
                     case 'w':
-                        if(y > 4)
+                        if(y > 3)
                         {
                             y -= 1;
                         }
@@ -261,7 +261,7 @@
                         }
                         break;
                     case 's':
-                        if(y < 18)
+                        if(y < 17)
                         {
                             y += 1;
                         }
@@ -315,37 +315,53 @@
 
             if (currentLevel == "levelOne")
             {
-                if (x == 4 && y == 8)
+                if (x == 4 && y == 7)
                 {
                     currentLevel = "levelTwo";
 
-                    return new [] { 108, 8 };
+                    return new [] { 108, 7 };
                 }
-                else if (x == 111 && y == 13)
+                else if (x == 111 && y == 12)
                 {
                     currentLevel = "levelThree";
 
-                    return new [] { 6, 13 };
+                    return new [] { 6, 12 };
                 }
             }
 
             if (currentLevel == "levelTwo")
             {
-                if (x == 109 && y == 8)
+                if (x == 109 && y == 7)
                 {
                     currentLevel = "levelOne";
 
-                    return new [] { 5, 8 };
+                    return new [] { 5, 7 };
+                }
+                else if (x == 54 && y == 17)
+                {
+                    currentLevel = "levelFour";
+
+                    return new[] { 54, 4 };
                 }
             }
 
             if (currentLevel == "levelThree")
             {
-                if (x == 5 && y == 13)
+                if (x == 5 && y == 12)
                 {
                     currentLevel = "levelOne";
 
-                    return new [] { 110, 13 };
+                    return new [] { 110, 12 };
+                }
+            }
+
+            if (currentLevel == "levelFour")
+            {
+                if (x == 54 && y == 3)
+                {
+                    currentLevel = "levelTwo";
+
+                    return new[] { 54, 16 };  
                 }
             }
 
@@ -366,9 +382,8 @@
                 { "levelOne", "Main Chamber"},
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
-                { "levelFour", "Cell" }, //CHANGE ONCE IN GAME
-                { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
-
+                { "levelFour", "Left Storage Room" }, //CHANGE ONCE IN GAME
+                { "levelFive", "Cell" } //CHANGE ONCE IN GAME
                 { "enemyEncounter", "BATTLE" },
             };
 
@@ -401,7 +416,7 @@
                 StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
-                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));      
+                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));     
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     
                 reader.Close();     //close reader
             }
@@ -430,6 +445,16 @@
                 Console.WriteLine("Press [Enter] to continue (or close the window to exit)");
                 Console.ReadLine();
             }
+        }
+
+        public void Items()
+        {
+            Dictionary<int, string> Items = new Dictionary<int, string>()
+            {
+                [1] = "Key",
+                [2] = "Healing Salve",
+                [3] = "Wooden s",
+            };
         }
     }
 }

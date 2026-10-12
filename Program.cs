@@ -204,7 +204,7 @@
                 [5] = "Item Five"
             };
 
-            Console.Write($"\nCurrently Equipped [{position}]: {inventory[position]}");
+            Console.Write($"Currently Equipped [{position}]: {inventory[position]}");
         }
 
         static void PlayerMovement()
@@ -219,10 +219,10 @@
             {
                 //this big block is for all of the information at the top of the screen
                 Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress.");
+                Console.Write($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress. ");
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($"X:{x:D3} Y:{y:D2} | ");
-                Console.SetCursorPosition(12, 1);
+                Console.Write($"X:{x:D3} Y:{y:D2} | ");
+                Console.SetCursorPosition(40, 1);
                 PlayerInventory(inventoryPosition);
                 Console.BackgroundColor = ConsoleColor.Black;
 
@@ -315,37 +315,43 @@
 
             if (currentLevel == "levelOne")
             {
-                if (x == 4 && y == 8)
+                if (x == 4 && y == 7)
                 {
                     currentLevel = "levelTwo";
 
-                    return new [] { 108, 8 };
+                    return new [] { 108, 7 };
                 }
-                else if (x == 111 && y == 13)
+                else if (x == 111 && y == 12)
                 {
                     currentLevel = "levelThree";
 
-                    return new [] { 6, 13 };
+                    return new [] { 6, 12 };
                 }
             }
 
             if (currentLevel == "levelTwo")
             {
-                if (x == 109 && y == 8)
+                if (x == 109 && y == 7)
                 {
                     currentLevel = "levelOne";
 
-                    return new [] { 5, 8 };
+                    return new [] { 5, 7 };
+                }
+                else if (x == 54 && y == 17)
+                {
+                    currentLevel = "levelFour";
+
+                    return new[] { 54, 2 };
                 }
             }
 
             if (currentLevel == "levelThree")
             {
-                if (x == 5 && y == 13)
+                if (x == 5 && y == 12)
                 {
                     currentLevel = "levelOne";
 
-                    return new [] { 110, 13 };
+                    return new [] { 110, 12 };
                 }
             }
 

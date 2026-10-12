@@ -51,6 +51,8 @@
 
         static bool MainMenu()
         {
+            /*EXPLANATION: This method gives the player a choice to start a new game or continue from their save file*/
+
             Console.SetCursorPosition(35, 13);
             Console.WriteLine("1. Continue");
             Console.SetCursorPosition(35, 14);
@@ -207,8 +209,7 @@
 
         static void PlayerMovement()
         {
-            /*EXPLANATION: This method is a simple WASD movement system. It continuously checks for user input and changes their position accordingly
-            TODO: Prevent the game from crashing if the cursor is moved outside of the window (consider the boundaries of the map)*/
+            /*EXPLANATION: This method is a simple WASD movement system. It continuously checks for user input and changes their position accordingly*/
 
             char movement = 'z';
 
@@ -397,9 +398,9 @@
 
                 StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
-                x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     //^
-                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));     //^ 
-                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     //^
+                x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
+                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));      
+                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     
                 reader.Close();     //close reader
             }
             else

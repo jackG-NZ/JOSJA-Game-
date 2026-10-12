@@ -457,8 +457,8 @@
                 { "levelOne", "Main Chamber"},
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
-                { "levelFour", "Left Storage Room" }, //CHANGE ONCE IN GAME
-                { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
+                { "levelFour", "Left Storage Room" },
+                { "levelFive", "Cell" },
                 { "enemyEncounter", "BATTLE" },
             };
 
@@ -526,9 +526,28 @@
         {
             Dictionary<int, string> Items = new Dictionary<int, string>()
             {
+                // Items
                 [1] = "Key",
-                [2] = "Healing Salve",
-                [3] = "Wooden s",
+                [2] = "Crystal Shard",
+                [3] = "Wooden Sword",
+                [4] = "Iron Sword",
+                [5] = "Diamond Sword",
+
+                // Foods
+                [6] = "Dungeon Berries",
+                [7] = "Raw Meet",
+                [8] = "Cooked Meat",
+
+                // Consumables
+                [9] = "Healing Salve",
+                [10] = "Antidote",
+                [11] = "Poison Bottle",
+
+                // Ingredients
+                [12] = "Cave Moss",
+                [13] = "Spider Fang",
+                [14] = "Stone",
+                [15] = "Slime",
             };
         }
     }

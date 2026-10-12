@@ -368,6 +368,8 @@
                 { "levelThree", "Right Room"},
                 { "levelFour", "Cell" }, //CHANGE ONCE IN GAME
                 { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
+
+                { "enemyEncounter", "BATTLE" },
             };
 
             if (File.Exists(filePath))

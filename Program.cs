@@ -249,7 +249,7 @@
                 switch (movement)
                 {
                     case 'w':
-                        if(y > 4)
+                        if(y > 3)
                         {
                             y -= 1;
                         }
@@ -261,7 +261,7 @@
                         }
                         break;
                     case 's':
-                        if(y < 18)
+                        if(y < 17)
                         {
                             y += 1;
                         }
@@ -341,7 +341,7 @@
                 {
                     currentLevel = "levelFour";
 
-                    return new[] { 54, 2 };
+                    return new[] { 54, 4 };
                 }
             }
 
@@ -352,6 +352,16 @@
                     currentLevel = "levelOne";
 
                     return new [] { 110, 12 };
+                }
+            }
+
+            if (currentLevel == "levelFour")
+            {
+                if (x == 54 && y == 3)
+                {
+                    currentLevel = "levelTwo";
+
+                    return new[] { 54, 16 };  
                 }
             }
 
@@ -372,7 +382,7 @@
                 { "levelOne", "Main Chamber"},
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
-                { "levelFour", "Cell" }, //CHANGE ONCE IN GAME
+                { "levelFour", "Left Storage Room" }, //CHANGE ONCE IN GAME
                 { "levelFive", "Cell" } //CHANGE ONCE IN GAME
             };
 

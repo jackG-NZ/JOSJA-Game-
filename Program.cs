@@ -367,7 +367,7 @@
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
                 { "levelFour", "Cell" }, //CHANGE ONCE IN GAME
-                { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
+                { "levelFive", "Cell" } //CHANGE ONCE IN GAME
             };
 
             if (File.Exists(filePath))
@@ -399,7 +399,7 @@
                 StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
-                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));      
+                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));     
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     
                 reader.Close();     //close reader
             }
@@ -428,6 +428,16 @@
                 Console.WriteLine("Press [Enter] to continue (or close the window to exit)");
                 Console.ReadLine();
             }
+        }
+
+        public void Items()
+        {
+            Dictionary<int, string> Items = new Dictionary<int, string>()
+            {
+                [1] = "Key",
+                [2] = "Healing Salve",
+                [3] = "Wooden s",
+            };
         }
     }
 }

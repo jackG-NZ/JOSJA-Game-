@@ -383,7 +383,7 @@
                 { "levelTwo", "Left Room"},
                 { "levelThree", "Right Room"},
                 { "levelFour", "Left Storage Room" }, //CHANGE ONCE IN GAME
-                { "levelFive", "Cell" } //CHANGE ONCE IN GAME
+                { "levelFive", "Cell" }, //CHANGE ONCE IN GAME
                 { "enemyEncounter", "BATTLE" },
             };
 

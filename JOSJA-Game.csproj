@@ -23,6 +23,9 @@
     </None>
     <None Update="Assets\levelFive.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Update="Assets\enemyEncounter.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

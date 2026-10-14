@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
+        static string currentLevel = "levelThree";
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
         static Dictionary<int, string> Items = new Dictionary<int, string>()
@@ -73,7 +73,7 @@
                 return; // continuing a save skips the intro
 
             Console.SetCursorPosition(35, 14);
-            Console.WriteLine("Would you like to skip the opening dialogue? (y|n): ");
+            Console.Write("Would you like to skip the opening dialogue? (y|n): ");
             string input = Console.ReadLine().ToLower();
 
             //this if statement prevents a crash from happening if the user inputs nothing
@@ -263,7 +263,10 @@
                 Console.ForegroundColor = ConsoleColor.White;
 
                 //Manages encounters
-                EncounterManagement(currentLevel, x, y);
+                if(EncounterManagement(currentLevel, x, y) == true)
+                {
+                    y -= 2;
+                }
 
                 if (isFighting)
                 {
@@ -407,16 +410,18 @@
             }
         }
 
-        static void EncounterManagement(string currentLevel, int x, int y)
+        static bool EncounterManagement(string currentLevel, int x, int y)
         {
             /*EXPLANATION: This method handles all encounters with items, enemies, interactables etc*/
 
             char playerInteract = 'z';
+
+            bool hasEncountered = false;
             
             switch (currentLevel) //RIGHT ROOM CHEST INTERACTION
             {
                 case "levelThree":
-                    if (x == 54 && y == 13)
+                    if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -424,16 +429,20 @@
                         Console.BackgroundColor = ConsoleColor.Black;
 
                         Interaction(17);
+
+                        hasEncountered = true;
                     }
                     break;
             }
+
+            return hasEncountered;
         }
 
         static void Interaction(int interactionID)
         {
-            char playerInteract = 'z';
+            char playerInteract = 'z', overWrite = 'y';
 
-            int inventorySlot = 0;
+            int inventorySlot = -1;
 
             Console.SetCursorPosition(31, 10);
             Console.Write(": ");
@@ -447,27 +456,68 @@
 
             if (playerInteract == 'i')
             {
-                Console.SetCursorPosition(31, 9);
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.WriteLine($"You picked up a {Items[interactionID]}!");
-                Console.BackgroundColor = ConsoleColor.Black;
-
-                Console.SetCursorPosition(31, 10);
-                Console.Write("Choose an inventory slot: ");
-
-                try //exception handling
+                do
                 {
-                    inventorySlot = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (Exception error)
-                {
-                    Console.SetCursorPosition(31, 10);
-                    Console.Write("Your input must be valid!");
-                    Thread.Sleep(3000);
                     Console.Clear();
+                    Console.SetCursorPosition(51, 11);
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    Console.Write("==== INVENTORY ====");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(44, 13);
+                    Console.WriteLine($"You picked up a {Items[interactionID]}!");
+                    Console.SetCursorPosition(44, 14);
+                    Console.Write("Choose an inventory slot (1 - 5): ");
+
+                    try
+                    {
+                        inventorySlot = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Console.SetCursorPosition(43, 15);
+                        Console.Write("          ! Input Error !         ");
+                        Thread.Sleep(3000);
+                    }
+
+                } while (inventorySlot > 5 || inventorySlot < 0);
+
+                if (Inventory[inventorySlot] != Items[1])
+                {
+                    Console.Clear();
+                    Console.SetCursorPosition(25, 13);
+                    Console.Write("Warning! This slot is already taken. Do you wish to overwrite its contents?");
+                    Console.SetCursorPosition(25, 14);
+                    Console.Write($"Slot {inventorySlot} is currently occupied by the item: {Inventory[inventorySlot]}.");
+                    Console.SetCursorPosition(25, 15);
+                    Console.Write($"Press [ENTER] to overwrite. Enter 'n' to cancel: ");
+
+                    input = Console.ReadLine().ToLower();
+
+                    //this if statement prevents a crash from happening if the user inputs nothing
+                    if (input.Length > 0)
+                    {
+                        overWrite = Convert.ToChar(input.Substring(0, 1));
+                    }
+
                 }
 
-                Inventory[inventorySlot] = Items[interactionID];
+                if (overWrite == 'y')
+                {
+                    Console.Clear();
+                    Inventory[inventorySlot] = Items[interactionID];
+                    Console.SetCursorPosition(38, 11);
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    Console.Write($"Slot overwritten by object {Items[interactionID]}!");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(38, 13);
+                    Console.Write("Press [ENTER] to return to game.");
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.SetCursorPosition(28, 13);
+                    Console.Write($"This slot will not be overwritten. Press [ENTER] to return to game.");
+                }
             }
         }
 

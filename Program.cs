@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "levelOne";
         static int x = 60, y = 14, inventoryPosition = 1;             //center position while windowed is 60, 14
 
         static void Main()
@@ -388,56 +388,56 @@
             /*EXPLANATION: This method checks what room the player is in and their current position. If they reach the x,y coordinates of a doorway, the room changes
             and returns the starting x, y coordinates of the new room in an integer array*/
 
-            if (currentLevel == "levelOne")
+            switch (currentLevel)
             {
-                if (x == 4 && y == 7)
-                {
-                    currentLevel = "levelTwo";
+                case "levelOne":
+                    if (x == 4 && y == 7)
+                    {
+                        currentLevel = "levelTwo";
 
-                    return new [] { 108, 7 };
-                }
-                else if (x == 111 && y == 12)
-                {
-                    currentLevel = "levelThree";
+                        return new[] { 108, 7 };
+                    }
+                    else if (x == 111 && y == 12)
+                    {
+                        currentLevel = "levelThree";
 
-                    return new [] { 6, 12 };
-                }
-            }
+                        return new[] { 6, 12 };
+                    }
+                    break;
+                case "levelTwo":
+                    if (x == 109 && y == 7)
+                    {
+                        currentLevel = "levelOne";
 
-            if (currentLevel == "levelTwo")
-            {
-                if (x == 109 && y == 7)
-                {
-                    currentLevel = "levelOne";
+                        return new[] { 5, 7 };
+                    }
+                    else if (x == 54 && y == 17)
+                    {
+                        currentLevel = "levelFour";
 
-                    return new [] { 5, 7 };
-                }
-                else if (x == 54 && y == 17)
-                {
-                    currentLevel = "levelFour";
+                        return new[] { 54, 4 };
+                    }
+                    break;
+                case "levelThree":
+                    if (x == 5 && y == 12)
+                    {
+                        currentLevel = "levelOne";
 
-                    return new[] { 54, 4 };
-                }
-            }
+                        return new[] { 110, 12 };
+                    }
+                    break;
+                case "levelFour":
+                    if (x == 54 && y == 3)
+                    {
+                        currentLevel = "levelTwo";
 
-            if (currentLevel == "levelThree")
-            {
-                if (x == 5 && y == 12)
-                {
-                    currentLevel = "levelOne";
-
-                    return new [] { 110, 12 };
-                }
-            }
-
-            if (currentLevel == "levelFour")
-            {
-                if (x == 54 && y == 3)
-                {
-                    currentLevel = "levelTwo";
-
-                    return new[] { 54, 16 };  
-                }
+                        return new[] { 54, 16 };
+                    }
+                    break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("An unexpected error has occured.");
+                    break;
             }
 
             return new [] { x, y };

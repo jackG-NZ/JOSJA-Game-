@@ -2,8 +2,8 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
-        static int x = 60, y = 14, inventoryPosition = 1;             //center position while windowed is 60, 14
+        static string currentLevel = "enemyEncounter";
+        static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
         static void Main()
         {
@@ -204,37 +204,42 @@
                 [5] = "Item Five"
             };
 
-            Console.Write($"Currently Equipped [{position}]: {inventory[position]}");
+            Console.Write($"Currently Equipped [{position}]: {inventory[position]} ");
         }
 
         static void PlayerMovement()
         {
-            /*EXPLANATION: This method is a simple WASD movement system. It continuously checks for user input and changes their position accordingly*/
+            /*EXPLANATION: This method contains the main gameplay loop. It continuously checks for user input and changes their position or performs actions accordingly*/
 
-            char movement = 'z';
+            char action = 'z';
 
             bool isFighting = false;
-            bool isMoving = false;
+            bool isMoving = true;
+            bool isPlayerTurn = false;
 
             if (currentLevel == "enemyEncounter")
             {
                 isFighting = true;
             }
-            else
-            {
-                isMoving = true;
-            }
 
             while (isMoving)
             {
                 //this big block is for all of the information at the top of the screen
-                Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.Write($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress. ");
-                Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.Write($"X:{x:D3} Y:{y:D2} | ");
-                Console.SetCursorPosition(40, 1);
-                PlayerInventory(inventoryPosition);
-                Console.BackgroundColor = ConsoleColor.Black;
+                if (isFighting) //different information is displayed to the user if they're fighting
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.Write($" -@-  Battle! ");
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.");
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write($"Press 'p' to save progress. | X:{x:D3} Y:{y:D2} | ");
+                    Console.SetCursorPosition(40, 1);
+                    PlayerInventory(inventoryPosition);
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
 
                 //Draws the map to the screen
                 SpawnRoom(currentLevel);
@@ -245,6 +250,45 @@
                 Console.Write("X");
                 Console.ForegroundColor = ConsoleColor.White;
 
+                if (isFighting)
+                {
+                    if (isPlayerTurn)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        Console.SetCursorPosition(54, 16);
+                        Console.Write("YOUR TURN");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.SetCursorPosition(53, 16);
+                        Console.Write("ENEMY TURN");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+
+                    //Draws the input options 
+                    Console.SetCursorPosition(21, 18);
+                    Console.Write("Attack");
+                    Console.SetCursorPosition(20, 19);
+                    Console.Write("ENTER 1");
+
+                    Console.SetCursorPosition(44, 18);
+                    Console.Write("Block");
+                    Console.SetCursorPosition(43, 19);
+                    Console.Write("ENTER 2");
+
+                    Console.SetCursorPosition(68, 18);
+                    Console.Write("Heal");
+                    Console.SetCursorPosition(67, 19);
+                    Console.Write("ENTER 3");
+
+                    Console.SetCursorPosition(91, 18);
+                    Console.Write("Flee");
+                    Console.SetCursorPosition(90, 19);
+                    Console.Write("ENTER 4");
+                }
+
                 //this block of code handles user input
                 Console.SetCursorPosition(0, 27);
                 Console.Write("Input: ");
@@ -253,31 +297,31 @@
                 //this if statement prevents a crash from happening if the user inputs nothing
                 if (input.Length > 0)
                 {
-                    movement = Convert.ToChar(input.Substring(0, 1));
+                    action = Convert.ToChar(input.Substring(0, 1));
                 }
 
-                switch (movement)
+                switch (action)
                 {
                     case 'w':
-                        if(y > 3)
+                        if (y > 3)
                         {
                             y -= 1;
                         }
                         break;
                     case 'a':
-                        if(x > 4)
+                        if (x > 4)
                         {
                             x -= 1;
                         }
                         break;
                     case 's':
-                        if(y < 17)
+                        if (y < 17)
                         {
                             y += 1;
                         }
                         break;
                     case 'd':
-                        if(x < 111)
+                        if (x < 111)
                         {
                             x += 1;
                         }
@@ -288,70 +332,17 @@
                     case 'h':
                         PlayerHelp();
                         break;
-                    case '-':
-                        if (inventoryPosition > 1)
-                        {
-                            inventoryPosition -= 1;
-                        }
+                    case '1':
+                        Console.WriteLine("PLACEHOLDER");
                         break;
-                    case '=':
-                        if (inventoryPosition < 5)
-                        {
-                            inventoryPosition += 1;
-                        }
+                    case '2':
+                        Console.WriteLine("PLACEHOLDER");
                         break;
-                    case 'p':
-                        SaveAndLoad(false);
+                    case '3':
+                        Console.WriteLine("PLACEHOLDER");
                         break;
-                    default:
-                        break;
-                }
-
-                //the CheckRoom method returns the x, y coordinates of the starting point for each room
-                int[] positions = CheckRoom(x, y);
-
-                x = positions[0];
-                y = positions[1];
-
-                //clear the screen to prevent trailing
-                Console.Clear();
-            }
-
-            while (isFighting)
-            {
-                //this big block is for all of the information at the top of the screen
-                Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.Write($" -@-  Enter - or = to cycle through your inventory. Enter 'h' for help.\nPress 'p' to save progress. ");
-                Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.SetCursorPosition(27, 1);
-                PlayerInventory(inventoryPosition);
-                Console.BackgroundColor = ConsoleColor.Black;
-
-                //Draws the map to the screen
-                SpawnRoom(currentLevel);
-
-                //Draws the input options 
-                Console.SetCursorPosition(21, 21);
-                Console.Write("Fight");
-
-                //this block of code handles user input
-                Console.SetCursorPosition(0, 27);
-                Console.Write("Input: ");
-                string input = Console.ReadLine().ToLower();
-
-                //this if statement prevents a crash from happening if the user inputs nothing
-                if (input.Length > 0)
-                {
-                    movement = Convert.ToChar(input.Substring(0, 1));
-                }
-
-                switch (movement)
-                {
-                    case 'e':
-                        isFighting = false;
-                        break;
-                    case 'h':
-                        PlayerHelp();
+                    case '4':
+                        Console.WriteLine("PLACEHOLDER");
                         break;
                     case '-':
                         if (inventoryPosition > 1)
@@ -465,7 +456,7 @@
             if (File.Exists(filePath))
             {
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($" | Room: {RoomNames[currentLevel]}");
+                Console.WriteLine($"Room: {RoomNames[currentLevel]}");
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Gray;
 

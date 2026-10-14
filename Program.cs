@@ -2,8 +2,12 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelThree";
+        static string currentLevel = "levelOne";
+
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
+
+        static bool isInGame = true;
+
 
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
@@ -50,10 +54,14 @@
         {
             GameIntro();
 
-            while (true) //will eventually add some sort of condition here
+            while (isInGame) //will eventually add some sort of condition here
             {
                 PlayerActions();
             }
+
+            Console.Clear();
+
+            Console.WriteLine("Thank you for playing our game!");
 
             Console.ReadLine();
         }
@@ -233,7 +241,7 @@
                 isFighting = true;
             }
 
-            while (isMoving)
+            while (isMoving && isInGame)
             {
                 //this big block is for all of the information at the top of the screen
                 if (isFighting) //different information is displayed to the user if they're fighting
@@ -418,19 +426,29 @@
 
             bool hasEncountered = false;
             
-            switch (currentLevel) //RIGHT ROOM CHEST INTERACTION
+            switch (currentLevel) 
             {
-                case "levelThree":
+                case "levelThree": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Your key fits the lock! Enter 'i' to interact.");
+                        Console.WriteLine("Your Key fits the lock! Enter 'i' to interact.");
                         Console.BackgroundColor = ConsoleColor.Black;
 
-                        Interaction(17);
+                        Interaction(17); //17 is the key of the portal component in the item dictionary
 
                         hasEncountered = true;
+                    }
+                    break;
+                case "levelFour": //BOTTOM ROOM PORTAL INTERACTION/GAME END
+                    if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
+
+                        GameEnd();
                     }
                     break;
             }
@@ -691,6 +709,29 @@
             }
 
             return 0;
+        }
+
+        static void GameEnd()
+        {
+            char playerInteract = 'z';
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(23, 10);
+            Console.Write(": ");
+
+            string input = Console.ReadLine().ToLower();
+            if (input.Length > 0)
+            {
+                playerInteract = Convert.ToChar(input.Substring(0, 1));
+            }
+
+            if (playerInteract == 'i')
+            {
+                Console.Clear();
+                Console.WriteLine("This is the end of the game. Press [ENTER] to proceed.");
+
+                isInGame = false;
+            }
         }
     }
 }

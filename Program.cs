@@ -213,6 +213,8 @@
 
             char action = 'z';
 
+            int previousAction = 0; //this records the player's previous action so the enemy AI can react appropriately
+
             bool isFighting = false;
             bool isMoving = true;
             bool isPlayerTurn = false;
@@ -233,10 +235,10 @@
                 else
                 {
                     Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($" -@-  Enter WASD to move. Enter 'e' to stop moving. Enter - or = to cycle through your inventory. Enter 'h' for help.");
+                    Console.WriteLine($"    -@-  Enter WASD to move. Enter - or = to cycle through your inventory. Enter 'h' for help.");
                     Console.BackgroundColor = ConsoleColor.DarkMagenta;
                     Console.Write($"Press 'p' to save progress. | X:{x:D3} Y:{y:D2} | ");
-                    Console.SetCursorPosition(40, 1);
+                    Console.SetCursorPosition(43, 1);
                     PlayerInventory(inventoryPosition);
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
@@ -252,11 +254,13 @@
 
                 if (isFighting)
                 {
+                    EnemyAIReaction(previousAction);
+
                     if (isPlayerTurn)
                     {
                         Console.BackgroundColor = ConsoleColor.DarkGreen;
-                        Console.SetCursorPosition(54, 16);
-                        Console.Write("YOUR TURN");
+                        Console.SetCursorPosition(53, 16);
+                        Console.Write("YOUR TURN!");
                         Console.BackgroundColor = ConsoleColor.Black;
                     }
                     else
@@ -300,49 +304,63 @@
                     action = Convert.ToChar(input.Substring(0, 1));
                 }
 
+                //this big switch statement handles all of the player's actions. This includes movement, combat, and utility
                 switch (action)
                 {
                     case 'w':
-                        if (y > 3)
+                        if (y > 3 && isFighting == false)
                         {
                             y -= 1;
                         }
                         break;
                     case 'a':
-                        if (x > 4)
+                        if (x > 4 && isFighting == false)
                         {
                             x -= 1;
                         }
                         break;
                     case 's':
-                        if (y < 17)
+                        if (y < 17 && isFighting == false)
                         {
                             y += 1;
                         }
                         break;
                     case 'd':
-                        if (x < 111)
+                        if (x < 111 && isFighting == false)
                         {
                             x += 1;
                         }
-                        break;
-                    case 'e':
-                        isMoving = false;
                         break;
                     case 'h':
                         PlayerHelp();
                         break;
                     case '1':
-                        Console.WriteLine("PLACEHOLDER");
+                        if (isPlayerTurn)
+                        {
+                            //ATTACK
+                            previousAction = 1;
+                        }
                         break;
                     case '2':
-                        Console.WriteLine("PLACEHOLDER");
+                        if (isPlayerTurn)
+                        {
+                            //BLOCK
+                            previousAction = 2;
+                        }
                         break;
                     case '3':
-                        Console.WriteLine("PLACEHOLDER");
+                        if (isPlayerTurn)
+                        {
+                            //HEAL
+                            previousAction = 3;
+                        }
                         break;
                     case '4':
-                        Console.WriteLine("PLACEHOLDER");
+                        if (isPlayerTurn)
+                        {
+                            //FLEE
+                            previousAction = 4;
+                        }
                         break;
                     case '-':
                         if (inventoryPosition > 1)
@@ -362,6 +380,8 @@
                     default:
                         break;
                 }
+
+                isPlayerTurn = !isPlayerTurn;
 
                 //the CheckRoom method returns the x, y coordinates of the starting point for each room
                 int[] positions = CheckRoom(x, y);
@@ -540,6 +560,39 @@
                 [14] = "Stone",
                 [15] = "Slime",
             };
+        }
+
+        static int EnemyAIReaction(int previousAction)
+        {
+            switch (previousAction)
+            {
+                case 0:
+                    Console.SetCursorPosition(46, 2);
+                    Console.Write("No player action detected.");
+                    break;
+                case 1:
+                    Console.SetCursorPosition(41, 2);
+                    Console.Write("The player has attacked the enemy!");
+                    break;
+                case 2:
+                    Console.SetCursorPosition(39, 2);
+                    Console.Write("The player will block the incoming attack.");
+                    break;
+                case 3:
+                    Console.SetCursorPosition(44, 2);
+                    Console.Write("The player has healed themselves.");
+                    break;
+                case 4:
+                    Console.SetCursorPosition(46, 2);
+                    Console.Write("The player is running away!");
+                    break;
+                default:
+                    Console.SetCursorPosition(45, 2);
+                    Console.Write("An unexpected error has occured.");
+                    break;
+            }
+
+            return 0;
         }
     }
 }

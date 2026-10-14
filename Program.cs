@@ -2,8 +2,49 @@
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "levelOne";
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
+
+        static Dictionary<int, string> Items = new Dictionary<int, string>()
+        {
+            // Misc
+            [1] = "Empty Handed",
+            
+            // Items
+            [2] = "Key",
+            [3] = "Crystal Shard",
+            [4] = "Wooden Sword",
+            [5] = "Iron Sword",
+            [6] = "Diamond Sword",
+
+            // Foods
+            [7] = "Dungeon Berries",
+            [8] = "Raw Meet",
+            [9] = "Cooked Meat",
+
+            // Consumables
+            [10] = "Healing Salve",
+            [11] = "Antidote",
+            [12] = "Poison Bottle",
+
+            // Ingredients
+            [13] = "Cave Moss",
+            [14] = "Spider Fang",
+            [15] = "Stone",
+            [16] = "Slime",
+
+            // Story/Lore Items
+            [17] = "Portal Component",
+        };
+
+        static Dictionary<int, string> Inventory = new Dictionary<int, string>()
+        {
+            [1] = Items[2], //the player starts with a key, a wooden sword, and three empty inventory slots
+            [2] = Items[4],
+            [3] = Items[1],
+            [4] = Items[1],
+            [5] = Items[1],
+        };
 
         static void Main()
         {
@@ -11,7 +52,7 @@
 
             while (true) //will eventually add some sort of condition here
             {
-                PlayerMovement();
+                PlayerActions();
             }
 
             Console.ReadLine();
@@ -85,16 +126,6 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(47, 14);
-            Console.WriteLine("I am the Demon Abezethibou.");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear();
-
-            Console.SetCursorPosition(37, 14);
-            Console.WriteLine("Please don't bother trying to pronounce my name.");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear();
-
             Console.SetCursorPosition(54, 14);
             Console.WriteLine("You are");
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -153,8 +184,8 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(23, 14);
-            Console.WriteLine("With that being said, I would like to offer you a final chance at freedom...");
+            Console.SetCursorPosition(30, 14);
+            Console.WriteLine("With that being said, I'm in the mood for some entertainment.");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
@@ -168,15 +199,10 @@
             Thread.Sleep(dialogueTimer);
             Console.Clear();
 
-            Console.SetCursorPosition(19, 14);
-            Console.WriteLine("What's with the grimaced expression I see on your face? I have full confidence in you.");
+            Console.SetCursorPosition(33, 14);
+            Console.WriteLine("Fail, and I will never let you leave. Well? Off you go!.");
             Thread.Sleep(dialogueTimer);
             Console.Clear();
-
-            Console.SetCursorPosition(34, 14);
-            Console.WriteLine($"But do you have full confidence in yourself... {playerName}?");
-            Thread.Sleep(dialogueTimer);
-            Console.Clear(); 
 
             Console.ForegroundColor = ConsoleColor.White;
         }
@@ -190,24 +216,7 @@
             Console.ReadLine();
         }
 
-        static void PlayerInventory(int position)
-        {
-            /*EXPLANATION: This method is for drawing and managing the player's inventory.*/
-
-            //these items are just placeholders to demonstrate how the inventory works
-            Dictionary<int, string> inventory = new Dictionary<int, string>()
-            {
-                [1] = "Item One",
-                [2] = "Item Two",
-                [3] = "Item Three",
-                [4] = "Item Four",
-                [5] = "Item Five"
-            };
-
-            Console.Write($"Currently Equipped [{position}]: {inventory[position]} ");
-        }
-
-        static void PlayerMovement()
+        static void PlayerActions()
         {
             /*EXPLANATION: This method contains the main gameplay loop. It continuously checks for user input and changes their position or performs actions accordingly*/
 
@@ -235,11 +244,12 @@
                 else
                 {
                     Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"    -@-  Enter WASD to move. Enter - or = to cycle through your inventory. Enter 'h' for help.");
+                    Console.WriteLine($"    --=@=--    |Enter WASD to move. Enter - or = to cycle through your inventory. Enter 'h' for help.|    --=@=--    ");
                     Console.BackgroundColor = ConsoleColor.DarkMagenta;
                     Console.Write($"Press 'p' to save progress. | X:{x:D3} Y:{y:D2} | ");
                     Console.SetCursorPosition(43, 1);
-                    PlayerInventory(inventoryPosition);
+
+                    Console.Write($"Currently Equipped [{inventoryPosition}]: {Inventory[inventoryPosition]} ");
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
 
@@ -251,6 +261,9 @@
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("X");
                 Console.ForegroundColor = ConsoleColor.White;
+
+                //Manages encounters
+                EncounterManagement(currentLevel, x, y);
 
                 if (isFighting)
                 {
@@ -394,6 +407,70 @@
             }
         }
 
+        static void EncounterManagement(string currentLevel, int x, int y)
+        {
+            /*EXPLANATION: This method handles all encounters with items, enemies, interactables etc*/
+
+            char playerInteract = 'z';
+            
+            switch (currentLevel) //RIGHT ROOM CHEST INTERACTION
+            {
+                case "levelThree":
+                    if (x == 54 && y == 13)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Your key fits the lock! Enter 'i' to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+
+                        Interaction(17);
+                    }
+                    break;
+            }
+        }
+
+        static void Interaction(int interactionID)
+        {
+            char playerInteract = 'z';
+
+            int inventorySlot = 0;
+
+            Console.SetCursorPosition(31, 10);
+            Console.Write(": ");
+            string input = Console.ReadLine().ToLower();
+
+            //this if statement prevents a crash from happening if the user inputs nothing
+            if (input.Length > 0)
+            {
+                playerInteract = Convert.ToChar(input.Substring(0, 1));
+            }
+
+            if (playerInteract == 'i')
+            {
+                Console.SetCursorPosition(31, 9);
+                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"You picked up a {Items[interactionID]}!");
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                Console.SetCursorPosition(31, 10);
+                Console.Write("Choose an inventory slot: ");
+
+                try //exception handling
+                {
+                    inventorySlot = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception error)
+                {
+                    Console.SetCursorPosition(31, 10);
+                    Console.Write("Your input must be valid!");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+
+                Inventory[inventorySlot] = Items[interactionID];
+            }
+        }
+
         static int[] CheckRoom(int x, int y)
         {
             /*EXPLANATION: This method checks what room the player is in and their current position. If they reach the x,y coordinates of a doorway, the room changes
@@ -476,7 +553,7 @@
             if (File.Exists(filePath))
             {
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($"Room: {RoomNames[currentLevel]}");
+                Console.WriteLine($" | Room: {RoomNames[currentLevel]}");
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Gray;
 
@@ -531,35 +608,6 @@
                 Console.WriteLine("Press [Enter] to continue (or close the window to exit)");
                 Console.ReadLine();
             }
-        }
-
-        public void Items()
-        {
-            Dictionary<int, string> Items = new Dictionary<int, string>()
-            {
-                // Items
-                [1] = "Key",
-                [2] = "Crystal Shard",
-                [3] = "Wooden Sword",
-                [4] = "Iron Sword",
-                [5] = "Diamond Sword",
-
-                // Foods
-                [6] = "Dungeon Berries",
-                [7] = "Raw Meet",
-                [8] = "Cooked Meat",
-
-                // Consumables
-                [9] = "Healing Salve",
-                [10] = "Antidote",
-                [11] = "Poison Bottle",
-
-                // Ingredients
-                [12] = "Cave Moss",
-                [13] = "Spider Fang",
-                [14] = "Stone",
-                [15] = "Slime",
-            };
         }
 
         static int EnemyAIReaction(int previousAction)

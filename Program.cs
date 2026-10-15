@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "levelOne";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -650,7 +650,7 @@ namespace JOSJA_Game
 
             currentLevel = nextLevel;
 
-            string filePath = $"Assets/{currentLevel}.txt";
+            string filePath = $"Assets/Levels/{currentLevel}.txt";
 
             //this dictionary just gives each level a nice name
             Dictionary<string, string> RoomNames = new Dictionary<string, string>()

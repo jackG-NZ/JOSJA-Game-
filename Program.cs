@@ -1,4 +1,6 @@
-﻿namespace JOSJA_Game
+﻿using System.Diagnostics;
+
+namespace JOSJA_Game
 {
     internal class Program
     {
@@ -6,8 +8,11 @@
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
-        static bool isInGame = true;
+        //these define the boundaries of each level. The values are adjusted in the checkRoom method
+        static int[] xBoundaries = { 0, 0 }; //left x boundary, right x boundary
+        static int[] yBoundaries = { 0, 0 }; //top y boundary, bottom y boundary
 
+        static bool isInGame = true;
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
@@ -47,6 +52,12 @@
             // Story/Lore Items
             [17] = "Portal Component",
         };
+
+        /*static Dictionary<string, int[]> MapSizes = new Dictionary<string, int[]>
+        {
+            { "levelOneX", new int[] { 4, 111 } }, //LEFT X BOUNDARY, RIGHT X BOUNDARY
+            { "levelOneY", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
+        };*/
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
@@ -337,30 +348,30 @@
                 {
                     action = Convert.ToChar(input.Substring(0, 1));
                 }
-
+                
                 //this big switch statement handles all of the player's actions. This includes movement, combat, and utility
                 switch (action)
                 {
                     case 'w':
-                        if (y > 3 && isFighting == false)
+                        if (y > yBoundaries[0] && isFighting == false)
                         {
                             y -= 1;
                         }
                         break;
                     case 'a':
-                        if (x > 4 && isFighting == false)
+                        if (x > xBoundaries[0] && isFighting == false)
                         {
                             x -= 1;
                         }
                         break;
                     case 's':
-                        if (y < 17 && isFighting == false)
+                        if (y < yBoundaries[1] && isFighting == false)
                         {
                             y += 1;
                         }
                         break;
                     case 'd':
-                        if (x < 111 && isFighting == false)
+                        if (x < xBoundaries[1] && isFighting == false)
                         {
                             x += 1;
                         }
@@ -418,7 +429,7 @@
                 isPlayerTurn = !isPlayerTurn;
 
                 //the CheckRoom method returns the x, y coordinates of the starting point for each room
-                int[] positions = CheckRoom(x, y);
+                int[] positions = CheckRoom(x, y, xBoundaries, yBoundaries);
 
                 x = positions[0];
                 y = positions[1];
@@ -426,6 +437,90 @@
                 //clear the screen to prevent trailing
                 Console.Clear();
             }
+        }
+
+        static int[] CheckRoom(int x, int y, int[] xBoundaries, int[] yBoundaries)
+        {
+            /*EXPLANATION: This method checks what room the player is in and their current position. If they reach the x,y coordinates of a doorway, the room changes
+            and returns the starting x, y coordinates of the new room in an integer array. It also adjusts the movement boundary for each level*/
+
+            switch (currentLevel)
+            {
+                case "levelOne":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 111;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+
+                    if (x == 4 && y == 7)
+                    {
+                        currentLevel = "levelTwo";
+
+                        return new[] { 108, 7 };
+                    }
+                    else if (x == 111 && y == 12)
+                    {
+                        currentLevel = "levelThree";
+
+                        return new[] { 6, 12 };
+                    }
+                    break;
+                case "levelTwo":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 109;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+
+                    if (x == 109 && y == 7)
+                    {
+                        currentLevel = "levelOne";
+
+                        return new[] { 5, 7 };
+                    }
+                    else if (x == 54 && y == 17)
+                    {
+                        currentLevel = "levelFour";
+
+                        return new[] { 54, 4 };
+                    }
+                    break;
+                case "levelThree":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 110;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+
+                    if (x == 5 && y == 12)
+                    {
+                        currentLevel = "levelOne";
+
+                        return new[] { 110, 12 };
+                    }
+                    break;
+                case "levelFour":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 109;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+
+                    if (x == 54 && y == 3)
+                    {
+                        currentLevel = "levelTwo";
+
+                        return new[] { 54, 16 };
+                    }
+                    break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("An unexpected error has occured.");
+                    break;
+            }
+
+            return new[] { x, y };
         }
 
         static bool EncounterManagement(string currentLevel, int x, int y)
@@ -547,66 +642,6 @@
                     Console.Write($"This slot will not be overwritten. Press [ENTER] to return to game.");
                 }
             }
-        }
-
-        static int[] CheckRoom(int x, int y)
-        {
-            /*EXPLANATION: This method checks what room the player is in and their current position. If they reach the x,y coordinates of a doorway, the room changes
-            and returns the starting x, y coordinates of the new room in an integer array*/
-
-            switch (currentLevel)
-            {
-                case "levelOne":
-                    if (x == 4 && y == 7)
-                    {
-                        currentLevel = "levelTwo";
-
-                        return new[] { 108, 7 };
-                    }
-                    else if (x == 111 && y == 12)
-                    {
-                        currentLevel = "levelThree";
-
-                        return new[] { 6, 12 };
-                    }
-                    break;
-                case "levelTwo":
-                    if (x == 109 && y == 7)
-                    {
-                        currentLevel = "levelOne";
-
-                        return new[] { 5, 7 };
-                    }
-                    else if (x == 54 && y == 17)
-                    {
-                        currentLevel = "levelFour";
-
-                        return new[] { 54, 4 };
-                    }
-                    break;
-                case "levelThree":
-                    if (x == 5 && y == 12)
-                    {
-                        currentLevel = "levelOne";
-
-                        return new[] { 110, 12 };
-                    }
-                    break;
-                case "levelFour":
-                    if (x == 54 && y == 3)
-                    {
-                        currentLevel = "levelTwo";
-
-                        return new[] { 54, 16 };
-                    }
-                    break;
-                default:
-                    Console.Clear();
-                    Console.WriteLine("An unexpected error has occured.");
-                    break;
-            }
-
-            return new [] { x, y };
         }
 
         static void SpawnRoom(string nextLevel)

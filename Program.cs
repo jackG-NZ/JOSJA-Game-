@@ -2,14 +2,14 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
         static bool isInGame = true;
 
 
-        double hp = 20;
+        static double hp = 20;
         const double RegenPerTurn = 0.5;
         const double PoisonEffectPerTurn = 2.0;
         const double HealthPotionRegen = 10.0;
@@ -285,6 +285,9 @@
 
                 if (isFighting)
                 {
+                    Console.SetCursorPosition(4, 2);
+                    Console.Write($"HP: {hp}");
+
                     EnemyAIReaction(previousAction);
 
                     if (isPlayerTurn)
@@ -730,7 +733,6 @@
 
         static void EnemyAIAttack(int attackStrength)
         {
-<<<<<<< HEAD
             Random rand = new Random();
             int attackPower = rand.Next(1, 5);
 
@@ -742,18 +744,16 @@
             {
                 hp -= attackPower;
             }
-=======
-            
->>>>>>> 8377a34cf509061a49326cfedd8415f562232f7a
+
+            HP(hp);
         }
 
-        static double HP(string Type)
+        static void HP(double hp)
         {
-            
-
-
-
-            return 0;
+            if (hp < 1)
+            {
+                GameEnd(true);
+            }
         }
 
         static void GameEnd(bool dead)

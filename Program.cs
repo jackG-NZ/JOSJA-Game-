@@ -9,6 +9,13 @@
         static bool isInGame = true;
 
 
+        double hp = 20;
+        const double RegenPerTurn = 0.5;
+        const double PoisonEffectPerTurn = 2.0;
+        const double HealthPotionRegen = 10.0;
+        const double HealingSalveRegen = 3.5;
+
+
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
             // Misc
@@ -707,6 +714,15 @@
                     Console.Write("An unexpected error has occured.");
                     break;
             }
+
+            return 0;
+        }
+
+        static double HP(string Type)
+        {
+            
+
+
 
             return 0;
         }

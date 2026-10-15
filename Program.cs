@@ -693,8 +693,14 @@ namespace JOSJA_Game
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
                 y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));
-                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
                 hp = Convert.ToDouble(reader.ReadLine().Replace("Health = ", ""));
+                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
+                // Load each inventory slot
+                for (int i = 1; i <= 5; i++)
+                {
+                    string line = reader.ReadLine();
+                    Inventory[i] = line.Replace("Slot " + i + " = ", "");
+                }
                 reader.Close();     //close reader
             }
             else
@@ -710,8 +716,13 @@ namespace JOSJA_Game
                         "Level = " + currentLevel + "\n" +
                         "X = " + x + "\n" +
                         "Y = " + y + "\n" +
-                        "Inventory = " + inventoryPosition + "\n" +
-                        "Health = " + hp;
+                        "Health = " + hp + "\n" +
+                        "Inventory = " + inventoryPosition + "\n";
+                        // Save each slot
+                        foreach (var item in Inventory)
+                        {
+                            saveContents += "Slot " + item.Key + " = " + item.Value + "\n";
+                        }
 
                     File.WriteAllText(savePath, saveContents);
                     Console.WriteLine("Saved!");

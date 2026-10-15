@@ -685,25 +685,37 @@
             }
         }
 
-        static int EnemyAIReaction(int previousAction)
+        static void EnemyAIReaction(int previousAction)
         {
             switch (previousAction)
             {
                 case 0:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
+
+                    EnemyAIAttack(1);
+
                     break;
                 case 1:
                     Console.SetCursorPosition(41, 2);
                     Console.Write("The player has attacked the enemy!");
+
+                    EnemyAIAttack(2);
+
                     break;
                 case 2:
                     Console.SetCursorPosition(39, 2);
                     Console.Write("The player will block the incoming attack.");
+
+                    EnemyAIAttack(4);
+
                     break;
                 case 3:
                     Console.SetCursorPosition(44, 2);
                     Console.Write("The player has healed themselves.");
+
+                    EnemyAIAttack(2);
+
                     break;
                 case 4:
                     Console.SetCursorPosition(46, 2);
@@ -711,11 +723,14 @@
                     break;
                 default:
                     Console.SetCursorPosition(45, 2);
-                    Console.Write("An unexpected error has occured.");
+                    Console.Write("An unexpected error has occurred.");
                     break;
             }
+        }
 
-            return 0;
+        static void EnemyAIAttack(int attackStrength)
+        {
+
         }
 
         static double HP(string Type)

@@ -760,9 +760,24 @@
         {
             if (dead)
             {
+                char Restore = 'n';
                 Console.Clear();
                 Console.SetCursorPosition(23, 10);
                 Console.WriteLine("You Died.");
+                Thread.Sleep(3000);
+                Console.Clear();
+                Console.WriteLine("Would you like re-spawn from last save? [y/n]");
+                string input = (Console.ReadLine().ToLower());
+                if (input.Length > 0)
+                {
+                    Restore = Convert.ToChar(input.Substring(0, 1));
+                }
+
+                if (Restore == 'y')
+                {
+                    SaveAndLoad(true);
+                }
+
             }
             else
             {

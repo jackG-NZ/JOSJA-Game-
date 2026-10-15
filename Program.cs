@@ -2,14 +2,14 @@
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
         static bool isInGame = true;
 
 
-        double hp = 20;
+        static double hp = 20;
         const double RegenPerTurn = 0.5;
         const double PoisonEffectPerTurn = 2.0;
         const double HealthPotionRegen = 10.0;
@@ -285,7 +285,12 @@
 
                 if (isFighting)
                 {
-                    EnemyAIReaction(previousAction);
+                    EnemyAIReaction(previousAction, isPlayerTurn);
+
+                    Console.SetCursorPosition(5, 2);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write($"HP: {hp}");
+                    Console.ForegroundColor = ConsoleColor.Black;
 
                     if (isPlayerTurn)
                     {
@@ -685,37 +690,25 @@
             }
         }
 
-        static void EnemyAIReaction(int previousAction)
+        static void EnemyAIReaction(int previousAction, bool playerTurn)
         {
             switch (previousAction)
             {
                 case 0:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
-
-                    EnemyAIAttack(1);
-
                     break;
                 case 1:
                     Console.SetCursorPosition(41, 2);
                     Console.Write("The player has attacked the enemy!");
-
-                    EnemyAIAttack(2);
-
                     break;
                 case 2:
                     Console.SetCursorPosition(39, 2);
                     Console.Write("The player will block the incoming attack.");
-
-                    EnemyAIAttack(4);
-
                     break;
                 case 3:
                     Console.SetCursorPosition(44, 2);
                     Console.Write("The player has healed themselves.");
-
-                    EnemyAIAttack(2);
-
                     break;
                 case 4:
                     Console.SetCursorPosition(46, 2);
@@ -726,21 +719,24 @@
                     Console.Write("An unexpected error has occurred.");
                     break;
             }
+
+            if (!playerTurn)
+            {
+                EnemyAIAttack();
+            }
         }
 
-        static void EnemyAIAttack(int attackStrength)
+        static void EnemyAIAttack()
         {
-
+            Random rand = new Random();
+            int attackpower = rand.Next(1, 5);
+            hp -= attackpower;
         }
 
-        static double HP(string Type)
+        /*static double DisplayHP(string Type)
         {
-            
-
-
-
             return 0;
-        }
+        }*/
 
         static void GameEnd()
         {

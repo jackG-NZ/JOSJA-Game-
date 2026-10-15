@@ -16,7 +16,7 @@ namespace JOSJA_Game
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
-        const double PoisonEffectPerTurn = 2.0;
+        const double PoisonEffectPerTurn = -2.0;
         const double HealthPotionRegen = 10.0;
         const double HealingSalveRegen = 3.5;
 
@@ -35,7 +35,7 @@ namespace JOSJA_Game
 
             // Foods
             [7] = "Dungeon Berries",
-            [8] = "Raw Meet",
+            [8] = "Raw Meat",
             [9] = "Cooked Meat",
 
             // Consumables

@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "levelOne";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -729,8 +729,16 @@
         static void EnemyAIAttack()
         {
             Random rand = new Random();
-            int attackpower = rand.Next(1, 5);
-            hp -= attackpower;
+            int attackPower = rand.Next(1, 5);
+
+            if(hp - attackPower < 0)
+            {
+                hp = 0;
+            }
+            else
+            {
+                hp -= attackPower;
+            }
         }
 
         /*static double DisplayHP(string Type)

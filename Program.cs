@@ -657,8 +657,9 @@
                 StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
-                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));     
-                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));     
+                y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));
+                inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
+                hp = Convert.ToDouble(reader.ReadLine().Replace("Health = ", ""));
                 reader.Close();     //close reader
             }
             else
@@ -674,7 +675,8 @@
                         "Level = " + currentLevel + "\n" +
                         "X = " + x + "\n" +
                         "Y = " + y + "\n" +
-                        "Inventory = " + inventoryPosition;
+                        "Inventory = " + inventoryPosition + "\n" +
+                        "Health = " + hp;
 
                     File.WriteAllText(savePath, saveContents);
                     Console.WriteLine("Saved!");

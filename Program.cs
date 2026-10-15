@@ -9,7 +9,7 @@
         static bool isInGame = true;
 
 
-        static double hp = 20;
+        double hp = 20;
         const double RegenPerTurn = 0.5;
         const double PoisonEffectPerTurn = 2.0;
         const double HealthPotionRegen = 10.0;
@@ -285,12 +285,7 @@
 
                 if (isFighting)
                 {
-                    EnemyAIReaction(previousAction, isPlayerTurn);
-
-                    Console.SetCursorPosition(5, 2);
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write($"HP: {hp}");
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    EnemyAIReaction(previousAction);
 
                     if (isPlayerTurn)
                     {
@@ -460,7 +455,7 @@
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
 
-                        GameEnd();
+                        GameEnd(false);
                     }
                     break;
             }
@@ -690,25 +685,37 @@
             }
         }
 
-        static void EnemyAIReaction(int previousAction, bool playerTurn)
+        static void EnemyAIReaction(int previousAction)
         {
             switch (previousAction)
             {
                 case 0:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
+
+                    EnemyAIAttack(1);
+
                     break;
                 case 1:
                     Console.SetCursorPosition(41, 2);
                     Console.Write("The player has attacked the enemy!");
+
+                    EnemyAIAttack(2);
+
                     break;
                 case 2:
                     Console.SetCursorPosition(39, 2);
                     Console.Write("The player will block the incoming attack.");
+
+                    EnemyAIAttack(4);
+
                     break;
                 case 3:
                     Console.SetCursorPosition(44, 2);
                     Console.Write("The player has healed themselves.");
+
+                    EnemyAIAttack(2);
+
                     break;
                 case 4:
                     Console.SetCursorPosition(46, 2);
@@ -719,15 +726,11 @@
                     Console.Write("An unexpected error has occurred.");
                     break;
             }
-
-            if (!playerTurn)
-            {
-                EnemyAIAttack();
-            }
         }
 
-        static void EnemyAIAttack()
+        static void EnemyAIAttack(int attackStrength)
         {
+<<<<<<< HEAD
             Random rand = new Random();
             int attackPower = rand.Next(1, 5);
 
@@ -739,33 +742,49 @@
             {
                 hp -= attackPower;
             }
+=======
+            
+>>>>>>> 8377a34cf509061a49326cfedd8415f562232f7a
         }
 
-        /*static double DisplayHP(string Type)
+        static double HP(string Type)
         {
+            
+
+
+
             return 0;
-        }*/
+        }
 
-        static void GameEnd()
+        static void GameEnd(bool dead)
         {
-            char playerInteract = 'z';
-
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(23, 10);
-            Console.Write(": ");
-
-            string input = Console.ReadLine().ToLower();
-            if (input.Length > 0)
-            {
-                playerInteract = Convert.ToChar(input.Substring(0, 1));
-            }
-
-            if (playerInteract == 'i')
+            if (dead)
             {
                 Console.Clear();
-                Console.WriteLine("This is the end of the game. Press [ENTER] to proceed.");
+                Console.SetCursorPosition(23, 10);
+                Console.WriteLine("You Died.");
+            }
+            else
+            {
+                char playerInteract = 'z';
 
-                isInGame = false;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(23, 10);
+                Console.Write(": ");
+
+                string input = Console.ReadLine().ToLower();
+                if (input.Length > 0)
+                {
+                    playerInteract = Convert.ToChar(input.Substring(0, 1));
+                }
+
+                if (playerInteract == 'i')
+                {
+                    Console.Clear();
+                    Console.WriteLine("This is the end of the game. Press [ENTER] to proceed.");
+
+                    isInGame = false;
+                }
             }
         }
     }

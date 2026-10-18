@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level3";
+        static string currentLevel = "level5";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -497,7 +497,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "level5";
 
-                        return new[] { 5, 7 };
+                        return new[] { 18, 16 };
                     }
                     else if (x == 54 && y == 17)
                     {
@@ -518,6 +518,32 @@ namespace JOSJA_Game
                         currentLevel = "level3";
 
                         return new[] { 54, 16 };
+                    }
+                    break;
+
+                case "level5":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 50;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 18 && y == 17)
+                    {
+                        currentLevel = "level3";
+
+                        return new[] { 54, 04 };
+                    }
+                    if (x == 4 && y == 15)
+                    {
+                        currentLevel = "level6";
+
+                        return new[] { 108, 15 };
+                    }
+                    if (x == 18 && y == 3)
+                    {
+                        currentLevel = "level7";
+
+                        return new[] { 34, 16 };
                     }
                     break;
 

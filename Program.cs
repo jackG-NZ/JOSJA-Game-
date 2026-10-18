@@ -449,15 +449,15 @@ namespace JOSJA_Game
                 case "levelOne":
 
                     xBoundaries[0] = 4;
-                    xBoundaries[1] = 111;
-                    yBoundaries[0] = 3;
-                    yBoundaries[1] = 17;
+                    xBoundaries[1] = 104;
+                    yBoundaries[0] = 5;
+                    yBoundaries[1] = 15;
 
-                    if (x == 4 && y == 7)
+                    if (x == 4 && y == 10)
                     {
                         currentLevel = "levelTwo";
 
-                        return new[] { 108, 7 };
+                        return new[] { 109, 12 };
                     }
                     else if (x == 111 && y == 12)
                     {
@@ -469,17 +469,17 @@ namespace JOSJA_Game
                 case "levelTwo":
 
                     xBoundaries[0] = 4;
-                    xBoundaries[1] = 109;
+                    xBoundaries[1] = 111;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
 
-                    if (x == 109 && y == 7)
+                    if (x == 111 && y == 12)
                     {
                         currentLevel = "levelOne";
 
-                        return new[] { 5, 7 };
+                        return new[] { 5, 10 };
                     }
-                    else if (x == 54 && y == 17)
+                    else if (x == 4 && y == 7)
                     {
                         currentLevel = "levelFour";
 
@@ -511,7 +511,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "levelTwo";
 
-                        return new[] { 54, 16 };
+                        return new[] { 5, 7 };
                     }
                     break;
                 default:

@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level8";
+        static string currentLevel = "level1";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 

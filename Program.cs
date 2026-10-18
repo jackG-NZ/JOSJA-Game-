@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "level3";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -487,27 +487,40 @@ namespace JOSJA_Game
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
 
-                    if (x == 5 && y == 12)
+                    if (x == 109 && y == 7)
                     {
-                        currentLevel = "level1";
+                        currentLevel = "level2";
 
-                        return new[] { 110, 12 };
+                        return new[] { 6, 7 };
+                    }
+                    else if (x == 54 && y == 3)
+                    {
+                        currentLevel = "level5";
+
+                        return new[] { 5, 7 };
+                    }
+                    else if (x == 54 && y == 17)
+                    {
+                        currentLevel = "level4";
+
+                        return new[] { 54, 4 };
                     }
                     break;
+
                 case "level4":
 
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 109;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
-
-                    if (x == 54 && y == 3)
+                    if (x == 54 && y == 03)
                     {
-                        currentLevel = "level2";
+                        currentLevel = "level3";
 
-                        return new[] { 5, 7 };
+                        return new[] { 54, 16 };
                     }
                     break;
+
                 default:
                     Console.Clear();
                     Console.WriteLine("An unexpected error has occured.");
@@ -527,6 +540,7 @@ namespace JOSJA_Game
             
             switch (currentLevel) 
             {
+                /* commented for now as i add the levels back :/
                 case "level3": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
@@ -540,6 +554,7 @@ namespace JOSJA_Game
                         hasEncountered = true;
                     }
                     break;
+                */
                 case "level4": //BOTTOM ROOM PORTAL INTERACTION/GAME END
                     if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
                     {

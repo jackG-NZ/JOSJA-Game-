@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "levelOne";
+        static string currentLevel = "level1";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -55,8 +55,8 @@ namespace JOSJA_Game
 
         /*static Dictionary<string, int[]> MapSizes = new Dictionary<string, int[]>
         {
-            { "levelOneX", new int[] { 4, 111 } }, //LEFT X BOUNDARY, RIGHT X BOUNDARY
-            { "levelOneY", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
+            { "level1X", new int[] { 4, 111 } }, //LEFT X BOUNDARY, RIGHT X BOUNDARY
+            { "level1Y", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
         };*/
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
@@ -446,7 +446,7 @@ namespace JOSJA_Game
 
             switch (currentLevel)
             {
-                case "levelOne":
+                case "level1":
 
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 104;
@@ -455,18 +455,12 @@ namespace JOSJA_Game
 
                     if (x == 4 && y == 10)
                     {
-                        currentLevel = "levelTwo";
+                        currentLevel = "level2";
 
                         return new[] { 109, 12 };
                     }
-                    else if (x == 111 && y == 12)
-                    {
-                        currentLevel = "levelThree";
-
-                        return new[] { 6, 12 };
-                    }
                     break;
-                case "levelTwo":
+                case "level2":
 
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 111;
@@ -475,18 +469,18 @@ namespace JOSJA_Game
 
                     if (x == 111 && y == 12)
                     {
-                        currentLevel = "levelOne";
+                        currentLevel = "level1";
 
                         return new[] { 5, 10 };
                     }
                     else if (x == 4 && y == 7)
                     {
-                        currentLevel = "levelFour";
+                        currentLevel = "level3";
 
-                        return new[] { 54, 4 };
+                        return new[] { 107, 7 };
                     }
                     break;
-                case "levelThree":
+                case "level3":
 
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 110;
@@ -495,12 +489,12 @@ namespace JOSJA_Game
 
                     if (x == 5 && y == 12)
                     {
-                        currentLevel = "levelOne";
+                        currentLevel = "level1";
 
                         return new[] { 110, 12 };
                     }
                     break;
-                case "levelFour":
+                case "level4":
 
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 109;
@@ -509,7 +503,7 @@ namespace JOSJA_Game
 
                     if (x == 54 && y == 3)
                     {
-                        currentLevel = "levelTwo";
+                        currentLevel = "level2";
 
                         return new[] { 5, 7 };
                     }
@@ -533,7 +527,7 @@ namespace JOSJA_Game
             
             switch (currentLevel) 
             {
-                case "levelThree": //RIGHT ROOM CHEST INTERACTION
+                case "level3": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
                         Console.SetCursorPosition(31, 9);
@@ -546,7 +540,7 @@ namespace JOSJA_Game
                         hasEncountered = true;
                     }
                     break;
-                case "levelFour": //BOTTOM ROOM PORTAL INTERACTION/GAME END
+                case "level4": //BOTTOM ROOM PORTAL INTERACTION/GAME END
                     if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
                     {
                         Console.SetCursorPosition(23, 9);
@@ -655,11 +649,15 @@ namespace JOSJA_Game
             //this dictionary just gives each level a nice name
             Dictionary<string, string> RoomNames = new Dictionary<string, string>()
             {
-                { "levelOne", "Main Chamber"},
-                { "levelTwo", "Left Room"},
-                { "levelThree", "Right Room"},
-                { "levelFour", "Left Storage Room" },
-                { "levelFive", "Cell" },
+                { "level1", "Entrance Room"},
+                { "level2", "First Chamber"},
+                { "level3", "Right Room"},
+                { "level4", "Left Storage Room" },
+                { "level5", "Cell" },
+                { "level6", "Cell" },
+                { "level7", "Cell" },
+                { "level8", "Cell" },
+                { "level9", "Cell" },
                 { "enemyEncounter", "BATTLE" },
             };
 

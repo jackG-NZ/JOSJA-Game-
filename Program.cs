@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level5";
+        static string currentLevel = "level8";
 
         static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -533,17 +533,89 @@ namespace JOSJA_Game
 
                         return new[] { 54, 04 };
                     }
-                    if (x == 4 && y == 15)
+                    else if (x == 4 && y == 15)
                     {
                         currentLevel = "level6";
 
                         return new[] { 108, 15 };
                     }
-                    if (x == 18 && y == 3)
+                    else if (x == 18 && y == 3)
                     {
                         currentLevel = "level7";
 
                         return new[] { 34, 16 };
+                    }
+                    break;
+
+                case "level6":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 111;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 110 && y == 15)
+                    {
+                        currentLevel = "level5";
+
+                        return new[] { 6, 15 };
+                    }
+                    break;
+
+                case "level7":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 110;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 34 && y == 17)
+                    {
+                        currentLevel = "level5";
+
+                        return new[] { 18, 4 };
+                    }
+                    else if (x == 109 && y == 7)
+                    {
+                        currentLevel = "level8";
+
+                        return new[] { 6, 9 };
+                    }
+                    else if (x == 109 && y == 7)
+                    {
+                        currentLevel = "level1";
+
+                        return new[] { 6, 9 };
+                    }
+                    break;
+                case "level8":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 86;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 4 && y == 9)
+                    {
+                        currentLevel = "level7";
+
+                        return new[] { 107, 7 };
+                    }
+                    else if (x == 85 && y == 12)
+                    {
+                        currentLevel = "level9";
+
+                        return new[] { 6, 12 };
+                    }
+                    break;
+                case "level9":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 86;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 4 && y == 12)
+                    {
+                        currentLevel = "level8";
+
+                        return new[] { 83, 12 };
                     }
                     break;
 
@@ -566,8 +638,8 @@ namespace JOSJA_Game
             
             switch (currentLevel) 
             {
-                /* commented for now as i add the levels back :/
-                case "level3": //RIGHT ROOM CHEST INTERACTION
+                
+                case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
                         Console.SetCursorPosition(31, 9);
@@ -580,7 +652,7 @@ namespace JOSJA_Game
                         hasEncountered = true;
                     }
                     break;
-                */
+                
                 case "level4": //BOTTOM ROOM PORTAL INTERACTION/GAME END
                     if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
                     {

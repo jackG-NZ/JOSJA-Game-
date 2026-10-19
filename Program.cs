@@ -666,6 +666,19 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(104, 10);
                         Console.Write('?');
                     }
+                    if (x == 10 && y == 10)
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Cauldron - press i to interact.");
+                        Console.ReadLine();
+                        Brewing();
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(10, 10);
+                        Console.Write('?');
+                    }
                     break;
                 case "level2":
                     int chestItem = 4;
@@ -705,17 +718,6 @@ namespace JOSJA_Game
                         Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
 
                         GameEnd(false);
-                    }
-                    break;
-
-                case "Level1": //TEMP ROOM - TEMP POS
-                    if (x == 10 && y == 10)
-                    {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Cauldron - press i to interact.");
-                        Console.ReadLine();
-                        Brewing();
                     }
                     break;
             }

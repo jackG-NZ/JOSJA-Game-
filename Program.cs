@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -21,6 +21,7 @@ namespace JOSJA_Game
         const double HealingSalveRegen = 3.5;
 
         static double enemyHP = 10;
+        static double enemyAttackModifier = 1;
 
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
@@ -299,7 +300,10 @@ namespace JOSJA_Game
                 {
                     Console.SetCursorPosition(4, 2);
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write($"HP: {new string('|', (int)hp)}");
+                    Console.Write($"Your HP:  {new string('|', (int)hp)}");
+                    Console.SetCursorPosition(4, 3);
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.Write($"Enemy HP: {new string('|', (int)enemyHP)}");
                     Console.BackgroundColor = ConsoleColor.Black;
 
                     EnemyAIReaction(previousAction);
@@ -380,28 +384,28 @@ namespace JOSJA_Game
                     case '1':
                         if (isPlayerTurn)
                         {
-                            //ATTACK
+                            PlayerAttack();
                             previousAction = 1;
                         }
                         break;
                     case '2':
                         if (isPlayerTurn)
                         {
-                            //BLOCK
+                            PlayerBlock();
                             previousAction = 2;
                         }
                         break;
                     case '3':
                         if (isPlayerTurn)
                         {
-                            //HEAL
+                            PlayerHeal();
                             previousAction = 3;
                         }
                         break;
                     case '4':
                         if (isPlayerTurn)
                         {
-                            //FLEE
+                            PlayerFlee();
                             previousAction = 4;
                         }
                         break;
@@ -861,11 +865,18 @@ namespace JOSJA_Game
         static void PlayerAttack()
         {
             /*EXPLANATION: This is the method for the player's attack*/
+
+            Random rand = new Random();
+            int attackStrength = rand.Next(2, 5);
+
+            enemyHP -= attackStrength;
         }
 
         static void PlayerBlock()
         {
             /*EXPLANATION: This is the method for the block utility*/
+
+            enemyAttackModifier = 0.75;
         }
 
         static void PlayerHeal()
@@ -886,28 +897,28 @@ namespace JOSJA_Game
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
 
-                    EnemyAIAttack(1);
+                    EnemyAIAttack();
 
                     break;
                 case 1:
                     Console.SetCursorPosition(41, 2);
                     Console.Write("The player has attacked the enemy!");
 
-                    EnemyAIAttack(2);
+                    EnemyAIAttack();
 
                     break;
                 case 2:
                     Console.SetCursorPosition(39, 2);
                     Console.Write("The player will block the incoming attack.");
 
-                    EnemyAIAttack(4);
+                    EnemyAIAttack();
 
                     break;
                 case 3:
                     Console.SetCursorPosition(44, 2);
                     Console.Write("The player has healed themselves.");
 
-                    EnemyAIAttack(2);
+                    EnemyAIAttack();
 
                     break;
                 case 4:
@@ -921,10 +932,11 @@ namespace JOSJA_Game
             }
         }
 
-        static void EnemyAIAttack(int attackStrength)
+        static void EnemyAIAttack()
         {
             Random rand = new Random();
-            int attackPower = rand.Next(1, 5);
+            double attackPower = rand.Next(1, 5);
+            attackPower *= enemyAttackModifier;
 
             if(hp - attackPower < 0)
             {
@@ -936,6 +948,8 @@ namespace JOSJA_Game
             }
 
             HP(hp);
+
+            enemyAttackModifier = 1;
         }
 
         static void HP(double hp)

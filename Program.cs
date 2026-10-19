@@ -707,6 +707,17 @@ namespace JOSJA_Game
                         GameEnd(false);
                     }
                     break;
+
+                case "Level1": //TEMP ROOM - TEMP POS
+                    if (x == 10 && y == 10)
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Cauldron - press i to interact.");
+                        Console.ReadLine();
+                        Brewing();
+                    }
+                    break;
             }
 
             return hasEncountered;
@@ -974,6 +985,26 @@ namespace JOSJA_Game
             if (hp < 1)
             {
                 GameEnd(true);
+            }
+        }
+
+        static void Brewing()
+        {
+            Console.Clear();
+            string filePath = $"Assets/UIs/Cauldron.txt";
+            if (File.Exists(filePath))
+            {
+                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                string CauldronUI = File.ReadAllText(filePath);
+                Console.WriteLine($"{CauldronUI}");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
         }
 

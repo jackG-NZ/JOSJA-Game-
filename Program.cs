@@ -553,7 +553,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "level7";
 
-                        return new[] { 34, 16 };
+                        return new[] { 28, 16 };
                     }
                     break;
 
@@ -577,7 +577,7 @@ namespace JOSJA_Game
                     xBoundaries[1] = 110;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
-                    if (x == 34 && y == 17)
+                    if (x == 28 && y == 17)
                     {
                         currentLevel = "level5";
 

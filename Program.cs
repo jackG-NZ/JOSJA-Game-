@@ -4,9 +4,9 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "enemyEncounter";
 
-        static int x = 58, y = 14, inventoryPosition = 1;             //center position while windowed is 58, 14
+        static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
         //these define the boundaries of each level. The values are adjusted in the checkRoom method
         static int[] xBoundaries = { 0, 0 }; //left x boundary, right x boundary
@@ -297,7 +297,9 @@ namespace JOSJA_Game
                 if (isFighting)
                 {
                     Console.SetCursorPosition(4, 2);
-                    Console.Write($"HP: {hp}");
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.Write($"HP: {new string('|', (int)hp)}");
+                    Console.BackgroundColor = ConsoleColor.Black;
 
                     EnemyAIReaction(previousAction);
 

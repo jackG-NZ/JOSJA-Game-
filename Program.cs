@@ -20,6 +20,7 @@ namespace JOSJA_Game
         const double HealthPotionRegen = 10.0;
         const double HealingSalveRegen = 3.5;
 
+        static double enemyHP = 10;
 
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
@@ -855,6 +856,26 @@ namespace JOSJA_Game
                 Console.WriteLine("Press [Enter] to continue (or close the window to exit)");
                 Console.ReadLine();
             }
+        }
+
+        static void PlayerAttack()
+        {
+            /*EXPLANATION: This is the method for the player's attack*/
+        }
+
+        static void PlayerBlock()
+        {
+            /*EXPLANATION: This is the method for the block utility*/
+        }
+
+        static void PlayerHeal()
+        {
+            /*EXPLANATION: This is the method for the heal utility*/
+        }
+
+        static void PlayerFlee()
+        {
+            /*EXPLANATION: This is the method for the flee utility*/
         }
 
         static void EnemyAIReaction(int previousAction)

@@ -287,7 +287,6 @@ namespace JOSJA_Game
                 if(EncounterManagement(currentLevel, x, y))
                 {
                     y -= 2;
-                    return;
                 }
 
                 if (isFighting)
@@ -704,10 +703,7 @@ namespace JOSJA_Game
                         {
                             Interaction(chestItem);
                         }
-                        else
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                     else
                     {
@@ -747,12 +743,13 @@ namespace JOSJA_Game
 
         static void Interaction(int interactionID)
         {
-            char playerInteract = 'z', overWrite = 'y';
+            char playerInteract = 'z', overWrite = 'n';
 
             int inventorySlot = -1;
 
             do
             {
+                Console.Clear();
                 Console.SetCursorPosition(51, 11);
                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                 Console.Write("==== INVENTORY ====");

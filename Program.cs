@@ -678,6 +678,16 @@ namespace JOSJA_Game
                         GameEnd(false);
                     }
                     break;
+
+                case "Level1": //TEMP ROOM - TEMP POS
+                    if (x == 10 && y == 10)
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Cauldron - press i to interact.");
+                        Brewing();
+                    }
+                    break;
             }
 
             return hasEncountered;
@@ -958,6 +968,11 @@ namespace JOSJA_Game
             {
                 GameEnd(true);
             }
+        }
+
+        static void Brewing()
+        {
+            // Temp
         }
 
         static void GameEnd(bool dead)

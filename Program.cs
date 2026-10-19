@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -653,7 +653,36 @@ namespace JOSJA_Game
             
             switch (currentLevel) 
             {
-                
+                case "level1":
+                    if (x == 104 && y == 10)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("This is where you entered from. It caved in just as you walked through.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(104, 10);
+                        Console.Write('?');
+                    }
+                    break;
+                case "level2":
+                    int chestItem = 4;
+                    if (x == 60 && y == 14 && chestItem == 4) //chest
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("The chest opens! Enter 'i' to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Interaction(chestItem);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(60, 14);
+                        Console.Write('?');
+                    }
+                    break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
@@ -690,14 +719,8 @@ namespace JOSJA_Game
             int inventorySlot = -1;
 
             Console.SetCursorPosition(31, 10);
-            Console.Write(": ");
-            string input = Console.ReadLine().ToLower();
-
-            //this if statement prevents a crash from happening if the user inputs nothing
-            if (input.Length > 0)
-            {
-                playerInteract = Convert.ToChar(input.Substring(0, 1));
-            }
+            Console.Write("Input: ");
+            playerInteract = Console.ReadKey().KeyChar;
 
             if (playerInteract == 'i')
             {
@@ -736,13 +759,7 @@ namespace JOSJA_Game
                     Console.SetCursorPosition(25, 15);
                     Console.Write($"Press [ENTER] to overwrite. Enter 'n' to cancel: ");
 
-                    input = Console.ReadLine().ToLower();
-
-                    //this if statement prevents a crash from happening if the user inputs nothing
-                    if (input.Length > 0)
-                    {
-                        overWrite = Convert.ToChar(input.Substring(0, 1));
-                    }
+                    playerInteract = Console.ReadKey().KeyChar;
 
                 }
 

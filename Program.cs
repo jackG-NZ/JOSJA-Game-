@@ -306,7 +306,19 @@ namespace JOSJA_Game
                     Console.Write($"Enemy HP: {new string('|', (int)enemyHP)}");
                     Console.BackgroundColor = ConsoleColor.Black;
 
-                    EnemyAIReaction(previousAction);
+                    if(enemyHP > 0)
+                    {
+                        EnemyAIReaction(previousAction);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(48, 2);
+                        Console.Write("The enemy has died!");
+
+                        isFighting = false;
+
+                        currentLevel = "level1";
+                    }
 
                     if (isPlayerTurn)
                     {
@@ -897,16 +909,23 @@ namespace JOSJA_Game
             /*EXPLANATION: This is the method for the player's attack*/
 
             Random rand = new Random();
-            int attackStrength = rand.Next(2, 5);
+            int attackPower = rand.Next(1, 5);
 
-            enemyHP -= attackStrength;
+            if(enemyHP - attackPower < 0)
+            {
+                enemyHP = 0;
+            }
+            else
+            {
+                enemyHP -= attackPower;
+            }
         }
 
         static void PlayerBlock()
         {
             /*EXPLANATION: This is the method for the block utility*/
 
-            enemyAttackModifier = 0.75;
+            enemyAttackModifier = 0;
         }
 
         static void PlayerHeal()
@@ -960,13 +979,14 @@ namespace JOSJA_Game
                     Console.Write("An unexpected error has occurred.");
                     break;
             }
+
+            enemyAttackModifier = 1;
         }
 
         static void EnemyAIAttack()
         {
             Random rand = new Random();
-            double attackPower = rand.Next(1, 5);
-            attackPower *= enemyAttackModifier;
+            double attackPower = rand.Next(1, 3);
 
             if(hp - attackPower < 0)
             {
@@ -974,12 +994,10 @@ namespace JOSJA_Game
             }
             else
             {
-                hp -= attackPower;
+                hp -= attackPower * enemyAttackModifier;
             }
 
             HP(hp);
-
-            enemyAttackModifier = 1;
         }
 
         static void HP(double hp)

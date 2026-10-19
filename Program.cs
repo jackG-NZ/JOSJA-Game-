@@ -92,53 +92,45 @@ namespace JOSJA_Game
 
             char skipDialogue = 'n'; //set this to n, so if the user enters nothing it assumes they don't want to skip the intro dialogue
 
-            Console.SetCursorPosition(23, 14);
-            Console.WriteLine("JOSJA Game Prototype. WORKS BEST IN WINDOWED MODE. Press [ENTER] to proceed.");
-            Console.ReadLine();
-            Console.Clear();
-
-            if (MainMenu()) 
-                return; // continuing a save skips the intro
-
-            Console.SetCursorPosition(35, 14);
-            Console.Write("Would you like to skip the opening dialogue? (y|n): ");
-            string input = Console.ReadLine().ToLower();
-
-            //this if statement prevents a crash from happening if the user inputs nothing
-            if (input.Length > 0)
+            string filePath = $"Assets/UIs/MainMenu.txt";
+            if (File.Exists(filePath))
             {
-                skipDialogue = Convert.ToChar(input.Substring(0, 1));
+                string MainMenuUI = File.ReadAllText(filePath);
+                Console.WriteLine($"{MainMenuUI}");
             }
-
-            Console.Clear();
-
-            if (skipDialogue == 'n')
+            else
             {
-                IntroDialogue(); //COMMENT OUT THIS METHOD TO SKIP THE INTRO DIALOGUE
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
-        }
-
-        static bool MainMenu()
-        {
-            /*EXPLANATION: This method gives the player a choice to start a new game or continue from their save file*/
-
-            Console.SetCursorPosition(35, 13);
-            Console.WriteLine("1. Continue");
-            Console.SetCursorPosition(35, 14);
-            Console.WriteLine("2. New Game");
-            Console.SetCursorPosition(35, 16);
-            Console.Write("Choose (1|2): ");
 
             int choice = Convert.ToInt32(Console.ReadLine());
             Console.Clear();
-
             if (choice == 1)
             {
                 SaveAndLoad(true);
-                return true;
             }
-            return false;
+            else
+            {
+                Console.SetCursorPosition(35, 14);
+                Console.Write("Would you like to skip the opening dialogue? (y|n): ");
+                string input = Console.ReadLine().ToLower();
+
+                //this if statement prevents a crash from happening if the user inputs nothing
+                if (input.Length > 0)
+                {
+                    skipDialogue = Convert.ToChar(input.Substring(0, 1));
+                }
+
+                Console.Clear();
+
+                if (skipDialogue == 'n')
+                {
+                    IntroDialogue(); //COMMENT OUT THIS METHOD TO SKIP THE INTRO DIALOGUE
+                }
+            }
         }
+
+
 
         static void IntroDialogue()
         {
@@ -1014,11 +1006,6 @@ namespace JOSJA_Game
             string filePath = $"Assets/UIs/Cauldron.txt";
             if (File.Exists(filePath))
             {
-                Console.BackgroundColor = ConsoleColor.DarkMagenta;
-
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.ForegroundColor = ConsoleColor.Gray;
-
                 string CauldronUI = File.ReadAllText(filePath);
                 Console.WriteLine($"{CauldronUI}");
             }

@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -685,6 +685,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(23, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine("Cauldron - press i to interact.");
+                        Console.ReadLine();
                         Brewing();
                     }
                     break;
@@ -972,7 +973,22 @@ namespace JOSJA_Game
 
         static void Brewing()
         {
-            // Temp
+            Console.Clear();
+            string filePath = $"Assets/UIs/Cauldron.txt";
+            if (File.Exists(filePath))
+            {
+                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                string CauldronUI = File.ReadAllText(filePath);
+                Console.WriteLine($"{CauldronUI}");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
+            }
         }
 
         static void GameEnd(bool dead)

@@ -343,14 +343,9 @@ namespace JOSJA_Game
                 //this block of code handles user input
                 Console.SetCursorPosition(0, 27);
                 Console.Write("Input: ");
-                string input = Console.ReadLine().ToLower();
-
-                //this if statement prevents a crash from happening if the user inputs nothing
-                if (input.Length > 0)
-                {
-                    action = Convert.ToChar(input.Substring(0, 1));
-                }
+                action = Console.ReadKey().KeyChar;
                 
+
                 //this big switch statement handles all of the player's actions. This includes movement, combat, and utility
                 switch (action)
                 {
@@ -451,7 +446,7 @@ namespace JOSJA_Game
             if (y-2 < 0 || y-2 >= map.Length) { return false; }
             if (x < 0 || x >= map[row].Length) { return false; }
 
-            return map[row][col] == '#';
+            return map[row][col] == '#' || map[row][col] == '|' || map[row][col] == '/' || map[row][col] == '\\';
         }
 
         static int[] CheckRoom(int x, int y, int[] xBoundaries, int[] yBoundaries)

@@ -4,7 +4,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -355,25 +355,25 @@ namespace JOSJA_Game
                 switch (action)
                 {
                     case 'w':
-                        if (y > yBoundaries[0] && isFighting == false)
+                        if (y > yBoundaries[0] && !isFighting && !IsWall(x, y - 1))
                         {
                             y -= 1;
                         }
                         break;
                     case 'a':
-                        if (x > xBoundaries[0] && isFighting == false)
+                        if (x > xBoundaries[0] && !isFighting && !IsWall(x - 1, y))
                         {
                             x -= 1;
                         }
                         break;
                     case 's':
-                        if (y < yBoundaries[1] && isFighting == false)
+                        if (y < yBoundaries[1] && !isFighting && !IsWall(x, y + 1))
                         {
                             y += 1;
                         }
                         break;
                     case 'd':
-                        if (x < xBoundaries[1] && isFighting == false)
+                        if (x < xBoundaries[1] && !isFighting && !IsWall(x + 1, y))
                         {
                             x += 1;
                         }
@@ -439,6 +439,19 @@ namespace JOSJA_Game
                 //clear the screen to prevent trailing
                 Console.Clear();
             }
+        }
+
+        static bool IsWall(int x, int y) //checks if the player is walking into a wall
+        {
+            string[] map = File.ReadAllLines($"Assets/Levels/{currentLevel}.txt");
+
+            int row = y-2;
+            int col = x;
+
+            if (y-2 < 0 || y-2 >= map.Length) { return false; }
+            if (x < 0 || x >= map[row].Length) { return false; }
+
+            return map[row][col] == '#';
         }
 
         static int[] CheckRoom(int x, int y, int[] xBoundaries, int[] yBoundaries)

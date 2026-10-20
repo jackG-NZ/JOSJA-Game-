@@ -71,6 +71,11 @@ namespace JOSJA_Game
             [5] = Items[1],
         };
 
+        static Dictionary<int, int> Chests = new Dictionary<int, int>()
+        {
+            [1] = 4,
+        };
+
         static void Main()
         {
             GameIntro();
@@ -690,8 +695,7 @@ namespace JOSJA_Game
                     }
                     break;
                 case "level2":
-                    int chestItem = 4;
-                    if (x == 60 && y == 14 && chestItem == 4) //chest
+                    if (x == 60 && y == 14) //chest
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -699,22 +703,21 @@ namespace JOSJA_Game
                         Console.BackgroundColor = ConsoleColor.Black;
                         Console.SetCursorPosition(31, 10);
                         Console.WriteLine($"Press e");
+                        Console.WriteLine(Items[Chests[1]]);
                         if (isInteracting)
                         {
                             Console.SetCursorPosition(31, 11);
-                            Console.WriteLine($"The chest opens! There's a {Items[chestItem]} inside");
-                            
-                            chestItem = Interaction(chestItem);
+                            Chests[1] = Interaction(Chests[1]);
                             return true;
                         }
                         isInteracting = false;
-
 
                     }
                     else
                     {
                         Console.SetCursorPosition(60, 14);
                         Console.Write('?');
+                        isInteracting = false;
                     }
                     break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION

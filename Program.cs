@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level2";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -360,7 +360,8 @@ namespace JOSJA_Game
                 Console.SetCursorPosition(0, 27);
                 Console.Write("Input: ");
                 action = Console.ReadKey().KeyChar;
-                
+                isInteracting = false;
+
 
                 //this big switch statement handles all of the player's actions. This includes movement, combat, and utility
                 switch (action)
@@ -684,9 +685,13 @@ namespace JOSJA_Game
                     {
                         Console.SetCursorPosition(23, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Cauldron - press i to interact.");
-                        Console.ReadLine();
-                        Brewing();
+                        Console.WriteLine("Cauldron - press E to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        if (isInteracting)
+                        {
+                            Brewing();
+                            Console.ReadLine();
+                        }  
                     }
                     else
                     {

@@ -290,10 +290,7 @@ namespace JOSJA_Game
                 Console.ForegroundColor = ConsoleColor.White;
 
                 //Manages encounters
-                if(EncounterManagement(currentLevel, x, y, isInteracting))
-                {
-                    y -= 2;
-                }
+                EncounterManagement(currentLevel, x, y);
 
                 if (isFighting)
                 {
@@ -390,9 +387,27 @@ namespace JOSJA_Game
                             x += 1;
                         }
                         break;
+
                     case 'e':
-                        isInteracting = true;
+                        if (currentLevel == "level1" && x == 10 && y == 10)
+                        {
+                            Brewing();
+                            Console.ReadLine();
+                        }
+                        else if (currentLevel == "level2" && x == 60 && y == 14)
+                        {
+                            Chests[1] = Interaction(Chests[1]);
+                        }
+                        else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
+                        {
+                            Interaction(17);
+                        }
+                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
+                        {
+                            GameEnd(false);
+                        }
                         break;
+
                     case 'h':
                         PlayerHelp();
                         break;
@@ -658,7 +673,7 @@ namespace JOSJA_Game
             return new[] { x, y };
         }
 
-        static bool EncounterManagement(string currentLevel, int x, int y, bool isInteracting)
+        static bool EncounterManagement(string currentLevel, int x, int y)
         {
             /*EXPLANATION: This method handles all encounters with items, enemies, interactables etc*/
 
@@ -687,11 +702,7 @@ namespace JOSJA_Game
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine("Cauldron - press E to interact.");
                         Console.BackgroundColor = ConsoleColor.Black;
-                        if (isInteracting)
-                        {
-                            Brewing();
-                            Console.ReadLine();
-                        }  
+                        
                     }
                     else
                     {
@@ -709,21 +720,10 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(31, 10);
                         Console.WriteLine($"Press e");
                         Console.WriteLine(Items[Chests[1]]);
-                        if (isInteracting)
-                        {
-                            Console.SetCursorPosition(31, 11);
-                            Chests[1] = Interaction(Chests[1]);
-                            return true;
-                        }
-                        isInteracting = false;
+                        
 
                     }
-                    else
-                    {
-                        Console.SetCursorPosition(60, 14);
-                        Console.Write('?');
-                        isInteracting = false;
-                    }
+
                     break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])

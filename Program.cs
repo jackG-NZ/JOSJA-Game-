@@ -768,7 +768,7 @@ namespace JOSJA_Game
 
             try
             {
-                inventorySlot = Console.ReadKey().KeyChar;
+                inventorySlot = int.Parse(Console.ReadKey().KeyChar.ToString());
             }
             catch
             {

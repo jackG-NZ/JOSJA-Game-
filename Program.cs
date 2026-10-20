@@ -248,6 +248,7 @@ namespace JOSJA_Game
             bool isFighting = false;
             bool isMoving = true;
             bool isPlayerTurn = false;
+            bool isInteracting = false;
 
             if (currentLevel == "enemyEncounter")
             {
@@ -284,7 +285,7 @@ namespace JOSJA_Game
                 Console.ForegroundColor = ConsoleColor.White;
 
                 //Manages encounters
-                if(EncounterManagement(currentLevel, x, y))
+                if(EncounterManagement(currentLevel, x, y, isInteracting))
                 {
                     y -= 2;
                 }
@@ -382,6 +383,9 @@ namespace JOSJA_Game
                         {
                             x += 1;
                         }
+                        break;
+                    case 'e':
+                        isInteracting = true;
                         break;
                     case 'h':
                         PlayerHelp();
@@ -648,7 +652,7 @@ namespace JOSJA_Game
             return new[] { x, y };
         }
 
-        static bool EncounterManagement(string currentLevel, int x, int y)
+        static bool EncounterManagement(string currentLevel, int x, int y, bool isInteracting)
         {
             /*EXPLANATION: This method handles all encounters with items, enemies, interactables etc*/
 
@@ -691,19 +695,21 @@ namespace JOSJA_Game
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("The chest opens!");
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
                         Console.BackgroundColor = ConsoleColor.Black;
-
                         Console.SetCursorPosition(31, 10);
-                        Console.WriteLine($"There's a {Items[chestItem]} inside");
-                        Console.SetCursorPosition(31, 11);
-                        Console.WriteLine($"Do you want to take it? (press i)");
-                        char input = Console.ReadKey().KeyChar;
-                        if (input == 'i')
+                        Console.WriteLine($"Press e");
+                        if (isInteracting)
                         {
-                            Interaction(chestItem);
+                            Console.SetCursorPosition(31, 11);
+                            Console.WriteLine($"The chest opens! There's a {Items[chestItem]} inside");
+                            
+                            chestItem = Interaction(chestItem);
+                            return true;
                         }
-                        return true;
+                        isInteracting = false;
+
+
                     }
                     else
                     {
@@ -741,68 +747,75 @@ namespace JOSJA_Game
             return hasEncountered;
         }
 
-        static void Interaction(int interactionID)
+        static int Interaction(int interactionID)
         {
             char playerInteract = 'z', overWrite = 'n';
 
             int inventorySlot = -1;
+            int newItem = interactionID;
 
-            do
+            Console.Clear();
+            Console.SetCursorPosition(51, 11);
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.Write("==== INVENTORY ====");
+            Console.SetCursorPosition(15, 12);
+            Console.Write($"Slot 1:{Inventory[1]} Slot 2:{Inventory[2]} Slot 3:{Inventory[3]} Slot 4:{Inventory[4]} Slot 5:{Inventory[5]}");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(44, 14);
+            Console.WriteLine($"You picked up a {Items[interactionID]}!");
+            Console.SetCursorPosition(44, 15);
+            Console.Write("Choose an inventory slot (1 - 5): ");
+
+            try
             {
-                Console.Clear();
-                Console.SetCursorPosition(51, 11);
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.Write("==== INVENTORY ====");
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(44, 13);
-                Console.WriteLine($"You picked up a {Items[interactionID]}!");
-                Console.SetCursorPosition(44, 14);
-                Console.Write("Choose an inventory slot (1 - 5): ");
-
-                try
-                {
-                    inventorySlot = Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.SetCursorPosition(43, 15);
-                    Console.Write("          ! Input Error !         ");
-                    Thread.Sleep(3000);
-                }
-
-            } while (inventorySlot > 5 || inventorySlot < 0);
-
-            if (Inventory[inventorySlot] != Items[1])
+                inventorySlot = Console.ReadKey().KeyChar;
+            }
+            catch
             {
-                Console.Clear();
-                Console.SetCursorPosition(25, 13);
-                Console.Write("Warning! This slot is already taken. Do you wish to overwrite its contents?");
-                Console.SetCursorPosition(25, 14);
-                Console.Write($"Slot {inventorySlot} is currently occupied by the item: {Inventory[inventorySlot]}.");
-                Console.SetCursorPosition(25, 15);
-                Console.Write($"Press [ENTER] to overwrite. Enter 'n' to cancel: ");
-
-                playerInteract = Console.ReadKey().KeyChar;
-
+                Console.SetCursorPosition(43, 15);
+                Console.Write("          ! Try Again !         ");
+                Thread.Sleep(500);
             }
 
-            if (overWrite == 'y')
+            if (inventorySlot <= 5 && inventorySlot >= 1)
             {
-                Console.Clear();
+                newItem = inventorySlot;
                 Inventory[inventorySlot] = Items[interactionID];
-                Console.SetCursorPosition(38, 11);
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.Write($"Slot overwritten by object {Items[interactionID]}!");
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(38, 13);
-                Console.Write("Press [ENTER] to return to game.");
+                Console.WriteLine($"slot {inventorySlot} is {Items[interactionID]}");
             }
-            else
-            {
-                Console.Clear();
-                Console.SetCursorPosition(28, 13);
-                Console.Write($"This slot will not be overwritten. Press [ENTER] to return to game.");
-            }
+            return newItem;
+
+            //if (Inventory[inventorySlot] != Items[1])
+            //{
+            //    Console.Clear();
+            //    Console.SetCursorPosition(25, 13);
+            //    Console.Write("Warning! This slot is already taken. Do you wish to overwrite its contents?");
+            //    Console.SetCursorPosition(25, 14);
+            //    Console.Write($"Slot {inventorySlot} is currently occupied by the item: {Inventory[inventorySlot]}.");
+            //    Console.SetCursorPosition(25, 15);
+            //    Console.Write($"Press [ENTER] to overwrite. Enter 'n' to cancel: ");
+
+            //    playerInteract = Console.ReadKey().KeyChar;
+
+            //}
+
+            //if (overWrite == 'y')
+            //{
+            //    Console.Clear();
+            //    Inventory[inventorySlot] = Items[interactionID];
+            //    Console.SetCursorPosition(38, 11);
+            //    Console.BackgroundColor = ConsoleColor.DarkBlue;
+            //    Console.Write($"Slot overwritten by object {Items[interactionID]}!");
+            //    Console.BackgroundColor = ConsoleColor.Black;
+            //    Console.SetCursorPosition(38, 13);
+            //    Console.Write("Press [ENTER] to return to game.");
+            //}
+            //else
+            //{
+            //    Console.Clear();
+            //    Console.SetCursorPosition(28, 13);
+            //    Console.Write($"This slot will not be overwritten. Press [ENTER] to return to game.");
+            //}
         }
 
         static void SpawnRoom(string nextLevel)

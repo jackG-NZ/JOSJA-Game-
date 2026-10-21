@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -145,8 +145,6 @@ namespace JOSJA_Game
             }
         }
 
-
-
         static void IntroDialogue()
         {
             /*EXPLANATION: This method gives the player a brief intro to the game's story*/
@@ -259,9 +257,9 @@ namespace JOSJA_Game
 
             int previousAction = 0; //this records the player's previous action so the enemy AI can react appropriately
 
-            bool isFighting = false;
             bool isMoving = true;
             bool isPlayerTurn = false;
+            bool isFighting = false;
             bool isInteracting = false;
 
             if (currentLevel == "enemyEncounter")
@@ -304,7 +302,7 @@ namespace JOSJA_Game
                 if (isFighting)
                 {
                     //I moved all the combat stuff to a single method for better readability
-                    CombatLoop(previousAction, isFighting, isPlayerTurn);
+                    isFighting = CombatLoop(previousAction, isFighting, isPlayerTurn);
 
                     previousAction = 0;
                 }
@@ -440,89 +438,100 @@ namespace JOSJA_Game
             }
         }
 
-        static void CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
+        static bool CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
         {
             /*EXPLANATION: This method handles pretty much all of the crucial combat functionality.*/
-
-            Console.SetCursorPosition(4, 2);
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write($"Your HP:  ");
-            Console.SetCursorPosition(14, 2);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write($"{new string('|', (int)hp)}");
-
-            Console.SetCursorPosition(4, 3);
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write($"Enemy HP: ");
-            Console.SetCursorPosition(14, 3);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write($"{new string('|', (int)enemyHP)}");
-            Console.BackgroundColor = ConsoleColor.Black;
-
-            Console.SetCursorPosition(4, 4);
-            Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
-
-            DisplayEnemy();
-
-            if (enemyHP > 0)
+            if (isFighting)
             {
-                EnemyAIReaction(previousAction);
-            }
-            else
-            {
-                Console.SetCursorPosition(48, 2);
-                Console.Write("The enemy has died!");
+                Console.SetCursorPosition(4, 2);
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($"Your HP:  ");
+                Console.SetCursorPosition(14, 2);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"{new string('|', (int)hp)}");
 
-                isFighting = false;
-
-                currentLevel = "level1";
-            }
-
-            if (isPlayerTurn)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.SetCursorPosition(53, 16);
-                Console.Write("YOUR TURN!");
+                Console.SetCursorPosition(4, 3);
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($"Enemy HP: ");
+                Console.SetCursorPosition(14, 3);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"{new string('|', (int)enemyHP)}");
                 Console.BackgroundColor = ConsoleColor.Black;
-            }
-            else
-            {
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(53, 16);
-                Console.Write("ENEMY TURN");
-                Console.BackgroundColor = ConsoleColor.Black;
+
+                Console.SetCursorPosition(4, 4);
+                Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
+
+                DisplayEnemy();
+
+                if (isPlayerTurn)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    Console.SetCursorPosition(53, 16);
+                    Console.Write("YOUR TURN!");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(53, 16);
+                    Console.Write("ENEMY TURN");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+
+                if (enemyHP > 0)
+                {
+                    EnemyAIReaction(previousAction);
+
+                    //Draws the input options 
+                    if (isPlayerTurn)
+                    {
+                        Console.SetCursorPosition(21, 18);
+                        Console.Write("Attack");
+                        Console.SetCursorPosition(20, 19);
+                        Console.Write("ENTER 1");
+
+                        Console.SetCursorPosition(44, 18);
+                        Console.Write("Block");
+                        Console.SetCursorPosition(43, 19);
+                        Console.Write("ENTER 2");
+
+                        Console.SetCursorPosition(68, 18);
+                        Console.Write("Heal");
+                        Console.SetCursorPosition(67, 19);
+                        Console.Write("ENTER 3");
+
+                        Console.SetCursorPosition(91, 18);
+                        Console.Write("Flee");
+                        Console.SetCursorPosition(90, 19);
+                        Console.Write("ENTER 4");
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(19, 18);
+                        Console.Write("WHEN READY");
+                        Console.SetCursorPosition(18, 19);
+                        Console.Write("PRESS ENTER");
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(48, 2);
+                    Console.Write("The enemy has died!");
+
+                    Thread.Sleep(3000);
+
+                    Console.Clear();
+
+                    isFighting = false;
+
+                    currentLevel = "level1";
+
+                    Console.SetCursorPosition(39, 15);
+                    Console.Write("Congratulations! Press [ENTER] to proceed.");
+                }
             }
 
-            //Draws the input options 
-            if (isPlayerTurn)
-            {
-                Console.SetCursorPosition(21, 18);
-                Console.Write("Attack");
-                Console.SetCursorPosition(20, 19);
-                Console.Write("ENTER 1");
-
-                Console.SetCursorPosition(44, 18);
-                Console.Write("Block");
-                Console.SetCursorPosition(43, 19);
-                Console.Write("ENTER 2");
-
-                Console.SetCursorPosition(68, 18);
-                Console.Write("Heal");
-                Console.SetCursorPosition(67, 19);
-                Console.Write("ENTER 3");
-
-                Console.SetCursorPosition(91, 18);
-                Console.Write("Flee");
-                Console.SetCursorPosition(90, 19);
-                Console.Write("ENTER 4");
-            }
-            else
-            {
-                Console.SetCursorPosition(19, 18);
-                Console.Write("WHEN READY");
-                Console.SetCursorPosition(18, 19);
-                Console.Write("PRESS ENTER");
-            }
+            return isFighting;
         }
 
         static bool IsWall(int x, int y) //checks if the player is walking into a wall

@@ -1039,6 +1039,43 @@ namespace JOSJA_Game
             {
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
+
+            Console.WriteLine("Choose a potion to brew: ");
+            int potionChoice = Convert.ToInt32(Console.ReadLine());
+            switch(potionChoice)
+            {
+                case 1:
+                    Console.WriteLine("You have brewed a Health Potion!");
+                    Interaction(16);
+                    break;
+                case 2:
+                    Console.WriteLine("You have brewed a Strength Potion!");
+                    Interaction(15);
+                    break;
+                case 3:
+                    Console.WriteLine("You have brewed a Poision Potion!");
+                    Interaction(12);
+                    break;
+                case 4:
+                    Console.WriteLine("You have brewed an Antidote Potion!");
+                    Interaction(11);
+                    break;
+                case 5:
+                    Console.WriteLine("You have brewed a Mana Potion!");
+                    Interaction(14);
+                    break;
+                case 6:
+                    Console.WriteLine("You have brewed a Stamina Potion!");
+                    Interaction(13);
+                    break;
+                case 7:
+                    Console.WriteLine("You have brewed a WD40!");
+                    Interaction(10);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. No potion brewed.");
+                    break;
+            }
         }
 
         static void GameEnd(bool dead)

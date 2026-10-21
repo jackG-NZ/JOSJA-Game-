@@ -55,10 +55,10 @@ namespace JOSJA_Game
             [18] = "Spider Fang",
             [19] = "Stone",
             [20] = "Slime",
-            [21] = "Iron shard",
-            [22] = "Spider Fang",
-            [23] = "Stone",
-            [24] = "Slime",
+            [21] = "Iron Shard",
+            [22] = "Feather",
+            [23] = "Bone",
+            [24] = "Cryptcrawler Root",
 
             // Story/Lore Items
             [30] = "Portal Component",
@@ -1070,15 +1070,28 @@ namespace JOSJA_Game
 
             Console.WriteLine("Choose a potion to brew: ");
             int potionChoice = Convert.ToInt32(Console.ReadLine());
-            switch(potionChoice)
+
+            Dictionary<int, int> Times = new Dictionary<int, int>()
+            {
+                [1] = 1000,
+                [2] = 500,
+                [3] = 500,
+                [4] = 500,
+                [5] = 500,
+                [6] = 500,
+                [7] = 1500,
+            };
+
+            switch (potionChoice)
             {
                 case 1:
                     Console.WriteLine("You have brewed a Health Potion!");
-                    Interaction(16);
+                    Thread.Sleep(Times[potionChoice]);
+                    Interaction(10);
                     break;
                 case 2:
                     Console.WriteLine("You have brewed an Antidote!");
-                    Interaction(15);
+                    Interaction(11);
                     break;
                 case 3:
                     Console.WriteLine("You have brewed a Poision Potion!");
@@ -1086,7 +1099,7 @@ namespace JOSJA_Game
                     break;
                 case 4:
                     Console.WriteLine("You have brewed a Strength Potion!");
-                    Interaction(11);
+                    Interaction(13);
                     break;
                 case 5:
                     Console.WriteLine("You have brewed a Mana Potion!");
@@ -1094,11 +1107,13 @@ namespace JOSJA_Game
                     break;
                 case 6:
                     Console.WriteLine("You have brewed a Stamina Potion!");
-                    Interaction(13);
+                    Thread.Sleep(Times[potionChoice]);
+                    Interaction(15);
                     break;
                 case 7:
                     Console.WriteLine("You have brewed some WD40!");
-                    Interaction(10);
+                    Thread.Sleep(Times[potionChoice]);
+                    Interaction(31);
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");

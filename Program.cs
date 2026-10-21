@@ -124,13 +124,13 @@ namespace JOSJA_Game
             string input1 = Console.ReadLine();
 
             //this if statement prevents a crash from happening if the user inputs nothing
-            if (input1.Length > 0) 
+            if (input1.Length > 0)
             {
-                choice = Convert.ToChar(input1.Substring(0, 1));
+                choice = input1[0];
             }
 
             Console.Clear();
-            if (choice == 1)
+            if (choice == '1')
             {
                 SaveAndLoad(true);
             }
@@ -1176,9 +1176,19 @@ namespace JOSJA_Game
 
         static void Brewing()
         {
-            Console.Clear();
+            Dictionary<int, int> Times = new Dictionary<int, int>()
+            {
+                [1] = 8000,
+                [2] = 9500,
+                [3] = 6000,
+                [4] = 1500,
+                [5] = 4000,
+                [6] = 5500,
+                [7] = 10500,
+            };
             string[] CauldronLines = null;
 
+            Console.Clear();
             string filePath = $"Assets/UIs/Cauldron.txt";
             if (File.Exists(filePath))
             {
@@ -1192,17 +1202,6 @@ namespace JOSJA_Game
 
             Console.WriteLine("Choose a potion to brew: ");
             int potionChoice = Convert.ToInt32(Console.ReadLine());
-
-            Dictionary<int, int> Times = new Dictionary<int, int>()
-            {
-                [1] = 8000,
-                [2] = 9500,
-                [3] = 6000,
-                [4] = 1500,
-                [5] = 4000,
-                [6] = 5500,
-                [7] = 10500,
-            };
             int brewTime = Times[potionChoice];
             int BrewedPotion = 0;
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualBasic;
 using System.Diagnostics;
-using System.Security.Principal;
 
 namespace JOSJA_Game
 {
@@ -107,6 +106,8 @@ namespace JOSJA_Game
         {
             /*EXPLANATION: This method serves as the title screen. We should make it look nice towards the end of the project*/
 
+            int choice = 2;
+
             char skipDialogue = 'n'; //set this to n, so if the user enters nothing it assumes they don't want to skip the intro dialogue
 
             string filePath = $"Assets/UIs/MainMenu.txt";
@@ -120,7 +121,14 @@ namespace JOSJA_Game
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
-            int choice = Convert.ToInt32(Console.ReadLine());
+            string input1 = Console.ReadLine();
+
+            //this if statement prevents a crash from happening if the user inputs nothing
+            if (input1.Length > 0) 
+            {
+                choice = Convert.ToChar(input1.Substring(0, 1));
+            }
+
             Console.Clear();
             if (choice == 1)
             {
@@ -130,12 +138,12 @@ namespace JOSJA_Game
             {
                 Console.SetCursorPosition(35, 14);
                 Console.Write("Would you like to skip the opening dialogue? (y|n): ");
-                string input = Console.ReadLine().ToLower();
+                string input2 = Console.ReadLine().ToLower();
 
                 //this if statement prevents a crash from happening if the user inputs nothing
-                if (input.Length > 0)
+                if (input2.Length > 0)
                 {
-                    skipDialogue = Convert.ToChar(input.Substring(0, 1));
+                    skipDialogue = Convert.ToChar(input2.Substring(0, 1));
                 }
 
                 Console.Clear();
@@ -146,8 +154,6 @@ namespace JOSJA_Game
                 }
             }
         }
-
-
 
         static void IntroDialogue()
         {
@@ -261,9 +267,9 @@ namespace JOSJA_Game
 
             int previousAction = 0; //this records the player's previous action so the enemy AI can react appropriately
 
-            bool isFighting = false;
             bool isMoving = true;
             bool isPlayerTurn = false;
+            bool isFighting = false;
             bool isInteracting = false;
 
             if (currentLevel == "enemyEncounter")
@@ -306,7 +312,7 @@ namespace JOSJA_Game
                 if (isFighting)
                 {
                     //I moved all the combat stuff to a single method for better readability
-                    CombatLoop(previousAction, isFighting, isPlayerTurn);
+                    isFighting = CombatLoop(previousAction, isFighting, isPlayerTurn);
 
                     previousAction = 0;
                 }
@@ -425,7 +431,10 @@ namespace JOSJA_Game
                         }
                         break;
                     case 'p':
-                        SaveAndLoad(false);
+                        if (!isFighting)
+                        {
+                            SaveAndLoad(false);
+                        }
                         break;
                     default:
                         break;
@@ -444,89 +453,100 @@ namespace JOSJA_Game
             }
         }
 
-        static void CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
+        static bool CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
         {
             /*EXPLANATION: This method handles pretty much all of the crucial combat functionality.*/
-
-            Console.SetCursorPosition(4, 2);
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write($"Your HP:  ");
-            Console.SetCursorPosition(14, 2);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write($"{new string('|', (int)hp)}");
-
-            Console.SetCursorPosition(4, 3);
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write($"Enemy HP: ");
-            Console.SetCursorPosition(14, 3);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Write($"{new string('|', (int)enemyHP)}");
-            Console.BackgroundColor = ConsoleColor.Black;
-
-            Console.SetCursorPosition(4, 4);
-            Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
-
-            DisplayEnemy();
-
-            if (enemyHP > 0)
+            if (isFighting)
             {
-                EnemyAIReaction(previousAction);
-            }
-            else
-            {
-                Console.SetCursorPosition(48, 2);
-                Console.Write("The enemy has died!");
+                Console.SetCursorPosition(4, 2);
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($"Your HP:  ");
+                Console.SetCursorPosition(14, 2);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"{new string('|', (int)hp)}");
 
-                isFighting = false;
-
-                currentLevel = "level1";
-            }
-
-            if (isPlayerTurn)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.SetCursorPosition(53, 16);
-                Console.Write("YOUR TURN!");
+                Console.SetCursorPosition(4, 3);
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($"Enemy HP: ");
+                Console.SetCursorPosition(14, 3);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"{new string('|', (int)enemyHP)}");
                 Console.BackgroundColor = ConsoleColor.Black;
-            }
-            else
-            {
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(53, 16);
-                Console.Write("ENEMY TURN");
-                Console.BackgroundColor = ConsoleColor.Black;
+
+                Console.SetCursorPosition(4, 4);
+                Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
+
+                DisplayEnemy();
+
+                if (isPlayerTurn)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    Console.SetCursorPosition(53, 16);
+                    Console.Write("YOUR TURN!");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(53, 16);
+                    Console.Write("ENEMY TURN");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+
+                if (enemyHP > 0)
+                {
+                    EnemyAIReaction(previousAction);
+
+                    //Draws the input options 
+                    if (isPlayerTurn)
+                    {
+                        Console.SetCursorPosition(21, 18);
+                        Console.Write("Attack");
+                        Console.SetCursorPosition(20, 19);
+                        Console.Write("ENTER 1");
+
+                        Console.SetCursorPosition(44, 18);
+                        Console.Write("Block");
+                        Console.SetCursorPosition(43, 19);
+                        Console.Write("ENTER 2");
+
+                        Console.SetCursorPosition(68, 18);
+                        Console.Write("Heal");
+                        Console.SetCursorPosition(67, 19);
+                        Console.Write("ENTER 3");
+
+                        Console.SetCursorPosition(91, 18);
+                        Console.Write("Flee");
+                        Console.SetCursorPosition(90, 19);
+                        Console.Write("ENTER 4");
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(19, 18);
+                        Console.Write("WHEN READY");
+                        Console.SetCursorPosition(18, 19);
+                        Console.Write("PRESS ENTER");
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(48, 2);
+                    Console.Write("The enemy has died!");
+
+                    Thread.Sleep(3000);
+
+                    Console.Clear();
+
+                    isFighting = false;
+
+                    currentLevel = "level1";
+
+                    Console.SetCursorPosition(39, 15);
+                    Console.Write("Congratulations! Press [ENTER] to proceed.");
+                }
             }
 
-            //Draws the input options 
-            if (isPlayerTurn)
-            {
-                Console.SetCursorPosition(21, 18);
-                Console.Write("Attack");
-                Console.SetCursorPosition(20, 19);
-                Console.Write("ENTER 1");
-
-                Console.SetCursorPosition(44, 18);
-                Console.Write("Block");
-                Console.SetCursorPosition(43, 19);
-                Console.Write("ENTER 2");
-
-                Console.SetCursorPosition(68, 18);
-                Console.Write("Heal");
-                Console.SetCursorPosition(67, 19);
-                Console.Write("ENTER 3");
-
-                Console.SetCursorPosition(91, 18);
-                Console.Write("Flee");
-                Console.SetCursorPosition(90, 19);
-                Console.Write("ENTER 4");
-            }
-            else
-            {
-                Console.SetCursorPosition(19, 18);
-                Console.Write("WHEN READY");
-                Console.SetCursorPosition(18, 19);
-                Console.Write("PRESS ENTER");
-            }
+            return isFighting;
         }
 
         static bool IsWall(int x, int y) //checks if the player is walking into a wall
@@ -1051,6 +1071,9 @@ namespace JOSJA_Game
 
         static void PlayerBlock()
         {
+            Console.SetCursorPosition(44, 2);
+            Console.Write("   Utility action detected.   ");
+
             Console.SetCursorPosition(38, 3);
             Console.BackgroundColor = ConsoleColor.Cyan;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -1087,7 +1110,6 @@ namespace JOSJA_Game
                 case 0:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
-
                     break;
                 case 1:
                     EnemyAIAttack();

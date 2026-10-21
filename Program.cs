@@ -317,7 +317,9 @@ namespace JOSJA_Game
                     Console.Write($"{new string('|', (int)enemyHP)}");
                     Console.BackgroundColor = ConsoleColor.Black;
 
-                    if(enemyHP > 0)
+                    DisplayEnemy();
+
+                    if (enemyHP > 0)
                     {
                         EnemyAIReaction(previousAction);
                     }
@@ -892,6 +894,21 @@ namespace JOSJA_Game
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
+        }
+
+        static void DisplayEnemy()
+        {
+            string filePath = $"Assets/Enemies/Skeleton.txt";
+
+            if (File.Exists(filePath))
+            {
+                string enemyContents = File.ReadAllText(filePath);
+                Console.Write($"{enemyContents}");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
+            }
         }
 
         static void SaveAndLoad(bool load)

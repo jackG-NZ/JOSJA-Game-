@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level2";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -317,7 +317,9 @@ namespace JOSJA_Game
                     Console.Write($"{new string('|', (int)enemyHP)}");
                     Console.BackgroundColor = ConsoleColor.Black;
 
-                    if(enemyHP > 0)
+                    DisplayEnemy();
+
+                    if (enemyHP > 0)
                     {
                         EnemyAIReaction(previousAction);
                     }
@@ -376,6 +378,8 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(18, 19);
                         Console.Write("PRESS ENTER");
                     }
+
+                    previousAction = 0;
                 }
 
                 //this block of code handles user input
@@ -801,10 +805,10 @@ namespace JOSJA_Game
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Black;
             WriteLineCenter("==== INVENTORY ====", 7);
-            WriteLineCenter($"Slot 1:{Inventory[1]} Slot 2:{Inventory[2]} Slot 3:{Inventory[3]} Slot 4:{Inventory[4]} Slot 5:{Inventory[5]}", 9);
-            WriteLineCenter($"You picked up a {Items[interactionID]}!", 13);
-            Console.SetCursorPosition(44, 15);
+            WriteLineCenter($"Slot 1: {Inventory[1]}     Slot 2: {Inventory[2]}     Slot 3: {Inventory[3]}     Slot 4: {Inventory[4]}     Slot 5: {Inventory[5]}", 9);
+            WriteLineCenter($"You got a {Items[interactionID]}!", 13);
             WriteLineCenter("Choose an inventory slot (1 - 5): ", 15);
+
             char key = Console.ReadKey().KeyChar;
             int.TryParse(key.ToString(), out inventorySlot);
 
@@ -892,6 +896,21 @@ namespace JOSJA_Game
 
         }
 
+        static void DisplayEnemy()
+        {
+            string filePath = $"Assets/Enemies/Skeleton.txt";
+
+            if (File.Exists(filePath))
+            {
+                string enemyContents = File.ReadAllText(filePath);
+                Console.Write($"{enemyContents}");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Can't find the file: {filePath}");
+            }
+        }
+
         static void SaveAndLoad(bool load)
         {
             const string saveFolder = "PlayerData";
@@ -967,6 +986,13 @@ namespace JOSJA_Game
                 enemyHP -= attackPower;
             }
 
+            Console.SetCursorPosition(50, 3);
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($" Damage dealt: {attackPower} ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
             Console.Beep(100, 90);
             Console.Beep(200, 90);
             Console.Beep(300, 90);
@@ -1032,7 +1058,8 @@ namespace JOSJA_Game
             Console.Write("   The enemy has attacked the player!   ");
 
             Random rand = new Random();
-            double attackPower = rand.Next(1, 3);
+            double attackPower = rand.Next(1, 5);
+            double totalDamage = attackPower * enemyAttackModifier;
 
             if(hp - attackPower < 0)
             {
@@ -1040,10 +1067,17 @@ namespace JOSJA_Game
             }
             else
             {
-                hp -= attackPower * enemyAttackModifier;
+                hp -= totalDamage;
             }
 
             HP(hp);
+
+            Console.SetCursorPosition(50, 3);
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($" Damage dealt: {totalDamage} ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         static void HP(double hp)

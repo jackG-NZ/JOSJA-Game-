@@ -83,6 +83,7 @@ namespace JOSJA_Game
         static Dictionary<int, int> Chests = new Dictionary<int, int>()
         {
             [1] = 4,
+            [2] = 10,
         };
 
         static void Main()
@@ -311,7 +312,6 @@ namespace JOSJA_Game
                 if (!isFighting)
                 {
                     Console.SetCursorPosition(0, 27);
-                    Console.Write("Input: ");
                     action = Console.ReadKey().KeyChar;
                     isInteracting = false;
                 }
@@ -319,7 +319,6 @@ namespace JOSJA_Game
                 {
                     //the ReadKey movement is great but it bugs out the combat system so I've added this here
                     Console.SetCursorPosition(0, 27);
-                    Console.Write("Input: ");
                     string input = Console.ReadLine().ToLower();
                     if(input.Length > 0)
                     {
@@ -364,6 +363,10 @@ namespace JOSJA_Game
                         else if (currentLevel == "level2" && x == 60 && y == 14)
                         {
                             Chests[1] = Interaction(Chests[1]);
+                        }
+                        else if (currentLevel == "level4" && x == 105 && y == 15)
+                        {
+                            Chests[2] = Interaction(Chests[2]);
                         }
                         else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                         {
@@ -785,7 +788,50 @@ namespace JOSJA_Game
 
 
                     }
+                    else
+                    {
+                        Console.SetCursorPosition(60, 14);
+                        Console.Write('?');
+                    }
+                    break;
+                case "level4":
+                    if (x == 105 && y == 15) //chest
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
 
+
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(105, 15);
+                        Console.Write('?');
+                    }
+                    if (x == 46 && y == 10) //Portal and end game
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("It looks like a broken portal, maybe if its fixed you could use it to get out of this place...");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else if (x == 46 && y == 10 && Inventory.ContainsValue(Items[17])) //Portal and end game
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+
+                        GameEnd(false);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(46, 10);
+                        Console.Write('?');
+                    }
                     break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
@@ -801,17 +847,7 @@ namespace JOSJA_Game
                         hasEncountered = true;
                     }
                     break;
-                
-                case "level4": //BOTTOM ROOM PORTAL INTERACTION/GAME END
-                    if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
-                    {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
-
-                        GameEnd(false);
-                    }
-                    break;
+                    
             }
 
             return hasEncountered;
@@ -819,8 +855,6 @@ namespace JOSJA_Game
 
         static int Interaction(int interactionID)
         {
-            char playerInteract = 'z', overWrite = 'n';
-
             int inventorySlot = -1;
             int newItem = interactionID;
 
@@ -839,7 +873,7 @@ namespace JOSJA_Game
                 string oldItem = Inventory[inventorySlot];
 
                 Inventory[inventorySlot] = Items[interactionID];
-                newItem = Items.First(i => i.Value == oldItem).Key; //this lets gives the key of the item that was replaced in the inventory
+                newItem = Items.First(i => i.Value == oldItem).Key; //this gives the key of the item that was replaced in the inventory
                 Console.WriteLine($"You swapped {oldItem} for {Items[interactionID]}");
             }
             return newItem;
@@ -1145,52 +1179,53 @@ namespace JOSJA_Game
 
             Dictionary<int, int> Times = new Dictionary<int, int>()
             {
-                [1] = 1000,
-                [2] = 500,
-                [3] = 500,
-                [4] = 500,
-                [5] = 500,
-                [6] = 500,
-                [7] = 1500,
+                [1] = 8000,
+                [2] = 9500,
+                [3] = 6000,
+                [4] = 1500,
+                [5] = 4000,
+                [6] = 5500,
+                [7] = 10500,
             };
+            int brewTime = Times[potionChoice];
+            int BrewedPotion = 0;
 
             switch (potionChoice)
             {
                 case 1:
                     Console.WriteLine("You have brewed a Health Potion!");
-                    Thread.Sleep(Times[potionChoice]);
-                    Interaction(10);
+                    BrewedPotion = 10;
                     break;
                 case 2:
                     Console.WriteLine("You have brewed an Antidote!");
-                    Interaction(11);
+                    BrewedPotion = 11;
                     break;
                 case 3:
                     Console.WriteLine("You have brewed a Poision Potion!");
-                    Interaction(12);
+                    BrewedPotion = 12;
                     break;
                 case 4:
                     Console.WriteLine("You have brewed a Strength Potion!");
-                    Interaction(13);
+                    BrewedPotion = 13;
                     break;
                 case 5:
                     Console.WriteLine("You have brewed a Mana Potion!");
-                    Interaction(14);
+                    BrewedPotion = 14;
                     break;
                 case 6:
                     Console.WriteLine("You have brewed a Stamina Potion!");
-                    Thread.Sleep(Times[potionChoice]);
-                    Interaction(15);
+                    BrewedPotion = 15;
                     break;
                 case 7:
                     Console.WriteLine("You have brewed some WD40!");
-                    Thread.Sleep(Times[potionChoice]);
-                    Interaction(31);
+                    BrewedPotion = 31;
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");
                     break;
             }
+            Thread.Sleep(brewTime);
+            Interaction(BrewedPotion);
         }
 
         static void GameEnd(bool dead)

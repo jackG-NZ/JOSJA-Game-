@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -414,7 +414,7 @@ namespace JOSJA_Game
                     case '4':
                         if (isPlayerTurn)
                         {
-                            PlayerFlee();
+                            isFighting = !PlayerFlee();  //isFighting is set to false if the player flees
                             previousAction = 4;
                         }
                         break;
@@ -1098,9 +1098,35 @@ namespace JOSJA_Game
             /*EXPLANATION: This is the method for the heal utility*/
         }
 
-        static void PlayerFlee()
+        static bool PlayerFlee()
         {
-            /*EXPLANATION: This is the method for the flee utility*/
+            /*EXPLANATION: This is the method for the flee utility. The player has a 50% chance for their attempt to flee to be successful.*/
+
+            bool flee = false;
+
+            Console.SetCursorPosition(42, 3);
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"The player is attempting to flee!");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            for(int i = 0; i < 3; i++)
+            {
+                Console.Beep(250, 500);
+                Thread.Sleep(250);
+            }
+
+            Random rand = new Random();
+            int fleeChance = rand.Next(1, 3);
+
+            if(fleeChance == 1)
+            {
+                currentLevel = "level1";
+                flee = true;
+            }
+
+            return flee;
         }
 
         static void EnemyAIReaction(int previousAction)
@@ -1117,9 +1143,12 @@ namespace JOSJA_Game
                 case 2:
                     EnemyAIAttack();
                     break;
+                case 3:
+                    EnemyAIAttack();
+                    break;
                 case 4:
                     Console.SetCursorPosition(46, 2);
-                    Console.Write("The player is running away!");
+                    Console.Write("You can't run away, punk!");
                     break;
                 default:
                     Console.SetCursorPosition(42, 2);

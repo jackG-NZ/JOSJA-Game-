@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace JOSJA_Game
 {
@@ -106,6 +107,8 @@ namespace JOSJA_Game
         {
             /*EXPLANATION: This method serves as the title screen. We should make it look nice towards the end of the project*/
 
+            int choice = 2;
+
             char skipDialogue = 'n'; //set this to n, so if the user enters nothing it assumes they don't want to skip the intro dialogue
 
             string filePath = $"Assets/UIs/MainMenu.txt";
@@ -119,7 +122,14 @@ namespace JOSJA_Game
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
-            int choice = Convert.ToInt32(Console.ReadLine());
+            string input1 = Console.ReadLine();
+
+            //this if statement prevents a crash from happening if the user inputs nothing
+            if (input1.Length > 0) 
+            {
+                choice = Convert.ToChar(input1.Substring(0, 1));
+            }
+
             Console.Clear();
             if (choice == 1)
             {
@@ -129,12 +139,12 @@ namespace JOSJA_Game
             {
                 Console.SetCursorPosition(35, 14);
                 Console.Write("Would you like to skip the opening dialogue? (y|n): ");
-                string input = Console.ReadLine().ToLower();
+                string input2 = Console.ReadLine().ToLower();
 
                 //this if statement prevents a crash from happening if the user inputs nothing
-                if (input.Length > 0)
+                if (input2.Length > 0)
                 {
-                    skipDialogue = Convert.ToChar(input.Substring(0, 1));
+                    skipDialogue = Convert.ToChar(input2.Substring(0, 1));
                 }
 
                 Console.Clear();
@@ -422,7 +432,10 @@ namespace JOSJA_Game
                         }
                         break;
                     case 'p':
-                        SaveAndLoad(false);
+                        if (!isFighting)
+                        {
+                            SaveAndLoad(false);
+                        }
                         break;
                     default:
                         break;
@@ -1059,6 +1072,9 @@ namespace JOSJA_Game
 
         static void PlayerBlock()
         {
+            Console.SetCursorPosition(44, 2);
+            Console.Write("   Utility action detected.   ");
+
             Console.SetCursorPosition(38, 3);
             Console.BackgroundColor = ConsoleColor.Cyan;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -1095,7 +1111,6 @@ namespace JOSJA_Game
                 case 0:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
-
                     break;
                 case 1:
                     EnemyAIAttack();

@@ -42,18 +42,27 @@ namespace JOSJA_Game
             [9] = "Cooked Meat",
 
             // Consumables
-            [10] = "Healing Salve",
+            [10] = "Health Potion",
             [11] = "Antidote",
-            [12] = "Poison Bottle",
+            [12] = "Poison Potion",
+            [13] = "Strength Potion",
+            [14] = "Mana Potion",
+            [15] = "Stamina Potion",
+
 
             // Ingredients
-            [13] = "Cave Moss",
-            [14] = "Spider Fang",
-            [15] = "Stone",
-            [16] = "Slime",
+            [17] = "Cave Moss",
+            [18] = "Spider Fang",
+            [19] = "Stone",
+            [20] = "Slime",
+            [21] = "Iron shard",
+            [22] = "Spider Fang",
+            [23] = "Stone",
+            [24] = "Slime",
 
             // Story/Lore Items
-            [17] = "Portal Component",
+            [30] = "Portal Component",
+            [31] = "WD40"
         };
 
         /*static Dictionary<string, int[]> MapSizes = new Dictionary<string, int[]>
@@ -1079,7 +1088,7 @@ namespace JOSJA_Game
                     Interaction(16);
                     break;
                 case 2:
-                    Console.WriteLine("You have brewed a Strength Potion!");
+                    Console.WriteLine("You have brewed an Antidote!");
                     Interaction(15);
                     break;
                 case 3:
@@ -1087,7 +1096,7 @@ namespace JOSJA_Game
                     Interaction(12);
                     break;
                 case 4:
-                    Console.WriteLine("You have brewed an Antidote Potion!");
+                    Console.WriteLine("You have brewed a Strength Potion!");
                     Interaction(11);
                     break;
                 case 5:
@@ -1099,7 +1108,7 @@ namespace JOSJA_Game
                     Interaction(13);
                     break;
                 case 7:
-                    Console.WriteLine("You have brewed a WD40!");
+                    Console.WriteLine("You have brewed some WD40!");
                     Interaction(10);
                     break;
                 default:

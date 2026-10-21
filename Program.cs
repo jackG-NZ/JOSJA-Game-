@@ -27,7 +27,7 @@ namespace JOSJA_Game
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
             // Misc
-            [1] = "Empty Handed",
+            [1] = "Nothing",
             
             // Items
             [2] = "Key",
@@ -64,8 +64,8 @@ namespace JOSJA_Game
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
-            [1] = Items[2], //the player starts with a key, a wooden sword, and three empty inventory slots
-            [2] = Items[4],
+            [1] = Items[2], //the player starts with a key, and four empty inventory slots
+            [2] = Items[1],
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -746,11 +746,10 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine("There's a chest, it looks like it's unlocked.");
-                        Console.BackgroundColor = ConsoleColor.Black;
                         Console.SetCursorPosition(31, 10);
-                        Console.WriteLine($"Press e");
-                        Console.WriteLine(Items[Chests[1]]);
-                        
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+
 
                     }
 
@@ -793,36 +792,26 @@ namespace JOSJA_Game
             int newItem = interactionID;
 
             Console.Clear();
-            Console.SetCursorPosition(51, 11);
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.Write("==== INVENTORY ====");
-            Console.SetCursorPosition(15, 12);
-            Console.Write($"Slot 1:{Inventory[1]} Slot 2:{Inventory[2]} Slot 3:{Inventory[3]} Slot 4:{Inventory[4]} Slot 5:{Inventory[5]}");
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(44, 14);
-            Console.WriteLine($"You picked up a {Items[interactionID]}!");
+            WriteLineCenter("==== INVENTORY ====", 7);
+            WriteLineCenter($"Slot 1:{Inventory[1]} Slot 2:{Inventory[2]} Slot 3:{Inventory[3]} Slot 4:{Inventory[4]} Slot 5:{Inventory[5]}", 9);
+            WriteLineCenter($"You picked up a {Items[interactionID]}!", 13);
             Console.SetCursorPosition(44, 15);
-            Console.Write("Choose an inventory slot (1 - 5): ");
-
-            try
-            {
-                inventorySlot = int.Parse(Console.ReadKey().KeyChar.ToString());
-            }
-            catch
-            {
-                Console.SetCursorPosition(43, 15);
-                Console.Write("          ! Try Again !         ");
-                Thread.Sleep(500);
-            }
+            WriteLineCenter("Choose an inventory slot (1 - 5): ", 15);
+            char key = Console.ReadKey().KeyChar;
+            int.TryParse(key.ToString(), out inventorySlot);
 
             if (inventorySlot <= 5 && inventorySlot >= 1)
             {
-                newItem = inventorySlot;
+                string oldItem = Inventory[inventorySlot];
+
                 Inventory[inventorySlot] = Items[interactionID];
-                Console.WriteLine($"slot {inventorySlot} is {Items[interactionID]}");
+                newItem = Items.First(i => i.Value == oldItem).Key; //this lets gives the key of the item that was replaced in the inventory
+                Console.WriteLine($"You swapped {oldItem} for {Items[interactionID]}");
             }
             return newItem;
 
+            //jack old code
             //if (Inventory[inventorySlot] != Items[1])
             //{
             //    Console.Clear();
@@ -1169,6 +1158,19 @@ namespace JOSJA_Game
 
                     isInGame = false;
                 }
+            }
+        }
+        static void WriteLineCenter(string text, int textY)
+        {
+            Console.SetCursorPosition(0, textY);
+            if (text.Length >= Console.WindowWidth)
+            {
+                Console.WriteLine(text);
+            }
+            else
+            {
+                int space = (Console.WindowWidth - text.Length)/2;
+                Console.WriteLine(new string(' ', space) + text);
             }
         }
     }

@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level2";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -803,10 +803,10 @@ namespace JOSJA_Game
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Black;
             WriteLineCenter("==== INVENTORY ====", 7);
-            WriteLineCenter($"Slot 1:{Inventory[1]} Slot 2:{Inventory[2]} Slot 3:{Inventory[3]} Slot 4:{Inventory[4]} Slot 5:{Inventory[5]}", 9);
-            WriteLineCenter($"You picked up a {Items[interactionID]}!", 13);
-            Console.SetCursorPosition(44, 15);
+            WriteLineCenter($"Slot 1: {Inventory[1]}     Slot 2: {Inventory[2]}     Slot 3: {Inventory[3]}     Slot 4: {Inventory[4]}     Slot 5: {Inventory[5]}", 9);
+            WriteLineCenter($"You got a {Items[interactionID]}!", 13);
             WriteLineCenter("Choose an inventory slot (1 - 5): ", 15);
+
             char key = Console.ReadKey().KeyChar;
             int.TryParse(key.ToString(), out inventorySlot);
 

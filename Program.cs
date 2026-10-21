@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Security.Principal;
 
 namespace JOSJA_Game
 {
@@ -1154,11 +1155,13 @@ namespace JOSJA_Game
         static void Brewing()
         {
             Console.Clear();
+            string[] CauldronLines = null;
+
             string filePath = $"Assets/UIs/Cauldron.txt";
             if (File.Exists(filePath))
             {
-                string CauldronUI = File.ReadAllText(filePath);
-                Console.WriteLine($"{CauldronUI}");
+                CauldronLines = File.ReadAllLines(filePath);
+                Console.WriteLine(string.Join(Environment.NewLine, CauldronLines));
             }
             else
             {
@@ -1215,9 +1218,44 @@ namespace JOSJA_Game
                     Console.WriteLine("Invalid choice. No potion brewed.");
                     break;
             }
-            Thread.Sleep(brewTime);
+            int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
+            int left = CauldronLines[row].IndexOf('[') + 1;
+            int width = CauldronLines[row].IndexOf(']') - left;
+            Timer(brewTime, width, left, row);
             Interaction(BrewedPotion);
         }
+
+        static void Timer(int totalMs, int width, int left, int row)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;  // needed for ░▒▓█
+
+            for (int pct = 0; pct <= 100; pct++)  // loop from 0 to 100 percent
+            {
+                char[] bar = new char[width];
+                int filled = pct * width / 100;     // calculate how many characters should be filled in the bar
+                for (int i = 0; i < width; i++)
+                {
+                    if (i < filled)
+                    {
+                        bar[i] = '█';
+                    }
+                    else
+                    {
+                        bar[i] = '░';
+                    }
+                }
+
+                string label = $" {pct}% ";     // label (percentage done) to display in the middle of the bar
+                int start = (width - label.Length) / 2;     // starting position of the label
+                label.CopyTo(0, bar, start, label.Length); // copy the label into the bar array
+
+                Console.SetCursorPosition(left, row);   // move the cursor to the start of the bar
+                Console.Write(new string(bar));
+                Thread.Sleep(totalMs / 100);
+            }
+
+        }
+
 
         static void GameEnd(bool dead)
         {

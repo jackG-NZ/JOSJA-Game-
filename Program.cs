@@ -367,6 +367,8 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(18, 19);
                         Console.Write("PRESS ENTER");
                     }
+
+                    previousAction = 0;
                 }
 
                 //this block of code handles user input
@@ -969,6 +971,13 @@ namespace JOSJA_Game
                 enemyHP -= attackPower;
             }
 
+            Console.SetCursorPosition(50, 3);
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($" Damage dealt: {attackPower} ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
             Console.Beep(100, 90);
             Console.Beep(200, 90);
             Console.Beep(300, 90);
@@ -1034,7 +1043,8 @@ namespace JOSJA_Game
             Console.Write("   The enemy has attacked the player!   ");
 
             Random rand = new Random();
-            double attackPower = rand.Next(1, 3);
+            double attackPower = rand.Next(1, 5);
+            double totalDamage = attackPower * enemyAttackModifier;
 
             if(hp - attackPower < 0)
             {
@@ -1042,10 +1052,17 @@ namespace JOSJA_Game
             }
             else
             {
-                hp -= attackPower * enemyAttackModifier;
+                hp -= totalDamage;
             }
 
             HP(hp);
+
+            Console.SetCursorPosition(50, 3);
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($" Damage dealt: {totalDamage} ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         static void HP(double hp)

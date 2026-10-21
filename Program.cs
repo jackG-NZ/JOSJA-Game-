@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level2";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -295,11 +295,17 @@ namespace JOSJA_Game
                 if (isFighting)
                 {
                     Console.SetCursorPosition(4, 2);
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.Write($"Your HP:  ");
+                    Console.SetCursorPosition(14, 2);
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write($"Your HP:  {new string('|', (int)hp)}");
+                    Console.Write($"{new string('|', (int)hp)}");
                     Console.SetCursorPosition(4, 3);
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.Write($"Enemy HP: ");
+                    Console.SetCursorPosition(14, 3);
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write($"Enemy HP: {new string('|', (int)enemyHP)}");
+                    Console.Write($"{new string('|', (int)enemyHP)}");
                     Console.BackgroundColor = ConsoleColor.Black;
 
                     if(enemyHP > 0)
@@ -332,33 +338,55 @@ namespace JOSJA_Game
                     }
 
                     //Draws the input options 
-                    Console.SetCursorPosition(21, 18);
-                    Console.Write("Attack");
-                    Console.SetCursorPosition(20, 19);
-                    Console.Write("ENTER 1");
+                    if (isPlayerTurn)
+                    {
+                        Console.SetCursorPosition(21, 18);
+                        Console.Write("Attack");
+                        Console.SetCursorPosition(20, 19);
+                        Console.Write("ENTER 1");
 
-                    Console.SetCursorPosition(44, 18);
-                    Console.Write("Block");
-                    Console.SetCursorPosition(43, 19);
-                    Console.Write("ENTER 2");
+                        Console.SetCursorPosition(44, 18);
+                        Console.Write("Block");
+                        Console.SetCursorPosition(43, 19);
+                        Console.Write("ENTER 2");
 
-                    Console.SetCursorPosition(68, 18);
-                    Console.Write("Heal");
-                    Console.SetCursorPosition(67, 19);
-                    Console.Write("ENTER 3");
+                        Console.SetCursorPosition(68, 18);
+                        Console.Write("Heal");
+                        Console.SetCursorPosition(67, 19);
+                        Console.Write("ENTER 3");
 
-                    Console.SetCursorPosition(91, 18);
-                    Console.Write("Flee");
-                    Console.SetCursorPosition(90, 19);
-                    Console.Write("ENTER 4");
+                        Console.SetCursorPosition(91, 18);
+                        Console.Write("Flee");
+                        Console.SetCursorPosition(90, 19);
+                        Console.Write("ENTER 4");
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(19, 18);
+                        Console.Write("WHEN READY");
+                        Console.SetCursorPosition(18, 19);
+                        Console.Write("PRESS ENTER");
+                    }
                 }
 
                 //this block of code handles user input
-                Console.SetCursorPosition(0, 27);
-                Console.Write("Input: ");
-                action = Console.ReadKey().KeyChar;
-                isInteracting = false;
-
+                if (!isFighting)
+                {
+                    Console.SetCursorPosition(0, 27);
+                    Console.Write("Input: ");
+                    action = Console.ReadKey().KeyChar;
+                    isInteracting = false;
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, 27);
+                    Console.Write("Input: ");
+                    string input = Console.ReadLine().ToLower();
+                    if(input.Length > 0)
+                    {
+                        action = Convert.ToChar(input.Substring(0, 1));
+                    }
+                }
 
                 //this big switch statement handles all of the player's actions. This includes movement, combat, and utility
                 switch (action)
@@ -915,6 +943,9 @@ namespace JOSJA_Game
         {
             /*EXPLANATION: This is the method for the player's attack*/
 
+            Console.SetCursorPosition(42, 2);
+            Console.Write("The player has attacked the enemy!");
+
             Random rand = new Random();
             int attackPower = rand.Next(1, 5);
 
@@ -926,6 +957,13 @@ namespace JOSJA_Game
             {
                 enemyHP -= attackPower;
             }
+
+            Console.Beep(100, 90);
+            Console.Beep(200, 90);
+            Console.Beep(300, 90);
+            Console.Beep(400, 90);
+
+            Thread.Sleep(2000);
         }
 
         static void PlayerBlock()
@@ -950,30 +988,11 @@ namespace JOSJA_Game
             switch (previousAction)
             {
                 case 0:
-                    Console.SetCursorPosition(46, 2);
+                    Console.SetCursorPosition(45, 2);
                     Console.Write("No player action detected.");
-
-                    EnemyAIAttack();
 
                     break;
                 case 1:
-                    Console.SetCursorPosition(41, 2);
-                    Console.Write("The player has attacked the enemy!");
-
-                    EnemyAIAttack();
-
-                    break;
-                case 2:
-                    Console.SetCursorPosition(39, 2);
-                    Console.Write("The player will block the incoming attack.");
-
-                    EnemyAIAttack();
-
-                    break;
-                case 3:
-                    Console.SetCursorPosition(44, 2);
-                    Console.Write("The player has healed themselves.");
-
                     EnemyAIAttack();
 
                     break;
@@ -987,11 +1006,22 @@ namespace JOSJA_Game
                     break;
             }
 
+            if(previousAction != 0)
+            {
+                Console.Beep(400, 90);
+                Console.Beep(300, 90);
+                Console.Beep(200, 90);
+                Console.Beep(100, 90);
+            }
+
             enemyAttackModifier = 1;
         }
 
         static void EnemyAIAttack()
         {
+            Console.SetCursorPosition(38, 2);
+            Console.Write("   The enemy has attacked the player!   ");
+
             Random rand = new Random();
             double attackPower = rand.Next(1, 3);
 
@@ -1027,6 +1057,43 @@ namespace JOSJA_Game
             else
             {
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
+            }
+
+            Console.WriteLine("Choose a potion to brew: ");
+            int potionChoice = Convert.ToInt32(Console.ReadLine());
+            switch(potionChoice)
+            {
+                case 1:
+                    Console.WriteLine("You have brewed a Health Potion!");
+                    Interaction(16);
+                    break;
+                case 2:
+                    Console.WriteLine("You have brewed a Strength Potion!");
+                    Interaction(15);
+                    break;
+                case 3:
+                    Console.WriteLine("You have brewed a Poision Potion!");
+                    Interaction(12);
+                    break;
+                case 4:
+                    Console.WriteLine("You have brewed an Antidote Potion!");
+                    Interaction(11);
+                    break;
+                case 5:
+                    Console.WriteLine("You have brewed a Mana Potion!");
+                    Interaction(14);
+                    break;
+                case 6:
+                    Console.WriteLine("You have brewed a Stamina Potion!");
+                    Interaction(13);
+                    break;
+                case 7:
+                    Console.WriteLine("You have brewed a WD40!");
+                    Interaction(10);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. No potion brewed.");
+                    break;
             }
         }
 

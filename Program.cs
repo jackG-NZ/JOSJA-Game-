@@ -5,7 +5,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level2";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -83,6 +83,7 @@ namespace JOSJA_Game
         static Dictionary<int, int> Chests = new Dictionary<int, int>()
         {
             [1] = 4,
+            [2] = 10,
         };
 
         static void Main()
@@ -303,81 +304,8 @@ namespace JOSJA_Game
 
                 if (isFighting)
                 {
-                    Console.SetCursorPosition(4, 2);
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.Write($"Your HP:  ");
-                    Console.SetCursorPosition(14, 2);
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write($"{new string('|', (int)hp)}");
-                    Console.SetCursorPosition(4, 3);
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.Write($"Enemy HP: ");
-                    Console.SetCursorPosition(14, 3);
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write($"{new string('|', (int)enemyHP)}");
-                    Console.BackgroundColor = ConsoleColor.Black;
-
-                    DisplayEnemy();
-
-                    if (enemyHP > 0)
-                    {
-                        EnemyAIReaction(previousAction);
-                    }
-                    else
-                    {
-                        Console.SetCursorPosition(48, 2);
-                        Console.Write("The enemy has died!");
-
-                        isFighting = false;
-
-                        currentLevel = "level1";
-                    }
-
-                    if (isPlayerTurn)
-                    {
-                        Console.BackgroundColor = ConsoleColor.DarkGreen;
-                        Console.SetCursorPosition(53, 16);
-                        Console.Write("YOUR TURN!");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                    }
-                    else
-                    {
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.SetCursorPosition(53, 16);
-                        Console.Write("ENEMY TURN");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                    }
-
-                    //Draws the input options 
-                    if (isPlayerTurn)
-                    {
-                        Console.SetCursorPosition(21, 18);
-                        Console.Write("Attack");
-                        Console.SetCursorPosition(20, 19);
-                        Console.Write("ENTER 1");
-
-                        Console.SetCursorPosition(44, 18);
-                        Console.Write("Block");
-                        Console.SetCursorPosition(43, 19);
-                        Console.Write("ENTER 2");
-
-                        Console.SetCursorPosition(68, 18);
-                        Console.Write("Heal");
-                        Console.SetCursorPosition(67, 19);
-                        Console.Write("ENTER 3");
-
-                        Console.SetCursorPosition(91, 18);
-                        Console.Write("Flee");
-                        Console.SetCursorPosition(90, 19);
-                        Console.Write("ENTER 4");
-                    }
-                    else
-                    {
-                        Console.SetCursorPosition(19, 18);
-                        Console.Write("WHEN READY");
-                        Console.SetCursorPosition(18, 19);
-                        Console.Write("PRESS ENTER");
-                    }
+                    //I moved all the combat stuff to a single method for better readability
+                    CombatLoop(previousAction, isFighting, isPlayerTurn);
 
                     previousAction = 0;
                 }
@@ -386,14 +314,13 @@ namespace JOSJA_Game
                 if (!isFighting)
                 {
                     Console.SetCursorPosition(0, 27);
-                    Console.Write("Input: ");
                     action = Console.ReadKey().KeyChar;
                     isInteracting = false;
                 }
                 else
                 {
+                    //the ReadKey movement is great but it bugs out the combat system so I've added this here
                     Console.SetCursorPosition(0, 27);
-                    Console.Write("Input: ");
                     string input = Console.ReadLine().ToLower();
                     if(input.Length > 0)
                     {
@@ -438,6 +365,10 @@ namespace JOSJA_Game
                         else if (currentLevel == "level2" && x == 60 && y == 14)
                         {
                             Chests[1] = Interaction(Chests[1]);
+                        }
+                        else if (currentLevel == "level4" && x == 105 && y == 15)
+                        {
+                            Chests[2] = Interaction(Chests[2]);
                         }
                         else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                         {
@@ -509,6 +440,91 @@ namespace JOSJA_Game
 
                 //clear the screen to prevent trailing
                 Console.Clear();
+            }
+        }
+
+        static void CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
+        {
+            /*EXPLANATION: This method handles pretty much all of the crucial combat functionality.*/
+
+            Console.SetCursorPosition(4, 2);
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.Write($"Your HP:  ");
+            Console.SetCursorPosition(14, 2);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write($"{new string('|', (int)hp)}");
+
+            Console.SetCursorPosition(4, 3);
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.Write($"Enemy HP: ");
+            Console.SetCursorPosition(14, 3);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write($"{new string('|', (int)enemyHP)}");
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            Console.SetCursorPosition(4, 4);
+            Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
+
+            DisplayEnemy();
+
+            if (enemyHP > 0)
+            {
+                EnemyAIReaction(previousAction);
+            }
+            else
+            {
+                Console.SetCursorPosition(48, 2);
+                Console.Write("The enemy has died!");
+
+                isFighting = false;
+
+                currentLevel = "level1";
+            }
+
+            if (isPlayerTurn)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                Console.SetCursorPosition(53, 16);
+                Console.Write("YOUR TURN!");
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(53, 16);
+                Console.Write("ENEMY TURN");
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+
+            //Draws the input options 
+            if (isPlayerTurn)
+            {
+                Console.SetCursorPosition(21, 18);
+                Console.Write("Attack");
+                Console.SetCursorPosition(20, 19);
+                Console.Write("ENTER 1");
+
+                Console.SetCursorPosition(44, 18);
+                Console.Write("Block");
+                Console.SetCursorPosition(43, 19);
+                Console.Write("ENTER 2");
+
+                Console.SetCursorPosition(68, 18);
+                Console.Write("Heal");
+                Console.SetCursorPosition(67, 19);
+                Console.Write("ENTER 3");
+
+                Console.SetCursorPosition(91, 18);
+                Console.Write("Flee");
+                Console.SetCursorPosition(90, 19);
+                Console.Write("ENTER 4");
+            }
+            else
+            {
+                Console.SetCursorPosition(19, 18);
+                Console.Write("WHEN READY");
+                Console.SetCursorPosition(18, 19);
+                Console.Write("PRESS ENTER");
             }
         }
 
@@ -763,7 +779,50 @@ namespace JOSJA_Game
 
 
                     }
+                    else
+                    {
+                        Console.SetCursorPosition(60, 14);
+                        Console.Write('?');
+                    }
+                    break;
+                case "level4":
+                    if (x == 105 && y == 15) //chest
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
 
+
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(105, 15);
+                        Console.Write('?');
+                    }
+                    if (x == 46 && y == 10) //Portal and end game
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("It looks like a broken portal, maybe if its fixed you could use it to get out of this place...");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else if (x == 46 && y == 10 && Inventory.ContainsValue(Items[17])) //Portal and end game
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+
+                        GameEnd(false);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(46, 10);
+                        Console.Write('?');
+                    }
                     break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
@@ -779,17 +838,7 @@ namespace JOSJA_Game
                         hasEncountered = true;
                     }
                     break;
-                
-                case "level4": //BOTTOM ROOM PORTAL INTERACTION/GAME END
-                    if(x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
-                    {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
-
-                        GameEnd(false);
-                    }
-                    break;
+                    
             }
 
             return hasEncountered;
@@ -797,8 +846,6 @@ namespace JOSJA_Game
 
         static int Interaction(int interactionID)
         {
-            char playerInteract = 'z', overWrite = 'n';
-
             int inventorySlot = -1;
             int newItem = interactionID;
 
@@ -817,7 +864,7 @@ namespace JOSJA_Game
                 string oldItem = Inventory[inventorySlot];
 
                 Inventory[inventorySlot] = Items[interactionID];
-                newItem = Items.First(i => i.Value == oldItem).Key; //this lets gives the key of the item that was replaced in the inventory
+                newItem = Items.First(i => i.Value == oldItem).Key; //this gives the key of the item that was replaced in the inventory
                 Console.WriteLine($"You swapped {oldItem} for {Items[interactionID]}");
             }
             return newItem;
@@ -1003,9 +1050,23 @@ namespace JOSJA_Game
 
         static void PlayerBlock()
         {
+            Console.SetCursorPosition(38, 3);
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"The player will block the incoming attack!");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
             /*EXPLANATION: This is the method for the block utility*/
 
             enemyAttackModifier = 0;
+
+            Console.Beep(100, 90);
+            Console.Beep(200, 90);
+            Console.Beep(300, 90);
+            Console.Beep(400, 90);
+
+            Thread.Sleep(2000);
         }
 
         static void PlayerHeal()
@@ -1023,20 +1084,22 @@ namespace JOSJA_Game
             switch (previousAction)
             {
                 case 0:
-                    Console.SetCursorPosition(45, 2);
+                    Console.SetCursorPosition(46, 2);
                     Console.Write("No player action detected.");
 
                     break;
                 case 1:
                     EnemyAIAttack();
-
+                    break;
+                case 2:
+                    EnemyAIAttack();
                     break;
                 case 4:
                     Console.SetCursorPosition(46, 2);
                     Console.Write("The player is running away!");
                     break;
                 default:
-                    Console.SetCursorPosition(45, 2);
+                    Console.SetCursorPosition(42, 2);
                     Console.Write("An unexpected error has occurred.");
                     break;
             }

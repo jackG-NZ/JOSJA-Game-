@@ -2,19 +2,19 @@
 |  PROGRESS: [                                                                                            ]   |
 |                                                                                                             |
 |                                                                                                 +-------+   |
-|  [1].                                                                                           |       |   |
+|  [1]. Health Potion    ->  Berries + Slime + Moss                                               |       |   |
 |                                                                                         +------ | SLOT1 |   |
-|  [2].                                                                                   |       |       |   |
+|  [2]. Antidote         ->  Moss + Fang                                                  |       |       |   |
 |                                                                                         |       +-------+   |
-|  [3].                                                                                   |                   |
+|  [3]. Poison Potion    ->  Fang + Slime + Bug                                           |                   |
 |                                                                         +-------+       |       +-------+   |
-|  [4].                                                                   |       |       |       |       |   |
+|  [4]. Strength Potion  ->  Raw Meat + Bone                              |       |       |       |       |   |
 |                                                                         | RESUL | <-----+------ | SLOT2 |   |
-|  [5].                                                                   |       |       |       |       |   |
+|  [5]. Mana Potion      ->  Crystal + Moss                               |       |       |       |       |   |
 |                                                                         +-------+       |       +-------+   |
-|  [6].                                                                                   |                   |
+|  [6]. Stamina Potion   ->  Berries + Feather + Fish                                     |                   |
 |                                                                                         |       +-------+   |
-|  [7].                                                                                   |       |       |   |
+|  [7]. WD-40            ->  Slime + Iron + Stone                                         |       |       |   |
 |                                                .---""""---.                             +------ | SLOT3 |   |
 |                                              .'  o   .  O  '.                                   |       |   |
 |                                             /   O   .   o    \                                  +-------+   |

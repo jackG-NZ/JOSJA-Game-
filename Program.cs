@@ -28,7 +28,7 @@ namespace JOSJA_Game
         {
             // Misc
             [1] = "Nothing",
-            
+
             // Items
             [2] = "Key",
             [3] = "Crystal Shard",
@@ -40,6 +40,7 @@ namespace JOSJA_Game
             [7] = "Dungeon Berries",
             [8] = "Raw Meat",
             [9] = "Cooked Meat",
+            [25] = "Blind Cave Fish",
 
             // Consumables
             [10] = "Health Potion",
@@ -48,7 +49,6 @@ namespace JOSJA_Game
             [13] = "Strength Potion",
             [14] = "Mana Potion",
             [15] = "Stamina Potion",
-
 
             // Ingredients
             [17] = "Cave Moss",
@@ -59,10 +59,12 @@ namespace JOSJA_Game
             [22] = "Feather",
             [23] = "Bone",
             [24] = "Cryptcrawler Root",
+            [26] = "Dungeon Bug",
 
             // Story/Lore Items
             [30] = "Portal Component",
-            [31] = "WD40"
+            [31] = "WD-40"
+
         };
 
         /*static Dictionary<string, int[]> MapSizes = new Dictionary<string, int[]>
@@ -1004,7 +1006,7 @@ namespace JOSJA_Game
             }
             else
             {
-                Console.WriteLine("Are you sure you want to overwrite save file? [y/n]");
+                Console.WriteLine("\nAre you sure you want to overwrite save file? [y/n]");
                 string temp = Console.ReadLine().ToLower();
 
                 if (temp == "y")
@@ -1215,6 +1217,20 @@ namespace JOSJA_Game
                 [6] = 5500,
                 [7] = 10500,
             };
+
+            // Dictionary<PotionID, IngredientIDs[]>
+            Dictionary<int, int[]> PotionRecipes = new Dictionary<int, int[]>()
+            {
+                { 10, new int[] { 7, 20, 17 } },  // Health Potion   -> Berries + Slime + Moss
+                { 11, new int[] { 17, 18 } },     // Antidote        -> Moss + Fang
+                { 12, new int[] { 18, 20, 25 } }, // Poison Potion   -> Fang + Slime + Bug
+                { 13, new int[] { 8, 23 } },      // Strength Potion -> Raw Meat + Bone
+                { 14, new int[] { 3, 17 } },      // Mana Potion     -> Crystal + Moss
+                { 15, new int[] { 7, 22, 9 } },   // Stamina Potion  -> Berries + Feather + Fish
+                { 31, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron + Stone
+            };
+
+
             string[] CauldronLines = null;
 
             Console.Clear();
@@ -1239,13 +1255,14 @@ namespace JOSJA_Game
                 case 1:
                     Console.WriteLine("You have brewed a Health Potion!");
                     BrewedPotion = 10;
+
                     break;
                 case 2:
                     Console.WriteLine("You have brewed an Antidote!");
                     BrewedPotion = 11;
                     break;
                 case 3:
-                    Console.WriteLine("You have brewed a Poision Potion!");
+                    Console.WriteLine("You have brewed a Poison Potion!");
                     BrewedPotion = 12;
                     break;
                 case 4:

@@ -1,11 +1,12 @@
 ﻿using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level1";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -86,6 +87,13 @@ namespace JOSJA_Game
         {
             [1] = 4,
             [2] = 10,
+        };
+
+        static Dictionary<string, int[]> Enemies = new Dictionary<string, int[]>()//[Name] = [Health, Item]
+        {
+            ["George"] = [10, 23],
+            ["Jason"] = [10, 23],
+            
         };
 
         static void Main()
@@ -668,7 +676,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "level7";
 
-                        return new[] { 28, 16 };
+                        return new[] { 29, 16 };
                     }
                     break;
 
@@ -689,16 +697,16 @@ namespace JOSJA_Game
                 case "level7":
 
                     xBoundaries[0] = 4;
-                    xBoundaries[1] = 110;
+                    xBoundaries[1] = 107;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
-                    if (x == 28 && y == 17)
+                    if (x == 29 && y == 17)
                     {
                         currentLevel = "level5";
 
                         return new[] { 18, 4 };
                     }
-                    else if (x == 109 && y == 7)
+                    else if (x == 104 && y == 7)
                     {
                         currentLevel = "level8";
 
@@ -710,6 +718,9 @@ namespace JOSJA_Game
 
                         return new[] { 6, 9 };
                     }
+                    else if (x >= 40 && Enemies["Jason"][0] > 0) // if you walk past the enemy and it has health above 0
+
+                        currentLevel = "enemyEncounter"; //JACK MAKE THIS START AN ENEMY ENCOUNTER WITH A METHOD MAYBE LIKE: enemy("Jason")
                     break;
                 case "level8":
 
@@ -721,7 +732,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "level7";
 
-                        return new[] { 107, 7 };
+                        return new[] { 102, 7 };
                     }
                     else if (x == 85 && y == 12)
                     {
@@ -755,6 +766,7 @@ namespace JOSJA_Game
 
         static bool EncounterManagement(string currentLevel, int x, int y)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             /*EXPLANATION: This method handles all encounters with items, enemies, interactables etc*/
 
             char playerInteract = 'z';
@@ -847,6 +859,20 @@ namespace JOSJA_Game
                         Console.Write('?');
                     }
                     break;
+                case "level7":
+                    if ((x == 40 &&  y == 6) || x == 41 && y == 6)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a dead skeleton, it might have dropped something. Press e");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(40, 6);
+                        Console.Write("☠︎");
+                    }
+                    break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
                     {
@@ -869,6 +895,7 @@ namespace JOSJA_Game
 
         static int Interaction(int interactionID)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             int inventorySlot = -1;
             int newItem = interactionID;
 
@@ -1320,7 +1347,6 @@ namespace JOSJA_Game
                 Console.Write(new string(bar));
                 Thread.Sleep(totalMs / 100);
             }
-
         }
 
 

@@ -18,7 +18,7 @@ namespace JOSJA_Game
         static int[] yBoundaries = { 0, 0 }; //top y boundary, bottom y boundary
 
         static bool isInGame = true;
-        static bool jasonEnemyDefeated = false;
+        static bool jasonEnemyDefeated = false; //this is kinda dumb but it stops an endless loop from happening
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
@@ -1033,6 +1033,8 @@ namespace JOSJA_Game
 
         static void EnemyEncounter(string name, int[] enemy)
         {
+            /*EXPLANATION: This manages the enemy encounters*/
+
             previousLevel = "level7";
             currentLevel = "enemyEncounter";
 
@@ -1042,6 +1044,8 @@ namespace JOSJA_Game
 
         static void DisplayEnemy()
         {
+            /*EXPLANATION: This displays the enemy sprite*/
+
             string filePath = $"Assets/Enemies/Skeleton.txt";
 
             if (File.Exists(filePath))
@@ -1057,6 +1061,8 @@ namespace JOSJA_Game
 
         static void DisplayWeapon(string currentWeapon)
         {
+            /*EXPLANATION: This displays the weapon sprite*/
+
             Console.SetCursorPosition(52, 22);
             Console.WriteLine(" ___________ ");
             Console.SetCursorPosition(52, 23);

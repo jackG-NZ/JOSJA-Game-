@@ -6,7 +6,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "enemyEncounter";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -487,6 +487,7 @@ namespace JOSJA_Game
                 Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
 
                 DisplayEnemy();
+                DisplayWeapon();
 
                 if (isPlayerTurn)
                 {
@@ -1006,6 +1007,27 @@ namespace JOSJA_Game
             {
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
+        }
+
+        static void DisplayWeapon()
+        {
+            Console.SetCursorPosition(52, 22);
+            Console.WriteLine(" ___________ ");
+            Console.SetCursorPosition(52, 23);
+            Console.WriteLine("|           |");
+            Console.SetCursorPosition(52, 24);
+            Console.WriteLine("|           |");
+            Console.SetCursorPosition(52, 25);
+            Console.WriteLine("|___________|");
+
+            Console.SetCursorPosition(55, 24);
+            StreamReader sr = new StreamReader(@"Assets/Items/Sword.txt");
+            string weapon = sr.ReadToEnd();
+            Console.WriteLine(weapon);
+            sr.Close();
+
+            Console.SetCursorPosition(43, 27);
+            Console.WriteLine("Currently equipped: PLACEHOLDER");
         }
 
         static void SaveAndLoad(bool load)

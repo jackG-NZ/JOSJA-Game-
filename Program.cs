@@ -8,6 +8,8 @@ namespace JOSJA_Game
     internal class Program
     {
         static string currentLevel = "level7";
+        static string enemyName = "placeholder"; //this changes depending on the enemy encounter
+        static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -16,6 +18,7 @@ namespace JOSJA_Game
         static int[] yBoundaries = { 0, 0 }; //top y boundary, bottom y boundary
 
         static bool isInGame = true;
+        static bool jasonEnemyDefeated = false;
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
@@ -23,7 +26,7 @@ namespace JOSJA_Game
         const double HealthPotionRegen = 10.0;
         const double HealingSalveRegen = 3.5;
 
-        static double enemyHP = 10;
+        static double enemyHP = 0;
         static double enemyAttackModifier = 1;
 
         static Dictionary<int, string> Items = new Dictionary<int, string>()
@@ -487,7 +490,7 @@ namespace JOSJA_Game
                 Console.BackgroundColor = ConsoleColor.Black;
 
                 Console.SetCursorPosition(4, 4);
-                Console.Write($"Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
+                Console.Write($"Enemy: Angry Skeleton {enemyName}"); //eventually change this when we have multiple enemy types?
 
                 DisplayEnemy();
                 DisplayWeapon(CurrentWeapon(Inventory));
@@ -557,10 +560,15 @@ namespace JOSJA_Game
 
                     isFighting = false;
 
-                    currentLevel = "level1";
+                    currentLevel = previousLevel;
 
                     Console.SetCursorPosition(39, 15);
                     Console.Write("Congratulations! Press [ENTER] to proceed.");
+
+                    if(previousLevel == "level7")
+                    {
+                        jasonEnemyDefeated = true;
+                    }
                 }
             }
 
@@ -746,9 +754,9 @@ namespace JOSJA_Game
 
                         return new[] { 6, 9 };
                     }
-                    else if (x >= 40 && Enemies["Jason"][0] > 0) // if you walk past the enemy and it has health above 0
+                    else if (x >= 40 && !jasonEnemyDefeated) // if you walk past Jason and if he hasn't been defeated
                     {
-                        EnemyEncounter();
+                        EnemyEncounter("Jason", Enemies["Jason"]);
                     } 
                     break;
 
@@ -1023,9 +1031,13 @@ namespace JOSJA_Game
 
         }
 
-        static void EnemyEncounter()
+        static void EnemyEncounter(string name, int[] enemy)
         {
+            previousLevel = "level7";
             currentLevel = "enemyEncounter";
+
+            enemyHP = enemy[0];
+            enemyName = name;
         }
 
         static void DisplayEnemy()

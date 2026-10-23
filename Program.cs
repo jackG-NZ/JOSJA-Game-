@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System.Diagnostics;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace JOSJA_Game
 {
@@ -77,7 +78,7 @@ namespace JOSJA_Game
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
             [1] = Items[2], //the player starts with a key, and four empty inventory slots
-            [2] = Items[1],
+            [2] = Items[6], //giving the player a diamond sword for testing purposes
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -285,6 +286,7 @@ namespace JOSJA_Game
             if (currentLevel == "enemyEncounter")
             {
                 isFighting = true;
+
             }
 
             while (isMoving && isInGame)
@@ -466,6 +468,7 @@ namespace JOSJA_Game
         static bool CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
         {
             /*EXPLANATION: This method handles pretty much all of the crucial combat functionality.*/
+
             if (isFighting)
             {
                 Console.SetCursorPosition(4, 2);
@@ -487,7 +490,7 @@ namespace JOSJA_Game
                 Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
 
                 DisplayEnemy();
-                DisplayWeapon();
+                DisplayWeapon(CurrentWeapon(Inventory));
 
                 if (isPlayerTurn)
                 {
@@ -558,6 +561,26 @@ namespace JOSJA_Game
             }
 
             return isFighting;
+        }
+
+        static string CurrentWeapon(Dictionary<int, string> Inventory)
+        {
+            /*EXPLANATION:This finds and returns the player's best weapon when they enter combat*/
+
+            if (Inventory.ContainsValue(Items[4])) //Wooden Sword
+            {
+                return Items[4];
+            }
+            else if (Inventory.ContainsValue(Items[5])) //Iron Sword
+            {
+                return Items[5];
+            }
+            else if (Inventory.ContainsValue(Items[6])) //Diamond Sword
+            {
+                return Items[6];
+            }
+
+            return "Empty Handed";
         }
 
         static bool IsWall(int x, int y) //checks if the player is walking into a wall
@@ -1009,7 +1032,7 @@ namespace JOSJA_Game
             }
         }
 
-        static void DisplayWeapon()
+        static void DisplayWeapon(string currentWeapon)
         {
             Console.SetCursorPosition(52, 22);
             Console.WriteLine(" ___________ ");
@@ -1027,7 +1050,7 @@ namespace JOSJA_Game
             sr.Close();
 
             Console.SetCursorPosition(43, 27);
-            Console.WriteLine("Currently equipped: PLACEHOLDER");
+            Console.WriteLine($"Currently equipped: {currentWeapon}");
         }
 
         static void SaveAndLoad(bool load)

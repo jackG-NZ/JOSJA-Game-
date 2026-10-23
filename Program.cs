@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "enemyEncounter";
+        static string currentLevel = "level7";
 
         static int x = 100, y = 10, inventoryPosition = 1;             //center position while windowed is 58, 14
 
@@ -283,14 +283,14 @@ namespace JOSJA_Game
             bool isFighting = false;
             bool isInteracting = false;
 
-            if (currentLevel == "enemyEncounter")
-            {
-                isFighting = true;
-
-            }
-
             while (isMoving && isInGame)
             {
+                if (currentLevel == "enemyEncounter")
+                {
+                    isFighting = true;
+
+                }
+
                 //this big block is for all of the information at the top of the screen
                 if (isFighting) //different information is displayed to the user if they're fighting
                 {
@@ -324,7 +324,7 @@ namespace JOSJA_Game
                 if (isFighting)
                 {
                     //I moved all the combat stuff to a single method for better readability
-                    isFighting = CombatLoop(previousAction, isFighting, isPlayerTurn);
+                    isFighting = CombatLoop(previousAction, isFighting, isPlayerTurn, Enemies);
 
                     previousAction = 0;
                 }
@@ -465,7 +465,7 @@ namespace JOSJA_Game
             }
         }
 
-        static bool CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn)
+        static bool CombatLoop(int previousAction, bool isFighting, bool isPlayerTurn, Dictionary<string, int[]> Enemy)
         {
             /*EXPLANATION: This method handles pretty much all of the crucial combat functionality.*/
 
@@ -487,7 +487,7 @@ namespace JOSJA_Game
                 Console.BackgroundColor = ConsoleColor.Black;
 
                 Console.SetCursorPosition(4, 4);
-                Console.Write("Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
+                Console.Write($"Enemy: Angry Skeleton"); //eventually change this when we have multiple enemy types?
 
                 DisplayEnemy();
                 DisplayWeapon(CurrentWeapon(Inventory));
@@ -747,9 +747,11 @@ namespace JOSJA_Game
                         return new[] { 6, 9 };
                     }
                     else if (x >= 40 && Enemies["Jason"][0] > 0) // if you walk past the enemy and it has health above 0
-
-                        currentLevel = "enemyEncounter"; //JACK MAKE THIS START AN ENEMY ENCOUNTER WITH A METHOD MAYBE LIKE: enemy("Jason")
+                    {
+                        EnemyEncounter();
+                    } 
                     break;
+
                 case "level8":
 
                     xBoundaries[0] = 4;
@@ -1019,6 +1021,11 @@ namespace JOSJA_Game
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
+        }
+
+        static void EnemyEncounter()
+        {
+            currentLevel = "enemyEncounter";
         }
 
         static void DisplayEnemy()

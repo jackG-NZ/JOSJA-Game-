@@ -405,7 +405,7 @@ namespace JOSJA_Game
                     case '1':
                         if (isPlayerTurn)
                         {
-                            PlayerAttack();
+                            PlayerAttack(CurrentWeapon(Inventory));
                             previousAction = 1;
                         }
                         break;
@@ -547,7 +547,11 @@ namespace JOSJA_Game
                     Console.SetCursorPosition(48, 2);
                     Console.Write("The enemy has died!");
 
-                    Thread.Sleep(3000);
+                    Console.Beep(500, 175);
+                    Console.Beep(400, 175);
+                    Console.Beep(450, 175);
+                    Console.Beep(500, 175);
+                    Console.Beep(600, 500);
 
                     Console.Clear();
 
@@ -1109,7 +1113,7 @@ namespace JOSJA_Game
             }
         }
 
-        static void PlayerAttack()
+        static void PlayerAttack(string currentWeapon)
         {
             /*EXPLANATION: This is the method for the player's attack*/
 
@@ -1117,7 +1121,30 @@ namespace JOSJA_Game
             Console.Write("The player has attacked the enemy!");
 
             Random rand = new Random();
-            int attackPower = rand.Next(1, 5);
+
+            int upperLimit = 3, lowerLimit = 1;
+
+            switch (currentWeapon) //this determines the maximum and minimum damage of the current weapon
+            {
+                case "Empty Handed":
+                    upperLimit = 2;
+                    lowerLimit = 1;
+                    break;
+                case "Wooden Sword":
+                    upperLimit = 4;
+                    lowerLimit = 2;
+                    break;
+                case "Iron Sword":
+                    upperLimit = 6;
+                    lowerLimit = 3;
+                    break;
+                case "Diamond Sword":
+                    upperLimit = 8;
+                    lowerLimit = 4;
+                    break;
+            }
+
+            int attackPower = rand.Next(lowerLimit, upperLimit);
 
             if(enemyHP - attackPower < 0)
             {

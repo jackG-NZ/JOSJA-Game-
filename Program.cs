@@ -1661,5 +1661,49 @@ namespace JOSJA_Game
                 Console.WriteLine(new string(' ', space) + text);
             }
         }
+
+
+
+
+        //Temporary methods to add items to invisible inventory, and to check stacking
+
+        static bool BelongsInInvisibleInventory(int itemId)
+        {
+            // Items are IDs 2-6, Foods are IDs 7-10
+            return (itemId >= 2 && itemId <= 6) || (itemId >= 7 && itemId <= 10);
+        }
+
+
+        static void AddToInvisibleInventory(int itemId)
+        {
+            // 1. Get the item name from your main Items dictionary
+            string itemName = Items[itemId];
+
+            // 2. Try to find if the item already exists to stack it
+            foreach (var slot in InvisibleInventory.Keys)
+            {
+                if (InvisibleInventory[slot].ItemName == itemName)
+                {
+                    // Update the quantity in place
+                    InvisibleInventory[slot] = (itemName, InvisibleInventory[slot].Quantity + 1);
+                    Console.WriteLine($"Stacked {itemName}. New quantity: {InvisibleInventory[slot].Quantity}");
+                    return;
+                }
+            }
+
+            // 3. If it doesn't exist, find the first empty slot (where name is "Nothing")
+            foreach (var slot in InvisibleInventory.Keys)
+            {
+                if (InvisibleInventory[slot].ItemName == Items[1]) // Items[1] is "Nothing"
+                {
+                    InvisibleInventory[slot] = (itemName, 1);
+                    Console.WriteLine($"Added {itemName} to invisible slot {slot}.");
+                    return;
+                }
+            }
+
+            Console.WriteLine("Invisible inventory is completely full!");
+        }
+
     }
 }

@@ -19,6 +19,7 @@ namespace JOSJA_Game
 
         static bool isInGame = true;
         static bool jasonEnemyDefeated = false; //this is kinda dumb but it stops an endless loop from happening
+        static bool slimyJackEnemyDefeated = false; //this is kinda dumb but it stops an endless loop from happening
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
@@ -116,7 +117,8 @@ namespace JOSJA_Game
         {
             ["George"] = [10, 23],
             ["Jason"] = [10, 23],
-            
+            ["Slimy Jack"] = [10, 20],
+
         };
 
         static void Main()
@@ -427,7 +429,11 @@ namespace JOSJA_Game
                         {
                             Chests[10] = Interaction(Chests[10]);
                         }
-                        
+                        else if (currentLevel == "level12" && ((x == 18 && y == 10) || (x == 19 && y == 10)))
+                        {
+                            Enemies["Slimy Jack"][1] = Interaction(Enemies["Slimy Jack"][1]);
+                        }
+
                         break;
 
                     case 'h':
@@ -584,6 +590,10 @@ namespace JOSJA_Game
                     if(previousLevel == "level7")
                     {
                         jasonEnemyDefeated = true;
+                    }
+                    if (previousLevel == "level12")
+                    {
+                        slimyJackEnemyDefeated = true;
                     }
                 }
             }
@@ -866,6 +876,11 @@ namespace JOSJA_Game
 
                         return new[] { 92, 12 };
                     }
+                    else if (x >= 40 && !slimyJackEnemyDefeated) // if you walk past Slimy Jack and if he hasn't been defeated
+                    {
+                        EnemyEncounter("Slimy Jack", Enemies["Slimy Jack"]);
+                        previousLevel = "level12";
+                    }
                     break;
                 default:
                     Console.Clear();
@@ -1021,6 +1036,20 @@ namespace JOSJA_Game
                     {
                         Console.SetCursorPosition(10, 10);
                         Console.Write('?');
+                    }
+                    break;
+                case "level12":
+                    if ((x == 40 && y == 10) || (x == 41 && y == 10))
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a dead skeleton, it might have dropped something. Press e");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(40, 10);
+                        Console.Write("☠︎");
                     }
                     break;
 
@@ -1199,6 +1228,8 @@ namespace JOSJA_Game
 
                 string jasonTemp = reader.ReadLine().Replace("Jason Enemy Dead = ", "");
                 jasonEnemyDefeated = Convert.ToBoolean(jasonTemp);
+                string slimyJackTemp = reader.ReadLine().Replace("Slimy Jack Enemy Dead = ", "");
+                slimyJackEnemyDefeated = Convert.ToBoolean(jasonTemp);
 
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
                 // Load each inventory slot
@@ -1224,6 +1255,7 @@ namespace JOSJA_Game
                         "Y = " + y + "\n" +
                         "Health = " + hp + "\n" +
                         "Jason Enemy Dead = " + jasonEnemyDefeated + "\n" +
+                        "Slimy Jack Enemy Dead = " + slimyJackEnemyDefeated + "\n" +
                         "Inventory = " + inventoryPosition + "\n";
                     // Save each slot
                     foreach (var item in Inventory)

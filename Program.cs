@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level10";
+        static string currentLevel = "level1";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -97,8 +97,8 @@ namespace JOSJA_Game
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
-            [1] = Items[2], //the player starts with a key, and four empty inventory slots
-            [2] = Items[1], //giving the player a diamond sword for testing purposes
+            [1] = Items[1], //all the needed items are now in the game in chests
+            [2] = Items[1], 
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -110,6 +110,7 @@ namespace JOSJA_Game
             [2] = 10,
             [3] = 21,
             [4] = 6,
+            [5] = 2,
             [10] = 26,
 
         };
@@ -422,6 +423,10 @@ namespace JOSJA_Game
                         {
                             Chests[3] = Interaction(Chests[3]);
                         }
+                        else if (currentLevel == "level6" && x == 7 && y == 11)
+                        {
+                            Chests[5] = Interaction(Chests[5]);
+                        }
                         else if (currentLevel == "level7" && ((x == 40 && y == 6) || (x == 41 && y == 6)))
                         {
                             Enemies["Jason"][1] = Interaction(Enemies["Jason"][1]);
@@ -523,7 +528,7 @@ namespace JOSJA_Game
                 Console.SetCursorPosition(4, 4);
                 Console.Write($"Enemy: Angry Skeleton {enemyName}"); //eventually change this when we have multiple enemy types?
 
-                DisplayEnemy();
+                DisplayEnemy(enemyName);
                 DisplayWeapon(CurrentWeapon(Inventory));
 
                 if (isPlayerTurn)
@@ -991,6 +996,22 @@ namespace JOSJA_Game
                         Console.Write('?');
                     }
                     break;
+                case "level6":
+                    if (x == 7 && y == 11)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(7, 11);
+                        Console.Write('?');
+                    }
+                    break;
                 case "level7":
                     if ((x == 40 &&  y == 6) || (x == 41 && y == 6))
                     {
@@ -1189,11 +1210,14 @@ namespace JOSJA_Game
             enemyName = name;
         }
 
-        static void DisplayEnemy()
+        static void DisplayEnemy(string enemyName)
         {
             /*EXPLANATION: This displays the enemy sprite*/
-
             string filePath = $"Assets/Enemies/Skeleton.txt";
+            if (enemyName == "Slimy Jack")
+            {
+                filePath = $"Assets/Enemies/SlimyJack.txt";
+            }
 
             if (File.Exists(filePath))
             {

@@ -92,6 +92,7 @@ namespace JOSJA_Game
             [1] = 4,
             [2] = 10,
             [3] = 21,
+            [10] = 30,
 
         };
 
@@ -394,6 +395,10 @@ namespace JOSJA_Game
                         {
                             Chests[2] = Interaction(Chests[2]);
                         }
+                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
+                        {
+                            GameEnd(false);
+                        }
                         else if (currentLevel == "level5" && x == 46 && y == 6)
                         {
                             Chests[3] = Interaction(Chests[3]);
@@ -404,12 +409,9 @@ namespace JOSJA_Game
                         }
                         else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                         {
-                            Interaction(17);
+                            Chests[10] = Interaction(Chests[10]);
                         }
-                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
-                        {
-                            GameEnd(false);
-                        }
+                        
                         break;
 
                     case 'h':
@@ -940,17 +942,26 @@ namespace JOSJA_Game
                     }
                     break;
                 case "level9": //RIGHT ROOM CHEST INTERACTION
-                    if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2])) //will only execute if the coordinates are correct AND if the player has the key (Items[2])
+                    if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Your Key fits the lock! Enter 'i' to interact.");
+                        Console.WriteLine("There's a chest, it looks like it's locked but you have the key!");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
                         Console.BackgroundColor = ConsoleColor.Black;
-                        Interaction(17);
-                        
-                         //17 is the key of the portal component in the item dictionary
-
-                        hasEncountered = true;
+                    }
+                    else if (x == 54 && y == 13)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's locked, you should try find the key.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(54, 13);
+                        Console.Write('?');
                     }
                     break;
                     

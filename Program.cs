@@ -401,7 +401,7 @@ namespace JOSJA_Game
                         break;
 
                     case 'e':
-                        if (currentLevel == "level1" && x == 10 && y == 10)
+                        if (currentLevel == "level11" && x == 10 && y == 10)
                         {
                             Brewing();
                             Console.ReadLine();

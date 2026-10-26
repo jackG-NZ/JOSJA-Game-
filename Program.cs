@@ -78,26 +78,26 @@ namespace JOSJA_Game
             { "level1Y", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
         };*/
 
-        static Dictionary<int, string, int> Inventory = new Dictionary<int, string, int>()
+        static Dictionary<int, (string ItemName, int Quantity)> InvisibleInventory = new Dictionary<int, (string, int)>()
         {
-            [1] = Items[2],
-            [2] = Items[6],
-            [3] = Items[1],
-            [4] = Items[1],
-            [5] = Items[1],
-            [6] = Items[1],
-            [7] = Items[1],
-            [8] = Items[1],
-            [9] = Items[1],
-            [10] = Items[1],
-            [11] = Items[1],
-            [12] = Items[1],
+            [1] = (Items[1], 0), // Starts as "Nothing" with 0 quantity
+            [2] = (Items[1], 0),
+            [3] = (Items[1], 0),
+            [4] = (Items[1], 0),
+            [5] = (Items[1], 0),
+            [6] = (Items[1], 0),
+            [7] = (Items[1], 0),
+            [8] = (Items[1], 0),
+            [9] = (Items[1], 0),
+            [10] = (Items[1], 0),
+            [11] = (Items[1], 0),
+            [12] = (Items[1], 0),
         };
 
-        static Dictionary<int, string> ItemInventory = new Dictionary<int, string>()
+        static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
-            [1] = Items[1], //the player starts with a key, and four empty inventory slots
-            [2] = Items[1], //giving the player a diamond sword for testing purposes
+            [1] = Items[2], //the player starts with a key, and four empty inventory slots
+            [2] = Items[6], //giving the player a diamond sword for testing purposes
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -108,7 +108,7 @@ namespace JOSJA_Game
             [1] = 4,
             [2] = 10,
             [3] = 21,
-            [10] = 30,
+            [10] = 26,
 
         };
 

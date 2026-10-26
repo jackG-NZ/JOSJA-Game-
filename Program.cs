@@ -579,17 +579,17 @@ namespace JOSJA_Game
         {
             /*EXPLANATION:This finds and returns the player's best weapon when they enter combat*/
 
-            if (Inventory.ContainsValue(Items[4])) //Wooden Sword
+            if (Inventory.ContainsValue(Items[6])) //Diamond Sword
             {
-                return Items[4];
+                return Items[6];
             }
             else if (Inventory.ContainsValue(Items[5])) //Iron Sword
             {
                 return Items[5];
             }
-            else if (Inventory.ContainsValue(Items[6])) //Diamond Sword
+            else if (Inventory.ContainsValue(Items[4])) //Wooden Sword
             {
-                return Items[6];
+                return Items[4];
             }
 
             return "Empty Handed";

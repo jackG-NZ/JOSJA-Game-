@@ -1641,7 +1641,7 @@ namespace JOSJA_Game
 
 
 
-        //Temporary methods to add items to invis inventory, and to check stacking
+        //Temporary methods to add items to invisible inventory, and to check stacking
 
         static bool BelongsInInvisibleInventory(int itemId)
         {

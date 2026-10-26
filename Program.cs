@@ -98,7 +98,7 @@ namespace JOSJA_Game
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
             [1] = Items[2], //the player starts with a key, and four empty inventory slots
-            [2] = Items[6], //giving the player a diamond sword for testing purposes
+            [2] = Items[1], //giving the player a diamond sword for testing purposes
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -109,6 +109,7 @@ namespace JOSJA_Game
             [1] = 4,
             [2] = 10,
             [3] = 21,
+            [4] = 6,
             [10] = 26,
 
         };
@@ -433,7 +434,10 @@ namespace JOSJA_Game
                         {
                             Enemies["Slimy Jack"][1] = Interaction(Enemies["Slimy Jack"][1]);
                         }
-
+                        else if (currentLevel == "level12" && x == 54 && y == 10)
+                        {
+                            Chests[4] = Interaction(Chests[4]);
+                        }
                         break;
 
                     case 'h':
@@ -591,7 +595,7 @@ namespace JOSJA_Game
                     {
                         jasonEnemyDefeated = true;
                     }
-                    if (previousLevel == "level7")
+                    if (previousLevel == "level12")
                     {
                         slimyJackEnemyDefeated = true;
                     }
@@ -876,7 +880,7 @@ namespace JOSJA_Game
 
                         return new[] { 92, 12 };
                     }
-                    else if (x >= 40 && !slimyJackEnemyDefeated) // if you walk past Slimy Jack and if he hasn't been defeated
+                    else if (x >= 18 && !slimyJackEnemyDefeated) // if you walk past Slimy Jack and if he hasn't been defeated
                     {
                         EnemyEncounter("Slimy Jack", Enemies["Slimy Jack"]);
                         previousLevel = "level12";
@@ -999,7 +1003,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(46, 6);
                         Console.Write('?');
                     }
-                        break;
+                    break;
                 case "level7":
                     if ((x == 40 &&  y == 6) || (x == 41 && y == 6))
                     {
@@ -1038,7 +1042,7 @@ namespace JOSJA_Game
                     }
                     break;
                 case "level12":
-                    if ((x == 40 && y == 10) || (x == 41 && y == 10))
+                    if ((x == 18 && y == 10) || (x == 19 && y == 10))
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -1047,8 +1051,22 @@ namespace JOSJA_Game
                     }
                     else
                     {
-                        Console.SetCursorPosition(40, 10);
+                        Console.SetCursorPosition(18, 10);
                         Console.Write("☠︎");
+                    }
+                    if (x == 54 && y == 10)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(54, 10);
+                        Console.Write('?');
                     }
                     break;
 

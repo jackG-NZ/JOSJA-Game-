@@ -1220,10 +1220,17 @@ namespace JOSJA_Game
             Console.WriteLine("|___________|");
 
             Console.SetCursorPosition(55, 24);
-            StreamReader sr = new StreamReader(@"Assets/Items/Sword.txt");
-            string weapon = sr.ReadToEnd();
-            Console.WriteLine(weapon);
-            sr.Close();
+
+            if (Inventory.ContainsValue(Items[6]) || Inventory.ContainsValue(Items[5]) || Inventory.ContainsValue(Items[4]))
+            {
+                StreamReader sr = new StreamReader(@"Assets/Items/Sword.txt");
+                string weapon = sr.ReadToEnd();
+                Console.WriteLine(weapon);
+                sr.Close();
+            }
+
+            Console.SetCursorPosition(58, 24);
+            Console.Write(@"X");
 
             Console.SetCursorPosition(43, 27);
             Console.WriteLine($"Currently equipped: {currentWeapon}");

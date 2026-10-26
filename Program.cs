@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level7";
+        static string currentLevel = "level3";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -91,6 +91,8 @@ namespace JOSJA_Game
         {
             [1] = 4,
             [2] = 10,
+            [3] = 21,
+
         };
 
         static Dictionary<string, int[]> Enemies = new Dictionary<string, int[]>()//[Name] = [Health, Item]
@@ -391,6 +393,14 @@ namespace JOSJA_Game
                         else if (currentLevel == "level4" && x == 105 && y == 15)
                         {
                             Chests[2] = Interaction(Chests[2]);
+                        }
+                        else if (currentLevel == "level5" && x == 46 && y == 6)
+                        {
+                            Chests[3] = Interaction(Chests[3]);
+                        }
+                        else if (currentLevel == "level7" && ((x == 40 && y == 6) || (x == 41 && y == 6)))
+                        {
+                            Enemies["Jason"][1] = Interaction(Enemies["Jason"][1]);
                         }
                         else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                         {
@@ -884,8 +894,24 @@ namespace JOSJA_Game
                         Console.Write('?');
                     }
                     break;
+                case "level5":
+                    if (x == 46 && y == 6)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine($"Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(46, 6);
+                        Console.Write('?');
+                    }
+                        break;
                 case "level7":
-                    if ((x == 40 &&  y == 6) || x == 41 && y == 6)
+                    if ((x == 40 &&  y == 6) || (x == 41 && y == 6))
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;

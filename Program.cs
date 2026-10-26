@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level7";
+        static string currentLevel = "level1";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -1096,6 +1096,10 @@ namespace JOSJA_Game
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
                 y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));
                 hp = Convert.ToDouble(reader.ReadLine().Replace("Health = ", ""));
+
+                string jasonTemp = reader.ReadLine().Replace("Jason Enemy Dead = ", "");
+                jasonEnemyDefeated = Convert.ToBoolean(jasonTemp);
+
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
                 // Load each inventory slot
                 for (int i = 1; i <= 5; i++)
@@ -1119,9 +1123,10 @@ namespace JOSJA_Game
                         "X = " + x + "\n" +
                         "Y = " + y + "\n" +
                         "Health = " + hp + "\n" +
+                        "Jason Enemy Dead = " + jasonEnemyDefeated + "\n" +
                         "Inventory = " + inventoryPosition + "\n";
-                        // Save each slot
-                        foreach (var item in Inventory)
+                    // Save each slot
+                    foreach (var item in Inventory)
                         {
                             saveContents += "Slot " + item.Key + " = " + item.Value + "\n";
                         }

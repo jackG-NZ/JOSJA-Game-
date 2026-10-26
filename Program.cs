@@ -431,6 +431,7 @@ namespace JOSJA_Game
                         {
                             isFighting = !PlayerFlee();  //isFighting is set to false if the player flees
                             previousAction = 4;
+                            currentLevel = previousLevel;
                         }
                         break;
                     case '-':
@@ -757,6 +758,7 @@ namespace JOSJA_Game
                     else if (x >= 40 && !jasonEnemyDefeated) // if you walk past Jason and if he hasn't been defeated
                     {
                         EnemyEncounter("Jason", Enemies["Jason"]);
+                        previousLevel = "level7";
                     } 
                     break;
 
@@ -1035,7 +1037,6 @@ namespace JOSJA_Game
         {
             /*EXPLANATION: This manages the enemy encounters*/
 
-            previousLevel = "level7";
             currentLevel = "enemyEncounter";
 
             enemyHP = enemy[0];
@@ -1248,7 +1249,6 @@ namespace JOSJA_Game
 
             if(fleeChance == 1)
             {
-                currentLevel = "level1";
                 flee = true;
             }
 

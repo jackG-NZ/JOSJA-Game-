@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level3";
+        static string currentLevel = "level1";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -438,14 +438,6 @@ namespace JOSJA_Game
                             previousAction = 3;
                         }
                         break;
-                    case '4':
-                        if (isPlayerTurn)
-                        {
-                            isFighting = !PlayerFlee();  //isFighting is set to false if the player flees
-                            previousAction = 4;
-                            currentLevel = previousLevel;
-                        }
-                        break;
                     case '-':
                         if (inventoryPosition > 1)
                         {
@@ -530,31 +522,26 @@ namespace JOSJA_Game
                     //Draws the input options 
                     if (isPlayerTurn)
                     {
-                        Console.SetCursorPosition(21, 18);
+                        Console.SetCursorPosition(32, 18);
                         Console.Write("Attack");
-                        Console.SetCursorPosition(20, 19);
+                        Console.SetCursorPosition(32, 19);
                         Console.Write("ENTER 1");
 
-                        Console.SetCursorPosition(44, 18);
+                        Console.SetCursorPosition(56, 18);
                         Console.Write("Block");
-                        Console.SetCursorPosition(43, 19);
+                        Console.SetCursorPosition(55, 19);
                         Console.Write("ENTER 2");
 
-                        Console.SetCursorPosition(68, 18);
+                        Console.SetCursorPosition(79, 18);
                         Console.Write("Heal");
-                        Console.SetCursorPosition(67, 19);
+                        Console.SetCursorPosition(78, 19);
                         Console.Write("ENTER 3");
-
-                        Console.SetCursorPosition(91, 18);
-                        Console.Write("Flee");
-                        Console.SetCursorPosition(90, 19);
-                        Console.Write("ENTER 4");
                     }
                     else
                     {
-                        Console.SetCursorPosition(19, 18);
+                        Console.SetCursorPosition(31, 18);
                         Console.Write("WHEN READY");
-                        Console.SetCursorPosition(18, 19);
+                        Console.SetCursorPosition(30, 19);
                         Console.Write("PRESS ENTER");
                     }
                 }
@@ -863,8 +850,6 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(31, 10);
                         Console.WriteLine($"Press E to open it.");
                         Console.BackgroundColor = ConsoleColor.Black;
-
-
                     }
                     else
                     {
@@ -1134,6 +1119,10 @@ namespace JOSJA_Game
                 x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
                 y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));
                 hp = Convert.ToDouble(reader.ReadLine().Replace("Health = ", ""));
+
+                string jasonTemp = reader.ReadLine().Replace("Jason Enemy Dead = ", "");
+                jasonEnemyDefeated = Convert.ToBoolean(jasonTemp);
+
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
                 // Load each inventory slot
                 for (int i = 1; i <= 5; i++)
@@ -1157,9 +1146,10 @@ namespace JOSJA_Game
                         "X = " + x + "\n" +
                         "Y = " + y + "\n" +
                         "Health = " + hp + "\n" +
+                        "Jason Enemy Dead = " + jasonEnemyDefeated + "\n" +
                         "Inventory = " + inventoryPosition + "\n";
-                        // Save each slot
-                        foreach (var item in Inventory)
+                    // Save each slot
+                    foreach (var item in Inventory)
                         {
                             saveContents += "Slot " + item.Key + " = " + item.Value + "\n";
                         }
@@ -1260,36 +1250,6 @@ namespace JOSJA_Game
         static void PlayerHeal()
         {
             /*EXPLANATION: This is the method for the heal utility*/
-        }
-
-        static bool PlayerFlee()
-        {
-            /*EXPLANATION: This is the method for the flee utility. The player has a 50% chance for their attempt to flee to be successful.*/
-
-            bool flee = false;
-
-            Console.SetCursorPosition(42, 3);
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write($"The player is attempting to flee!");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.Black;
-
-            for(int i = 0; i < 3; i++)
-            {
-                Console.Beep(250, 500);
-                Thread.Sleep(250);
-            }
-
-            Random rand = new Random();
-            int fleeChance = rand.Next(1, 3);
-
-            if(fleeChance == 1)
-            {
-                flee = true;
-            }
-
-            return flee;
         }
 
         static void EnemyAIReaction(int previousAction)

@@ -900,19 +900,6 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(104, 10);
                         Console.Write('?');
                     }
-                    if (x == 10 && y == 10)
-                    {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Cauldron - press E to interact.");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        
-                    }
-                    else
-                    {
-                        Console.SetCursorPosition(10, 10);
-                        Console.Write('?');
-                    }
                     break;
                 case "level2":
                     if (x == 60 && y == 14) //chest
@@ -1022,7 +1009,21 @@ namespace JOSJA_Game
                         Console.Write('?');
                     }
                     break;
-                    
+                case "level11":
+                    if (x == 10 && y == 10)
+                    {
+                        Console.SetCursorPosition(23, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Cauldron - press E to interact.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(10, 10);
+                        Console.Write('?');
+                    }
+                    break;
+
             }
 
             return hasEncountered;

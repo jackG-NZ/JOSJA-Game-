@@ -46,15 +46,15 @@ namespace JOSJA_Game
             [7] = "Dungeon Berries",
             [8] = "Raw Meat",
             [9] = "Cooked Meat",
-            [25] = "Blind Cave Fish",
+            [10] = "Blind Cave Fish",
 
             // Consumables
-            [10] = "Health Potion",
-            [11] = "Antidote",
-            [12] = "Poison Potion",
-            [13] = "Strength Potion",
-            [14] = "Mana Potion",
-            [15] = "Stamina Potion",
+            [11] = "Health Potion",
+            [12] = "Antidote",
+            [13] = "Poison Potion",
+            [14] = "Strength Potion",
+            [15] = "Mana Potion",
+            [16] = "Stamina Potion",
 
             // Ingredients
             [17] = "Cave Moss",
@@ -65,11 +65,11 @@ namespace JOSJA_Game
             [22] = "Feather",
             [23] = "Bone",
             [24] = "Cryptcrawler Root",
-            [26] = "Dungeon Bug",
+            [25] = "Dungeon Bug",
 
             // Story/Lore Items
-            [30] = "Portal Component",
-            [31] = "WD-40"
+            [26] = "Portal Component",
+            [27] = "WD-40"
 
         };
 
@@ -78,6 +78,22 @@ namespace JOSJA_Game
             { "level1X", new int[] { 4, 111 } }, //LEFT X BOUNDARY, RIGHT X BOUNDARY
             { "level1Y", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
         };*/
+
+        static Dictionary<int, (string ItemName, int Quantity)> InvisibleInventory = new Dictionary<int, (string, int)>()
+        {
+            [1] = (Items[1], 0), // Starts as "Nothing" with 0 quantity
+            [2] = (Items[1], 0),
+            [3] = (Items[1], 0),
+            [4] = (Items[1], 0),
+            [5] = (Items[1], 0),
+            [6] = (Items[1], 0),
+            [7] = (Items[1], 0),
+            [8] = (Items[1], 0),
+            [9] = (Items[1], 0),
+            [10] = (Items[1], 0),
+            [11] = (Items[1], 0),
+            [12] = (Items[1], 0),
+        };
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
@@ -93,7 +109,7 @@ namespace JOSJA_Game
             [1] = 4,
             [2] = 10,
             [3] = 21,
-            [10] = 30,
+            [10] = 26,
 
         };
 
@@ -589,17 +605,17 @@ namespace JOSJA_Game
         {
             /*EXPLANATION:This finds and returns the player's best weapon when they enter combat*/
 
-            if (Inventory.ContainsValue(Items[4])) //Wooden Sword
+            if (Inventory.ContainsValue(Items[6])) //Diamond Sword
             {
-                return Items[4];
+                return Items[6];
             }
             else if (Inventory.ContainsValue(Items[5])) //Iron Sword
             {
                 return Items[5];
             }
-            else if (Inventory.ContainsValue(Items[6])) //Diamond Sword
+            else if (Inventory.ContainsValue(Items[4])) //Wooden Sword
             {
-                return Items[6];
+                return Items[4];
             }
 
             return "Empty Handed";

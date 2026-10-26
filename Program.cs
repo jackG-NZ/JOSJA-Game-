@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "level10";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -595,17 +595,17 @@ namespace JOSJA_Game
         {
             /*EXPLANATION:This finds and returns the player's best weapon when they enter combat*/
 
-            if (Inventory.ContainsValue(Items[4])) //Wooden Sword
+            if (Inventory.ContainsValue(Items[6])) //Diamond Sword
             {
-                return Items[4];
+                return Items[6];
             }
             else if (Inventory.ContainsValue(Items[5])) //Iron Sword
             {
                 return Items[5];
             }
-            else if (Inventory.ContainsValue(Items[6])) //Diamond Sword
+            else if (Inventory.ContainsValue(Items[4])) //Wooden Sword
             {
-                return Items[6];
+                return Items[4];
             }
 
             return "Empty Handed";
@@ -722,7 +722,7 @@ namespace JOSJA_Game
                     {
                         currentLevel = "level6";
 
-                        return new[] { 108, 15 };
+                        return new[] { 103, 15 };
                     }
                     else if (x == 18 && y == 3)
                     {
@@ -738,7 +738,7 @@ namespace JOSJA_Game
                     xBoundaries[1] = 111;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
-                    if (x == 110 && y == 15)
+                    if (x == 105 && y == 15)
                     {
                         currentLevel = "level5";
 
@@ -795,6 +795,12 @@ namespace JOSJA_Game
 
                         return new[] { 6, 12 };
                     }
+                    else if (x == 48 && y == 17)
+                    {
+                        currentLevel = "level10";
+
+                        return new[] { 48, 5 };
+                    }
                     break;
                 case "level9":
 
@@ -810,6 +816,57 @@ namespace JOSJA_Game
                     }
                     break;
 
+                case "level10":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 96;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 48 && y == 4)
+                    {
+                        currentLevel = "level8";
+
+                        return new[] { 48, 16 };
+                    }
+                    else if (x == 4 && y == 10)
+                    {
+                        currentLevel = "level11";
+
+                        return new[] { 38, 9 };
+                    }
+                    else if (x == 94 && y == 12)
+                    {
+                        currentLevel = "level12";
+
+                        return new[] { 4, 10 };
+                    }
+                    break;
+                case "level11":
+
+                    xBoundaries[0] = 4;
+                    xBoundaries[1] = 86;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 40 && y == 9)
+                    {
+                        currentLevel = "level10";
+
+                        return new[] { 6, 10 };
+                    }
+                    break;
+                case "level12":
+
+                    xBoundaries[0] = 1;
+                    xBoundaries[1] = 86;
+                    yBoundaries[0] = 3;
+                    yBoundaries[1] = 17;
+                    if (x == 2 && y == 10)
+                    {
+                        currentLevel = "level10";
+
+                        return new[] { 92, 12 };
+                    }
+                    break;
                 default:
                     Console.Clear();
                     Console.WriteLine("An unexpected error has occured.");
@@ -1046,11 +1103,14 @@ namespace JOSJA_Game
                 { "level2", "First Chamber"},
                 { "level3", "Right Room"},
                 { "level4", "Left Storage Room" },
-                { "level5", "Cell" },
-                { "level6", "Cell" },
-                { "level7", "Cell" },
-                { "level8", "Cell" },
-                { "level9", "Cell" },
+                { "level5", "level5" },
+                { "level6", "level6" },
+                { "level7", "level7" },
+                { "level8", "level8" },
+                { "level9", "level9" },
+                { "level10", "level10" },
+                { "level11", "level11" },
+                { "level12", "level12" },
                 { "enemyEncounter", "BATTLE" },
             };
 

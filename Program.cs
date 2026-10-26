@@ -591,7 +591,7 @@ namespace JOSJA_Game
                     {
                         jasonEnemyDefeated = true;
                     }
-                    if (previousLevel == "level7")
+                    if (previousLevel == "level12")
                     {
                         slimyJackEnemyDefeated = true;
                     }

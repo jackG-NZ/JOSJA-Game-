@@ -45,15 +45,15 @@ namespace JOSJA_Game
             [7] = "Dungeon Berries",
             [8] = "Raw Meat",
             [9] = "Cooked Meat",
-            [25] = "Blind Cave Fish",
+            [10] = "Blind Cave Fish",
 
             // Consumables
-            [10] = "Health Potion",
-            [11] = "Antidote",
-            [12] = "Poison Potion",
-            [13] = "Strength Potion",
-            [14] = "Mana Potion",
-            [15] = "Stamina Potion",
+            [11] = "Health Potion",
+            [12] = "Antidote",
+            [13] = "Poison Potion",
+            [14] = "Strength Potion",
+            [15] = "Mana Potion",
+            [16] = "Stamina Potion",
 
             // Ingredients
             [17] = "Cave Moss",
@@ -64,11 +64,11 @@ namespace JOSJA_Game
             [22] = "Feather",
             [23] = "Bone",
             [24] = "Cryptcrawler Root",
-            [26] = "Dungeon Bug",
+            [25] = "Dungeon Bug",
 
             // Story/Lore Items
-            [30] = "Portal Component",
-            [31] = "WD-40"
+            [26] = "Portal Component",
+            [27] = "WD-40"
 
         };
 
@@ -78,10 +78,26 @@ namespace JOSJA_Game
             { "level1Y", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
         };*/
 
-        static Dictionary<int, string> Inventory = new Dictionary<int, string>()
+        static Dictionary<int, string, int> Inventory = new Dictionary<int, string, int>()
         {
-            [1] = Items[2], //the player starts with a key, and four empty inventory slots
-            [2] = Items[6], //giving the player a diamond sword for testing purposes
+            [1] = Items[2],
+            [2] = Items[6],
+            [3] = Items[1],
+            [4] = Items[1],
+            [5] = Items[1],
+            [6] = Items[1],
+            [7] = Items[1],
+            [8] = Items[1],
+            [9] = Items[1],
+            [10] = Items[1],
+            [11] = Items[1],
+            [12] = Items[1],
+        };
+
+        static Dictionary<int, string> ItemInventory = new Dictionary<int, string>()
+        {
+            [1] = Items[1], //the player starts with a key, and four empty inventory slots
+            [2] = Items[1], //giving the player a diamond sword for testing purposes
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],

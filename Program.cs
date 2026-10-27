@@ -1645,7 +1645,9 @@ namespace JOSJA_Game
 
         static bool CheckNeededIngredients(Action brewing, int[] required)
         {
-            // First pass: make sure every ingredient is available in the amount needed before using anything
+            bool hasEverything = true;
+
+            // make sure every ingredient is available in the amount needed before using anything
             foreach (int id in required)
             {
                 string name = Items[id];
@@ -1672,8 +1674,13 @@ namespace JOSJA_Game
                 if (!found)
                 {
                     Console.Write($"You don't have the required ingredient: {name} (need {amountNeeded}).\n");
-                    return false;
+                    hasEverything = false;
                 }
+            }
+
+            if (!hasEverything)
+            {
+                return false;
             }
 
             // Everything was found, consume the ingredients

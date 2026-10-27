@@ -35,6 +35,7 @@ namespace JOSJA_Game
         static Dictionary<int, string> Items = new Dictionary<int, string>()
         {
             // Misc
+            [0] = "null",
             [1] = "Nothing",
 
             // Items
@@ -63,7 +64,7 @@ namespace JOSJA_Game
             [18] = "Spider Fang",
             [19] = "Stone",
             [20] = "Slime",
-            [21] = "Iron Shard",
+            [21] = "Iron Ingot",
             [22] = "Feather",
             [23] = "Bone",
             [24] = "Cryptcrawler Root",
@@ -110,13 +111,13 @@ namespace JOSJA_Game
         {
             [1] = 4,
             [2] = 10,
-            [3] = 22,
+            [3] = 3,
             [4] = 6,
             [5] = 2,
-            [6] = 3,
-            [7] = 17,
-            [8] = 19,
-            [9] = 21,
+            [6] = 5,
+            [7] = 17,//
+            [8] = 19,//
+            [9] = 21,//
             [10] = 26,
 
         };
@@ -1295,26 +1296,61 @@ namespace JOSJA_Game
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             int inventorySlot = -1;
             int newItem = interactionID;
-
-            Console.Clear();
-            Console.BackgroundColor = ConsoleColor.Black;
-            WriteLineCenter("==== INVENTORY ====", 7);
-            WriteLineCenter($"Slot 1: {Inventory[1]}     Slot 2: {Inventory[2]}     Slot 3: {Inventory[3]}     Slot 4: {Inventory[4]}     Slot 5: {Inventory[5]}", 9);
-            WriteLineCenter($"You got a {Items[interactionID]}!", 13);
-            WriteLineCenter("Choose an inventory slot (1 - 5): ", 15);
-
-            char key = Console.ReadKey().KeyChar;
-            int.TryParse(key.ToString(), out inventorySlot);
-
-            if (inventorySlot <= 5 && inventorySlot >= 1)
+            string itemName = Items[interactionID];
+            if (interactionID >= 17 && interactionID <= 25 )
             {
-                string oldItem = Inventory[inventorySlot];
+                for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
+                {
+                    if (InvisibleInventory[slot].ItemName == itemName)
+                    {
+                        // Update the quantity directly in place using the index variable
+                        InvisibleInventory[slot] = (itemName, InvisibleInventory[slot].Quantity + 1);
+                        Console.WriteLine($"\nStacked {itemName}. New quantity: {InvisibleInventory[slot].Quantity}");
+                        Console.ReadKey();
+                        return 0;
+                    }
+                }
 
-                Inventory[inventorySlot] = Items[interactionID];
-                newItem = Items.First(i => i.Value == oldItem).Key; //this gives the key of the item that was replaced in the inventory
-                Console.WriteLine($"You swapped {oldItem} for {Items[interactionID]}");
+                // If it doesn't exist, find the first empty slot (where name is "Nothing")
+                for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
+                {
+                    if (InvisibleInventory[slot].ItemName == Items[1]) // Items[1] is "Nothing"
+                    {
+                        InvisibleInventory[slot] = (itemName, 1);
+                        Console.WriteLine($"\nAdded {itemName} to invisible slot {slot}.");
+                        Console.ReadKey();
+                        return 0;
+                    }
+                }
+            }
+            else if (interactionID!=0)
+            {
+                Console.WriteLine("Invisible inventory is completely full!");
+                //return itemId;
+
+
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Black;
+                WriteLineCenter("==== INVENTORY ====", 7);
+                WriteLineCenter($"Slot 1: {Inventory[1]}     Slot 2: {Inventory[2]}     Slot 3: {Inventory[3]}     Slot 4: {Inventory[4]}     Slot 5: {Inventory[5]}", 9);
+                WriteLineCenter($"You got a {itemName}!", 13);
+                WriteLineCenter("Choose an inventory slot (1 - 5): ", 15);
+
+                char key = Console.ReadKey().KeyChar;
+                int.TryParse(key.ToString(), out inventorySlot);
+
+                if (inventorySlot <= 5 && inventorySlot >= 1)
+                {
+                    string oldItem = Inventory[inventorySlot];
+
+                    Inventory[inventorySlot] = itemName;
+                    newItem = Items.First(i => i.Value == oldItem).Key; //this gives the key of the item that was replaced in the inventory
+                    Console.WriteLine($"You swapped {oldItem} for {itemName}");
+                }
+                return newItem;
             }
             return newItem;
+
 
             //jack old code
             //if (Inventory[inventorySlot] != Items[1])
@@ -1504,6 +1540,15 @@ namespace JOSJA_Game
                     int quantity = Convert.ToInt32(line.Substring(divider + 1));
                     InvisibleInventory[i] = (itemName, quantity);
                 }
+
+                reader.ReadLine();  // skip "--- Chests States ---"
+                // Load items in chests
+                for (int i = 1; i <= Chests.Count; i++)
+                {
+                    string line = reader.ReadLine();
+                    Chests[i] = Convert.ToInt32(line.Replace("Chest Item " + i + " = ", ""));
+                }
+
                 reader.Close();     //close reader
             }
             else
@@ -1536,6 +1581,12 @@ namespace JOSJA_Game
                     foreach (var item in InvisibleInventory)
                     {
                         saveContents += "Invis Slot " + item.Key + " = " + item.Value.ItemName + "|" + item.Value.Quantity + "\n";
+                    }
+                    saveContents += "--- Chests States ---\n";
+                    // Save Chests
+                    foreach (var itemID in Chests)
+                    {
+                        saveContents += "Chest Item " + itemID.Key + " = " + itemID.Value + "\n";
                     }
 
                     File.WriteAllText(savePath, saveContents);
@@ -1951,34 +2002,6 @@ namespace JOSJA_Game
 
 
         //Temporary methods to add items to invisible inventory, and to check stacking
-
-        static void AddToInvisibleInventory(int itemId)
-        {
-            // Get the item name from your main Items dictionary
-            string itemName = Items[itemId];
-
-            for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
-            {
-                if (InvisibleInventory[slot].ItemName == itemName)
-                {
-                    // Update the quantity directly in place using the index variable
-                    InvisibleInventory[slot] = (itemName, InvisibleInventory[slot].Quantity + 1);
-                    Console.WriteLine($"Stacked {itemName}. New quantity: {InvisibleInventory[slot].Quantity}");
-                    return;
-                }
-            }
-
-            // If it doesn't exist, find the first empty slot (where name is "Nothing")
-            for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
-            {
-                if (InvisibleInventory[slot].ItemName == Items[1]) // Items[1] is "Nothing"
-                {
-                    InvisibleInventory[slot] = (itemName, 1);
-                    Console.WriteLine($"Added {itemName} to invisible slot {slot}.");
-                    return;
-                }
-            }
-            Console.WriteLine("Invisible inventory is completely full!");
-        }
+ 
     }
 }

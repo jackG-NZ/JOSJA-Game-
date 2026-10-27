@@ -76,12 +76,6 @@ namespace JOSJA_Game
 
         };
 
-        /*static Dictionary<string, int[]> MapSizes = new Dictionary<string, int[]>
-        {
-            { "level1X", new int[] { 4, 111 } }, //LEFT X BOUNDARY, RIGHT X BOUNDARY
-            { "level1Y", new int[] { 3, 16 } }, //TOP Y BOUNDARY, BOTTOM Y BOUNDARY
-        };*/
-
         static Dictionary<int, (string ItemName, int Quantity)> InvisibleInventory = new Dictionary<int, (string, int)>()
         {
             [1] = (Items[1], 0), // Starts as "Nothing" with 0 quantity
@@ -1350,40 +1344,6 @@ namespace JOSJA_Game
                 return newItem;
             }
             return newItem;
-
-
-            //jack old code
-            //if (Inventory[inventorySlot] != Items[1])
-            //{
-            //    Console.Clear();
-            //    Console.SetCursorPosition(25, 13);
-            //    Console.Write("Warning! This slot is already taken. Do you wish to overwrite its contents?");
-            //    Console.SetCursorPosition(25, 14);
-            //    Console.Write($"Slot {inventorySlot} is currently occupied by the item: {Inventory[inventorySlot]}.");
-            //    Console.SetCursorPosition(25, 15);
-            //    Console.Write($"Press [ENTER] to overwrite. Enter 'n' to cancel: ");
-
-            //    playerInteract = Console.ReadKey().KeyChar;
-
-            //}
-
-            //if (overWrite == 'y')
-            //{
-            //    Console.Clear();
-            //    Inventory[inventorySlot] = Items[interactionID];
-            //    Console.SetCursorPosition(38, 11);
-            //    Console.BackgroundColor = ConsoleColor.DarkBlue;
-            //    Console.Write($"Slot overwritten by object {Items[interactionID]}!");
-            //    Console.BackgroundColor = ConsoleColor.Black;
-            //    Console.SetCursorPosition(38, 13);
-            //    Console.Write("Press [ENTER] to return to game.");
-            //}
-            //else
-            //{
-            //    Console.Clear();
-            //    Console.SetCursorPosition(28, 13);
-            //    Console.Write($"This slot will not be overwritten. Press [ENTER] to return to game.");
-            //}
         }
 
         static void SpawnRoom(string nextLevel)
@@ -1998,10 +1958,5 @@ namespace JOSJA_Game
                 Console.WriteLine(new string(' ', space) + text);
             }
         }
-
-
-
-        //Temporary methods to add items to invisible inventory, and to check stacking
- 
     }
 }

@@ -1522,7 +1522,7 @@ namespace JOSJA_Game
                 { 13, new int[] { 8, 23 } },      // Strength Potion -> Raw Meat + Bone
                 { 14, new int[] { 3, 17 } },      // Mana Potion     -> Crystal + Moss
                 { 15, new int[] { 7, 22, 9 } },   // Stamina Potion  -> Berries + Feather + Fish
-                { 31, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron + Stone
+                { 27, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron + Stone
             };
 
 
@@ -1574,7 +1574,7 @@ namespace JOSJA_Game
                     break;
                 case 7:
                     Console.WriteLine("You have brewed some WD40!");
-                    BrewedPotion = 31;
+                    BrewedPotion = 27;
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");

@@ -1287,14 +1287,17 @@ namespace JOSJA_Game
 
                 StreamReader reader = new StreamReader(savePath);               //StreamReader is a tool used to read a file line by line
                 currentLevel = reader.ReadLine().Replace("Level = ", "");       //Uses .Replace to get rid of the human readable formatting and only keeps the saved info
-                x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));     
+                x = Convert.ToInt32(reader.ReadLine().Replace("X = ", ""));
                 y = Convert.ToInt32(reader.ReadLine().Replace("Y = ", ""));
                 hp = Convert.ToDouble(reader.ReadLine().Replace("Health = ", ""));
 
                 string jasonTemp = reader.ReadLine().Replace("Jason Enemy Dead = ", "");
                 jasonEnemyDefeated = Convert.ToBoolean(jasonTemp);
                 string slimyJackTemp = reader.ReadLine().Replace("Slimy Jack Enemy Dead = ", "");
-                slimyJackEnemyDefeated = Convert.ToBoolean(jasonTemp);
+                slimyJackEnemyDefeated = Convert.ToBoolean(slimyJackTemp);
+
+                reader.ReadLine();  // skip the blank line
+                reader.ReadLine();  // skip "--- Inventory ---"
 
                 inventoryPosition = Convert.ToInt32(reader.ReadLine().Replace("Inventory = ", ""));
                 // Load each inventory slot
@@ -1302,6 +1305,18 @@ namespace JOSJA_Game
                 {
                     string line = reader.ReadLine();
                     Inventory[i] = line.Replace("Slot " + i + " = ", "");
+                }
+
+                reader.ReadLine();  // skip "--- Invis Inventory ---"
+
+                // Load each slot in Invis Inventory
+                for (int i = 1; i <= InvisibleInventory.Count; i++)
+                {
+                    string line = reader.ReadLine().Replace("Invis Slot " + i + " = ", "");
+                    int divider = line.IndexOf('|');
+                    string itemName = line.Substring(0, divider);
+                    int quantity = Convert.ToInt32(line.Substring(divider + 1));
+                    InvisibleInventory[i] = (itemName, quantity);
                 }
                 reader.Close();     //close reader
             }
@@ -1320,13 +1335,20 @@ namespace JOSJA_Game
                         "Y = " + y + "\n" +
                         "Health = " + hp + "\n" +
                         "Jason Enemy Dead = " + jasonEnemyDefeated + "\n" +
-                        "Slimy Jack Enemy Dead = " + slimyJackEnemyDefeated + "\n" +
+                        "Slimy Jack Enemy Dead = " + slimyJackEnemyDefeated + "\n\n" +
+                        "--- Inventory ---\n" +
                         "Inventory = " + inventoryPosition + "\n";
                     // Save each slot
                     foreach (var item in Inventory)
                         {
                             saveContents += "Slot " + item.Key + " = " + item.Value + "\n";
                         }
+                    saveContents += "--- Invis Inventory ---\n";
+                    // Save each slot in Invis Inventory
+                    foreach (var item in InvisibleInventory)
+                    {
+                        saveContents += "Invis Slot " + item.Key + " = " + item.Value.ItemName + "|" + item.Value.Quantity + "\n";
+                    }
 
                     File.WriteAllText(savePath, saveContents);
                     Console.WriteLine("Saved!");
@@ -1544,47 +1566,50 @@ namespace JOSJA_Game
             int potionChoice = Convert.ToInt32(Console.ReadLine());
             int brewTime = Times[potionChoice];
             int BrewedPotion = 0;
+            bool AllIngredents = false;
 
             switch (potionChoice)
             {
                 case 1:
-                    Console.WriteLine("You have brewed a Health Potion!");
                     BrewedPotion = 10;
-
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 2:
-                    Console.WriteLine("You have brewed an Antidote!");
                     BrewedPotion = 11;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 3:
-                    Console.WriteLine("You have brewed a Poison Potion!");
                     BrewedPotion = 12;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 4:
-                    Console.WriteLine("You have brewed a Strength Potion!");
                     BrewedPotion = 13;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 5:
-                    Console.WriteLine("You have brewed a Mana Potion!");
                     BrewedPotion = 14;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 6:
-                    Console.WriteLine("You have brewed a Stamina Potion!");
                     BrewedPotion = 15;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 7:
-                    Console.WriteLine("You have brewed some WD40!");
                     BrewedPotion = 27;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");
                     break;
             }
-            int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
-            int left = CauldronLines[row].IndexOf('[') + 1;
-            int width = CauldronLines[row].IndexOf(']') - left;
-            Timer(brewTime, width, left, row);
-            Interaction(BrewedPotion);
+            if (AllIngredents)
+            {
+                int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
+                int left = CauldronLines[row].IndexOf('[') + 1;
+                int width = CauldronLines[row].IndexOf(']') - left;
+                Timer(brewTime, width, left, row);
+                Interaction(BrewedPotion);
+            }
         }
 
         static void Timer(int totalMs, int width, int left, int row)
@@ -1615,6 +1640,64 @@ namespace JOSJA_Game
                 Console.Write(new string(bar));
                 Thread.Sleep(totalMs / 100);
             }
+        }
+
+        static bool CheckNeededIngredients(Action brewing, int[] required)
+        {
+            // First pass: make sure every ingredient is available in the amount needed before using anything
+            foreach (int id in required)
+            {
+                string name = Items[id];
+
+                int amountNeeded = 0;
+                for (int i = 0; i < required.Length; i++)
+                {
+                    if (required[i] == id)
+                    {
+                        amountNeeded++;
+                    }
+                }
+
+                bool found = false;
+
+                for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
+                {
+                    if (InvisibleInventory[slot].ItemName == name && InvisibleInventory[slot].Quantity >= amountNeeded)
+                    {
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    Console.Write($"You don't have the required ingredient: {name} (need {amountNeeded}).\n");
+                    return false;
+                }
+            }
+
+            // Everything was found, consume the ingredients
+            foreach (int id in required)
+            {
+                string name = Items[id];
+
+                for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
+                {
+                    if (InvisibleInventory[slot].ItemName == name && InvisibleInventory[slot].Quantity > 0)
+                    {
+                        int newQuantity = InvisibleInventory[slot].Quantity - 1;
+
+                        if (newQuantity > 0)
+                        {
+                            InvisibleInventory[slot] = (name, newQuantity);
+                        }
+                        else
+                        {
+                            InvisibleInventory[slot] = (Items[1], 0); // back to "Nothing"
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         static void GameEnd(bool dead)

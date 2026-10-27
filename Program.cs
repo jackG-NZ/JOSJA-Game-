@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level1";
+        static string currentLevel = "level7";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -20,6 +20,7 @@ namespace JOSJA_Game
         static bool isInGame = true;
         static bool jasonEnemyDefeated = false; //this is kinda dumb but it stops an endless loop from happening
         static bool slimyJackEnemyDefeated = false; //this is kinda dumb but it stops an endless loop from happening
+        static bool level8GateOpen = false;
 
         static double hp = 20;
         const double RegenPerTurn = 0.5;
@@ -97,8 +98,8 @@ namespace JOSJA_Game
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
-            [1] = Items[1], //all the needed items are now in the game in chests
-            [2] = Items[1], 
+            [1] = Items[6], //all the needed items are now in the game in chests
+            [2] = Items[27], 
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -111,6 +112,7 @@ namespace JOSJA_Game
             [3] = 21,
             [4] = 6,
             [5] = 2,
+            [6] = 3,
             [10] = 26,
 
         };
@@ -447,6 +449,15 @@ namespace JOSJA_Game
                         {
                             Enemies["Jason"][1] = Interaction(Enemies["Jason"][1]);
                         }
+                        else if (currentLevel == "level7" && x == 78 && y == 14)
+                        {
+                            Chests[6] = Interaction(Chests[6]);
+                        }
+                        else if (currentLevel == "level8" && x == 68 && y == 10 && Inventory.ContainsValue(Items[27]))
+                        {
+                            level8GateOpen = true;
+                            Inventory[Inventory.First(i => i.Value == Items[27]).Key] = Items[1];
+                        }
                         else if (currentLevel == "level9" && x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                         {
                             Chests[10] = Interaction(Chests[10]);
@@ -648,6 +659,10 @@ namespace JOSJA_Game
 
         static bool IsWall(int x, int y) //checks if the player is walking into a wall
         {
+            if (currentLevel == "level8" && level8GateOpen && y == 10 && x >= 69 && x <= 71)
+            {
+                return false;
+            }
             string[] map = File.ReadAllLines($"Assets/Levels/{currentLevel}.txt");
 
             int row = y-2;
@@ -784,7 +799,7 @@ namespace JOSJA_Game
                 case "level7":
 
                     xBoundaries[0] = 4;
-                    xBoundaries[1] = 107;
+                    xBoundaries[1] = 105;
                     yBoundaries[0] = 3;
                     yBoundaries[1] = 17;
                     if (x == 29 && y == 17)
@@ -960,10 +975,10 @@ namespace JOSJA_Game
                 case "level4":
                     if (x == 105 && y == 15) //chest
                     {
-                        Console.SetCursorPosition(31, 9);
+                        Console.SetCursorPosition(31, 8);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine("There's a chest, it looks like it's unlocked.");
-                        Console.SetCursorPosition(31, 10);
+                        Console.SetCursorPosition(31, 9);
                         Console.WriteLine($"Press E to open it.");
                         Console.BackgroundColor = ConsoleColor.Black;
 
@@ -1041,7 +1056,45 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(40, 6);
                         Console.Write("☠︎");
                     }
+                    if (x == 78 && y == 14)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's a chest, it looks like it's unlocked.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine("Press E to open it.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(78, 14);
+                        Console.Write('?');
+                    }
                     break;
+                case "level8":
+                    if (x == 68 && y == 10 && !level8GateOpen)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        if (Inventory.ContainsValue(Items[27]))
+                        {
+                            Console.WriteLine("It looks like a rusty old gate. You could maybe use your WD-40. Press E to open");
+                            Console.SetCursorPosition(31, 10);
+                            Console.WriteLine($"Press E to open it.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("It looks like a rusty old gate. Maybe if you had something to loosen the hinges...");
+                        }
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else if (!level8GateOpen)
+                    {
+                        Console.SetCursorPosition(68, 10);
+                        Console.Write('?');
+                    }
+                    break;
+
                 case "level9": //RIGHT ROOM CHEST INTERACTION
                     if (x == 54 && y == 13 && Inventory.ContainsValue(Items[2]))
                     {
@@ -1064,6 +1117,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(54, 13);
                         Console.Write('?');
                     }
+                    
                     break;
                 case "level11":
                     if (x == 10 && y == 10)
@@ -1208,6 +1262,12 @@ namespace JOSJA_Game
 
                 string levelContents = File.ReadAllText(filePath);
                 Console.WriteLine($"{levelContents}");
+
+                if (level8GateOpen)
+                {
+                    Console.SetCursorPosition(69, 10);
+                    Console.Write("   ");
+                }
             }
             else
             {
@@ -1295,7 +1355,8 @@ namespace JOSJA_Game
                 jasonEnemyDefeated = Convert.ToBoolean(jasonTemp);
                 string slimyJackTemp = reader.ReadLine().Replace("Slimy Jack Enemy Dead = ", "");
                 slimyJackEnemyDefeated = Convert.ToBoolean(slimyJackTemp);
-
+                string gateTemp = reader.ReadLine().Replace("Level 8 Gate Open = ", "");
+                level8GateOpen = Convert.ToBoolean(gateTemp);
                 reader.ReadLine();  // skip the blank line
                 reader.ReadLine();  // skip "--- Inventory ---"
 
@@ -1335,7 +1396,8 @@ namespace JOSJA_Game
                         "Y = " + y + "\n" +
                         "Health = " + hp + "\n" +
                         "Jason Enemy Dead = " + jasonEnemyDefeated + "\n" +
-                        "Slimy Jack Enemy Dead = " + slimyJackEnemyDefeated + "\n\n" +
+                        "Slimy Jack Enemy Dead = " + slimyJackEnemyDefeated + "\n" +
+                        "Level 8 Gate Open = " + level8GateOpen + "\n\n" +
                         "--- Inventory ---\n" +
                         "Inventory = " + inventoryPosition + "\n";
                     // Save each slot

@@ -292,7 +292,23 @@ namespace JOSJA_Game
             /*EXPLANATION: This method displays helpful tips to the player*/
 
             Console.Clear();
-            Console.WriteLine("This is a placeholder for the help method. Jack says: Michael Jackson is the King of Pop");
+            Console.WriteLine("""      
+                Explore the dungeon, collect items, fight enemies and escape!
+
+                - Interact with objects by placing your 'X' cursor over "?" symbols.
+                - Travel between rooms by placing your 'X' cursor over "< > ^ v" symbols.
+                - Essential controls are always displayed at the top of the screen.
+                """);
+
+            Console.Write("\nYou: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("X");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("\n\nPress [ENTER] to proceed.");
+
+            Console.SetCursorPosition(0, 28);
+            Console.WriteLine("Made by Jayden, Oliver, Seth, and Jack.");
+
             Console.ReadLine();
         }
 

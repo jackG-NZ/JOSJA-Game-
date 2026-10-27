@@ -1538,13 +1538,13 @@ namespace JOSJA_Game
             // Dictionary<PotionID, IngredientIDs[]>
             Dictionary<int, int[]> PotionRecipes = new Dictionary<int, int[]>()
             {
-                { 10, new int[] { 7, 20, 17 } },  // Health Potion   -> Berries + Slime + Moss
-                { 11, new int[] { 17, 18 } },     // Antidote        -> Moss + Fang
-                { 12, new int[] { 18, 20, 25 } }, // Poison Potion   -> Fang + Slime + Bug
-                { 13, new int[] { 8, 23 } },      // Strength Potion -> Raw Meat + Bone
-                { 14, new int[] { 3, 17 } },      // Mana Potion     -> Crystal + Moss
-                { 15, new int[] { 7, 22, 9 } },   // Stamina Potion  -> Berries + Feather + Fish
-                { 27, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron + Stone
+                { 11, new int[] { 7, 20, 17 } },  // Health Potion   -> Berries + Slime + Moss
+                { 12, new int[] { 17, 18 } },     // Antidote        -> Moss + Spider Fang
+                { 13, new int[] { 18, 20, 25 } }, // Poison Potion   -> Spider Fang + Slime + Bug
+                { 14, new int[] { 24, 23 } },     // Strength Potion -> Cryptcrawler Root + Bone
+                { 15, new int[] { 3, 17 } },      // Mana Potion     -> Crystal Shard + Moss
+                { 16, new int[] { 7, 22, 10 } },  // Stamina Potion  -> Berries + Feather + Blind Cave Fish
+                { 27, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron Shard + Stone
             };
 
 
@@ -1564,34 +1564,34 @@ namespace JOSJA_Game
 
             Console.WriteLine("Choose a potion to brew: ");
             int potionChoice = Convert.ToInt32(Console.ReadLine());
-            int brewTime = Times[potionChoice];
+            int brewTime = 0;
             int BrewedPotion = 0;
             bool AllIngredents = false;
 
             switch (potionChoice)
             {
                 case 1:
-                    BrewedPotion = 10;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
-                    break;
-                case 2:
                     BrewedPotion = 11;
                     AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
-                case 3:
+                case 2:
                     BrewedPotion = 12;
                     AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
-                case 4:
+                case 3:
                     BrewedPotion = 13;
                     AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
-                case 5:
+                case 4:
                     BrewedPotion = 14;
                     AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
-                case 6:
+                case 5:
                     BrewedPotion = 15;
+                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
+                    break;
+                case 6:
+                    BrewedPotion = 16;
                     AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 7:
@@ -1604,6 +1604,7 @@ namespace JOSJA_Game
             }
             if (AllIngredents)
             {
+                brewTime = Times[potionChoice];
                 int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
                 int left = CauldronLines[row].IndexOf('[') + 1;
                 int width = CauldronLines[row].IndexOf(']') - left;

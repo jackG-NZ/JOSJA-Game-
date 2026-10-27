@@ -1547,7 +1547,6 @@ namespace JOSJA_Game
                 { 27, new int[] { 20, 21, 19 } }  // WD-40           -> Slime + Iron Shard + Stone
             };
 
-
             string[] CauldronLines = null;
 
             Console.Clear();
@@ -1632,11 +1631,9 @@ namespace JOSJA_Game
                         bar[i] = '░';
                     }
                 }
-
                 string label = $" {pct}% ";     // label (percentage done) to display in the middle of the bar
                 int start = (width - label.Length) / 2;     // starting position of the label
                 label.CopyTo(0, bar, start, label.Length); // copy the label into the bar array
-
                 Console.SetCursorPosition(left, row);   // move the cursor to the start of the bar
                 Console.Write(new string(bar));
                 Thread.Sleep(totalMs / 100);
@@ -1651,7 +1648,6 @@ namespace JOSJA_Game
             foreach (int id in required)
             {
                 string name = Items[id];
-
                 int amountNeeded = 0;
                 for (int i = 0; i < required.Length; i++)
                 {
@@ -1660,7 +1656,6 @@ namespace JOSJA_Game
                         amountNeeded++;
                     }
                 }
-
                 bool found = false;
 
                 for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
@@ -1670,19 +1665,16 @@ namespace JOSJA_Game
                         found = true;
                     }
                 }
-
                 if (!found)
                 {
                     Console.Write($"You don't have the required ingredient: {name} (need {amountNeeded}).\n");
                     hasEverything = false;
                 }
             }
-
             if (!hasEverything)
             {
                 return false;
             }
-
             // Everything was found, consume the ingredients
             foreach (int id in required)
             {
@@ -1798,9 +1790,7 @@ namespace JOSJA_Game
                     return;
                 }
             }
-
             Console.WriteLine("Invisible inventory is completely full!");
         }
-
     }
 }

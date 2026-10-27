@@ -7,7 +7,7 @@ namespace JOSJA_Game
 {
     internal class Program
     {
-        static string currentLevel = "level7";
+        static string currentLevel = "level1";
         static string enemyName = "placeholder"; //this changes depending on the enemy encounter
         static string previousLevel = "level1"; //this saves the previous level so the game knows where to return the player after combat
 
@@ -98,8 +98,8 @@ namespace JOSJA_Game
 
         static Dictionary<int, string> Inventory = new Dictionary<int, string>()
         {
-            [1] = Items[6], //all the needed items are now in the game in chests
-            [2] = Items[27], 
+            [1] = Items[1], //all the needed items are now in the game in chests
+            [2] = Items[1], 
             [3] = Items[1],
             [4] = Items[1],
             [5] = Items[1],
@@ -109,10 +109,13 @@ namespace JOSJA_Game
         {
             [1] = 4,
             [2] = 10,
-            [3] = 21,
+            [3] = 22,
             [4] = 6,
             [5] = 2,
             [6] = 3,
+            [7] = 17,
+            [8] = 19,
+            [9] = 21,
             [10] = 26,
 
         };
@@ -429,11 +432,19 @@ namespace JOSJA_Game
                         {
                             Chests[1] = Interaction(Chests[1]);
                         }
+                        else if (currentLevel == "level3" && x == 88 && y == 3)
+                        {
+                            Chests[7] = Interaction(Chests[7]);
+                        }
+                        else if (currentLevel == "level3" && x == 14 && y == 17)
+                        {
+                            Chests[8] = Interaction(Chests[8]);
+                        }
                         else if (currentLevel == "level4" && x == 105 && y == 15)
                         {
                             Chests[2] = Interaction(Chests[2]);
                         }
-                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[17]))
+                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[26]))
                         {
                             GameEnd(false);
                         }
@@ -444,6 +455,10 @@ namespace JOSJA_Game
                         else if (currentLevel == "level6" && x == 7 && y == 11)
                         {
                             Chests[5] = Interaction(Chests[5]);
+                        }
+                        else if (currentLevel == "level6" && x == 102 && y == 4)
+                        {
+                            Chests[9] = Interaction(Chests[9]);
                         }
                         else if (currentLevel == "level7" && ((x == 40 && y == 6) || (x == 41 && y == 6)))
                         {
@@ -787,7 +802,7 @@ namespace JOSJA_Game
                     xBoundaries[0] = 4;
                     xBoundaries[1] = 111;
                     yBoundaries[0] = 3;
-                    yBoundaries[1] = 17;
+                    yBoundaries[1] = 18;
                     if (x == 105 && y == 15)
                     {
                         currentLevel = "level5";
@@ -947,12 +962,26 @@ namespace JOSJA_Game
                     {
                         Console.SetCursorPosition(31, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("This is where you entered from. It caved in just as you walked through.");
+                        Console.WriteLine("It looks like a caved in entrance. Strange...");
                         Console.BackgroundColor = ConsoleColor.Black;
                     }
                     else
                     {
                         Console.SetCursorPosition(104, 10);
+                        Console.Write('?');
+                    }
+                    if (x == 55 && y == 10)
+                    {
+                        Console.SetCursorPosition(31, 8);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("This place looks like a mix between a dungeon and a cave...");
+                        Console.SetCursorPosition(31, 9);
+                        Console.WriteLine("Maybe you can search for things to help you.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(55, 10);
                         Console.Write('?');
                     }
                     break;
@@ -969,6 +998,37 @@ namespace JOSJA_Game
                     else
                     {
                         Console.SetCursorPosition(60, 14);
+                        Console.Write('?');
+                    }
+                    break;
+                case "level3":
+                    if (x == 88 && y == 3)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's something on the wall.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine("Press E to pick it up.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(88, 3);
+                        Console.Write('?');
+                    }
+
+                    if (x == 14 && y == 17)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's something on the wall.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine("Press E to pick it up.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(14, 17);
                         Console.Write('?');
                     }
                     break;
@@ -1040,6 +1100,20 @@ namespace JOSJA_Game
                     else
                     {
                         Console.SetCursorPosition(7, 11);
+                        Console.Write('?');
+                    }
+                    if (x == 102 && y == 4)
+                    {
+                        Console.SetCursorPosition(31, 9);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("There's something on the wall.");
+                        Console.SetCursorPosition(31, 10);
+                        Console.WriteLine("Press E to pick it up.");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(102, 4);
                         Console.Write('?');
                     }
                     break;
@@ -1239,8 +1313,8 @@ namespace JOSJA_Game
             Dictionary<string, string> RoomNames = new Dictionary<string, string>()
             {
                 { "level1", "Entrance Room"},
-                { "level2", "First Chamber"},
-                { "level3", "Right Room"},
+                { "level2", "Chest Room"},
+                { "level3", "Joining Caverns"},
                 { "level4", "Left Storage Room" },
                 { "level5", "level5" },
                 { "level6", "level6" },

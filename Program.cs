@@ -85,15 +85,15 @@ namespace JOSJA_Game
 
             // Items
             [2] = "Assets/Items/Key.txt",
-            [3] = "Assets/Items/temp.txt",       //Crystal Shard
+            [3] = "Assets/Items/CrystalShard.txt",
             [4] = "Assets/Items/Sword.txt",
             [5] = "Assets/Items/Sword.txt",
             [6] = "Assets/Items/Sword.txt",
 
             // Foods
             [7] = "Assets/Items/Berries.txt",
-            [8] = "Assets/Items/temp.txt",       //Raw Meat
-            [9] = "Assets/Items/temp.txt",       //Cooked Meat
+            [8] = "Assets/Items/RawMeat.txt",
+            [9] = "Assets/Items/CookedMeat.txt",
             [10] = "Assets/Items/FishFossil.txt",
 
             // Consumables
@@ -189,7 +189,7 @@ namespace JOSJA_Game
 
         static void GameIntro()
         {
-            /*EXPLANATION: This method serves as the title screen. We should make it look nice towards the end of the project*/
+            /* EXPLANATION: This method serves as the title screen. */
 
             int choice = 2;
 

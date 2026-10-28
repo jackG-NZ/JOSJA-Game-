@@ -473,7 +473,7 @@ namespace JOSJA_Game
                         break;
 
                     case 'e':
-                        if (currentLevel == "level11" && x == 10 && y == 10)
+                        if (currentLevel == "level11" && x == 13 && y == 10)
                         {
                             Brewing();
                             Console.ReadLine();
@@ -1293,7 +1293,7 @@ namespace JOSJA_Game
 
                     break;
                 case "level11":
-                    if (x == 10 && y == 10)
+                    if (x == 13 && y == 10)
                     {
                         Console.SetCursorPosition(23, 9);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -1302,7 +1302,7 @@ namespace JOSJA_Game
                     }
                     else
                     {
-                        Console.SetCursorPosition(10, 10);
+                        Console.SetCursorPosition(13, 10);
                         Console.Write('?');
                     }
                     break;

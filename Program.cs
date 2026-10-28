@@ -76,6 +76,51 @@ namespace JOSJA_Game
 
         };
 
+        //item ID -> icon file. Items with no asset yet use temp.txt
+        static Dictionary<int, string> ItemIcons = new Dictionary<int, string>()
+        {
+            // Misc
+            [0] = "Assets/Items/None.txt",
+            [1] = "Assets/UIs/None.txt",
+
+            // Items
+            [2] = "Assets/Items/Key.txt",
+            [3] = "Assets/Items/temp.txt",       //Crystal Shard
+            [4] = "Assets/Items/Sword.txt",
+            [5] = "Assets/Items/Sword.txt",
+            [6] = "Assets/Items/Sword.txt",
+
+            // Foods
+            [7] = "Assets/Items/temp.txt",       //Dungeon Berries
+            [8] = "Assets/Items/temp.txt",       //Raw Meat
+            [9] = "Assets/Items/temp.txt",       //Cooked Meat
+            [10] = "Assets/Items/FishFossil.txt",
+
+            // Consumables
+            [11] = "Assets/Items/HealthPotion.txt",
+            [12] = "Assets/Items/temp.txt",      //Antidote
+            [13] = "Assets/Items/PoisonPotion.txt",
+            [14] = "Assets/Items/StrengthPotion.txt",
+            [15] = "Assets/Items/ManaPotion.txt",
+            [16] = "Assets/Items/StaminaPotion.txt",
+
+            // Ingredients
+            [17] = "Assets/Items/CaveMoss.txt",
+            [18] = "Assets/Items/SpiderFang.txt",
+            [19] = "Assets/Items/Stone.txt",
+            [20] = "Assets/Items/Slime.txt",
+            [21] = "Assets/Items/IronShard.txt",
+            [22] = "Assets/Items/Feather.txt",
+            [23] = "Assets/Items/Bone.txt",
+            [24] = "Assets/Items/Root.txt",
+            [25] = "Assets/Items/Bug.txt",
+
+            // Story/Lore Items
+            [26] = "Assets/Items/PortalPart.txt",
+            [27] = "Assets/Items/WD40.txt"
+        };
+
+
         static Dictionary<int, (string ItemName, int Quantity)> InvisibleInventory = new Dictionary<int, (string, int)>()
         {
             [1] = (Items[1], 0), // Starts as "Nothing" with 0 quantity
@@ -1778,44 +1823,173 @@ namespace JOSJA_Game
             {
                 case 1:
                     BrewedPotion = 11;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 2:
                     BrewedPotion = 12;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 3:
                     BrewedPotion = 13;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 4:
                     BrewedPotion = 14;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 5:
                     BrewedPotion = 15;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 6:
                     BrewedPotion = 16;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 case 7:
                     BrewedPotion = 27;
-                    AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");
                     break;
             }
-            if (AllIngredents)
+
+
+            ////// START ICON ON UI //////
+
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            int savedLeft = Console.CursorLeft;
+            int savedTop = Console.CursorTop; //so the prompts below carry on in the right place
+
+            int[] uiIngredients = PotionRecipes[BrewedPotion];
+            string[] uiLabels = { "SLOT1", "SLOT2", "SLOT3", "RESUL" }; //the 4th box is the result
+
+            for (int s = 0; s < uiLabels.Length; s++)
             {
-                brewTime = Times[potionChoice];
-                int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
-                int left = CauldronLines[row].IndexOf('[') + 1;
-                int width = CauldronLines[row].IndexOf(']') - left;
-                Timer(brewTime, width, left, row);
-                Interaction(BrewedPotion);
+                // Determine which item goes in this box
+                int iconID = -1;
+
+                if (s == 3)
+                {
+                    iconID = BrewedPotion;
+                }
+                else if (s < uiIngredients.Length)
+                {
+                    iconID = uiIngredients[s];
+                }
+                else
+                {
+                    iconID = -1;
+                }
+
+                // get the file paths for the icons, default to "None" if not found
+                string iconPath = "Assets/UIs/None.txt";
+
+                if (iconID != -1)
+                {
+                    iconPath = "Assets/Items/temp.txt";
+
+                    // If this item has an icon listed in ItemIcons and that file exists, use it instead of temp.txt
+                    if (ItemIcons.ContainsKey(iconID))
+                    {
+                        string checkedPath = ItemIcons[iconID];
+                        if (File.Exists(checkedPath) == true)
+                        {
+                            iconPath = checkedPath;
+                        }
+                    }
+                }
+
+                if (File.Exists(iconPath) == false)
+                {
+                    iconPath = "Assets/Items/temp.txt";
+                }
+
+                // Draw the icon in the box if the file exists
+                if (File.Exists(iconPath) == true)
+                {
+                    string[] iconLines = File.ReadAllLines(iconPath);
+
+                    // Find the box by its label - label sits on the middle line, interior of the slots is 7 wide x 3 tall
+                    int RowOfTheLable = -1;
+                    for (int RowNum = 0; RowNum < CauldronLines.Length; RowNum++)
+                    {
+                        if (CauldronLines[RowNum].Contains(uiLabels[s]) == true)
+                        {
+                            RowOfTheLable = RowNum;
+                        }
+                    }
+
+                    if (RowOfTheLable >= 0)
+                    {
+                        int boxLeft = CauldronLines[RowOfTheLable].IndexOf(uiLabels[s]) - 1;
+                        int boxTop = RowOfTheLable - 1;
+
+                        // Remove the label text inside the box
+                        for (int r = 0; r < 3; r++)
+                        {
+                            Console.SetCursorPosition(boxLeft, boxTop + r);
+                            Console.Write(new string(' ', 7));
+                        }
+
+                        // Measure the icon height
+                        int iconH = iconLines.Length;
+                        if (iconH > 3)
+                        {
+                            iconH = 3;
+                        }
+
+                        // Calculate the maximum horizontal line width of the icon, ignoring trailing spaces
+                        int maxLineLength = 0;
+                        for (int i = 0; i < iconLines.Length; i++)
+                        {
+                            int currentLineLen = iconLines[i].TrimEnd().Length;
+                            if (currentLineLen > maxLineLength)
+                            {
+                                maxLineLength = currentLineLen;
+                            }
+                        }
+
+                        // Restrict maximum width to the size of the box interior
+                        int iconW = maxLineLength;
+                        if (iconW > 7)
+                        {
+                            iconW = 7;
+                        }
+
+                        // Work out the offsets that center the icon
+                        int offsetX = (7 - iconW) / 2;
+                        int offsetY = (3 - iconH) / 2;
+
+                        // Show the text art on the Brewing slots
+                        for (int i = 0; i < iconH; i++)
+                        {
+                            Console.SetCursorPosition(boxLeft + offsetX, boxTop + offsetY + i);
+                            Console.Write(iconLines[i]);
+                        }
+                    }
+                }
+            }
+
+            Console.SetCursorPosition(savedLeft, savedTop);
+
+            ////// END ICON ON UI //////
+
+
+
+            Console.WriteLine($"Are you sure you want to brew {Items[BrewedPotion]}? [y/n]");
+            string response = Console.ReadLine().ToLower();
+            bool input = (response.Length > 0 && response[0] == 'y');
+
+            if (input)
+            {
+                AllIngredents = CheckNeededIngredients(Brewing, PotionRecipes[BrewedPotion]);
+                if (AllIngredents)
+                {
+                    brewTime = Times[potionChoice];
+                    int row = Array.FindIndex(CauldronLines, l => l.Contains("PROGRESS:"));
+                    int left = CauldronLines[row].IndexOf('[') + 1;
+                    int width = CauldronLines[row].IndexOf(']') - left;
+                    Timer(brewTime, width, left, row);
+                    Interaction(BrewedPotion);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Brewing cancelled.");
             }
         }
 

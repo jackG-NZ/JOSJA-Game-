@@ -24,10 +24,7 @@ namespace JOSJA_Game
         static bool level8GateOpen = false;
 
         static double hp = 20;
-        const double RegenPerTurn = 0.5;
-        const double PoisonEffectPerTurn = -2.0;
         const double HealthPotionRegen = 10.0;
-        const double HealingSalveRegen = 3.5;
 
         static double enemyHP = 0;
         static double enemyAttackModifier = 1;
@@ -1412,18 +1409,18 @@ namespace JOSJA_Game
             //this dictionary just gives each level a nice name
             Dictionary<string, string> RoomNames = new Dictionary<string, string>()
             {
-                { "level1", "Entrance Room"},
-                { "level2", "Chest Room"},
-                { "level3", "Joining Caverns"},
+                { "level1", "Entrance Room" },
+                { "level2", "Chest Room" },
+                { "level3", "Joining Caverns" },
                 { "level4", "Left Storage Room" },
-                { "level5", "level5" },
-                { "level6", "level6" },
-                { "level7", "level7" },
-                { "level8", "level8" },
-                { "level9", "level9" },
-                { "level10", "level10" },
-                { "level11", "level11" },
-                { "level12", "level12" },
+                { "level5", "Small Room" },
+                { "level6", "Twisting Caverns" },
+                { "level7", "Ominious Passage" },
+                { "level8", "Gate Room" },
+                { "level9", "Large Chest Room" },
+                { "level10", "Dark Basin" },
+                { "level11", "Witch's Chamber" },
+                { "level12", "Slimy Room" },
                 { "enemyEncounter", "BATTLE" },
             };
 
@@ -1700,6 +1697,35 @@ namespace JOSJA_Game
         static void PlayerHeal()
         {
             /*EXPLANATION: This is the method for the heal utility*/
+
+            if (Inventory.ContainsValue(Items[11]) && hp <= 10)
+            {
+                Console.SetCursorPosition(54, 3);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"Healing!");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.Beep(500, 200);
+                Console.Beep(500, 200);
+                Thread.Sleep(2000);
+
+                hp += HealthPotionRegen;  
+            }
+            else if (!Inventory.ContainsValue(Items[11]))
+            {
+                Console.SetCursorPosition(45, 3);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"No healing potion detected!");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Thread.Sleep(2000);
+            }
+            else
+            {
+                Console.SetCursorPosition(42, 3);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write($"Your health is too high to heal!");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Thread.Sleep(2000);
+            }
         }
 
         static void EnemyAIReaction(int previousAction)

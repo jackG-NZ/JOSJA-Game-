@@ -301,6 +301,7 @@ namespace JOSJA_Game
                 - Interact with objects by placing your 'X' cursor over "?" symbols.
                 - Travel between rooms by placing your 'X' cursor over "< > ^ v" symbols.
                 - Essential controls are always displayed at the top of the screen.
+                - Try not to spam ENTER because it can preemptively fill the input buffer and cause unusual behaviour. 
                 """);
 
             Console.Write("\nYou: ");

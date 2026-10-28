@@ -91,14 +91,14 @@ namespace JOSJA_Game
             [6] = "Assets/Items/Sword.txt",
 
             // Foods
-            [7] = "Assets/Items/temp.txt",       //Dungeon Berries
+            [7] = "Assets/Items/Berries.txt",
             [8] = "Assets/Items/temp.txt",       //Raw Meat
             [9] = "Assets/Items/temp.txt",       //Cooked Meat
             [10] = "Assets/Items/FishFossil.txt",
 
             // Consumables
             [11] = "Assets/Items/HealthPotion.txt",
-            [12] = "Assets/Items/temp.txt",      //Antidote
+            [12] = "Assets/Items/Antidote.txt",
             [13] = "Assets/Items/PoisonPotion.txt",
             [14] = "Assets/Items/StrengthPotion.txt",
             [15] = "Assets/Items/ManaPotion.txt",

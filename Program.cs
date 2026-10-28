@@ -24,7 +24,7 @@ namespace JOSJA_Game
         static bool level8GateOpen = false;
 
         static double hp = 20;
-        const double HealthPotionRegen = 10.0;
+        const double HealthPotionRegen = 5;
 
         static double enemyHP = 0;
         static double enemyAttackModifier = 1;
@@ -49,7 +49,7 @@ namespace JOSJA_Game
             [10] = "Blind Cave Fish",
 
             // Consumables
-            [11] = "Health Potion",
+            [11] = "Reusable Health Potion",
             [12] = "Antidote",
             [13] = "Poison Potion",
             [14] = "Strength Potion",
@@ -146,7 +146,7 @@ namespace JOSJA_Game
         static Dictionary<int, int> Chests = new Dictionary<int, int>()
         {
             [1] = 4,
-            [2] = 10,
+            [2] = 11,
             [3] = 3,
             [4] = 6,
             [5] = 2,
@@ -1412,11 +1412,11 @@ namespace JOSJA_Game
                 { "level1", "Entrance Room" },
                 { "level2", "Chest Room" },
                 { "level3", "Joining Caverns" },
-                { "level4", "Left Storage Room" },
+                { "level4", "Portal Room" },
                 { "level5", "Small Room" },
                 { "level6", "Twisting Caverns" },
                 { "level7", "Ominious Passage" },
-                { "level8", "Gate Room" },
+                { "level8", "Gated Passage" },
                 { "level9", "Large Chest Room" },
                 { "level10", "Dark Basin" },
                 { "level11", "Witch's Chamber" },
@@ -1839,11 +1839,17 @@ namespace JOSJA_Game
                 Console.WriteLine($"Error: Can't find the file: {filePath}");
             }
 
+            int potionChoice = 0;
+
             Console.WriteLine("Choose a potion to brew: ");
-            int potionChoice = Convert.ToInt32(Console.ReadLine());
+            string potionInput = Console.ReadLine();
+            if(potionInput.Length > 0)
+            {
+                potionChoice = Convert.ToInt32(potionInput);
+            }
             int brewTime = 0;
             int BrewedPotion = 0;
-            bool AllIngredents = false;
+            bool AllIngredents = false, validPotion = true;
 
             switch (potionChoice)
             {
@@ -1870,6 +1876,7 @@ namespace JOSJA_Game
                     break;
                 default:
                     Console.WriteLine("Invalid choice. No potion brewed.");
+                    validPotion = false;
                     break;
             }
 
@@ -1880,7 +1887,13 @@ namespace JOSJA_Game
             int savedLeft = Console.CursorLeft;
             int savedTop = Console.CursorTop; //so the prompts below carry on in the right place
 
-            int[] uiIngredients = PotionRecipes[BrewedPotion];
+            int[] uiIngredients = { 0 };
+
+            if (validPotion)
+            {
+                uiIngredients = PotionRecipes[BrewedPotion];
+            }
+
             string[] uiLabels = { "SLOT1", "SLOT2", "SLOT3", "RESUL" }; //the 4th box is the result
 
             for (int s = 0; s < uiLabels.Length; s++)
@@ -1994,11 +2007,14 @@ namespace JOSJA_Game
 
             ////// END ICON ON UI //////
 
+            string response; bool input = false;
 
-
-            Console.WriteLine($"Are you sure you want to brew {Items[BrewedPotion]}? [y/n]");
-            string response = Console.ReadLine().ToLower();
-            bool input = (response.Length > 0 && response[0] == 'y');
+            if (validPotion)
+            {
+                Console.WriteLine($"Are you sure you want to brew {Items[BrewedPotion]}? [y/n]");
+                response = Console.ReadLine().ToLower();
+                input = (response.Length > 0 && response[0] == 'y');
+            }
 
             if (input)
             {

@@ -128,14 +128,16 @@ namespace JOSJA_Game
         {
             GameIntro();
 
-            while (isInGame) //will eventually add some sort of condition here
+            do
             {
                 PlayerActions();
-            }
+            } while (isInGame);
 
             Console.Clear();
 
             Console.WriteLine("Thank you for playing our game!");
+
+            Console.WriteLine("Press [ENTER] to close the program.");
 
             Console.ReadLine();
         }
@@ -299,6 +301,7 @@ namespace JOSJA_Game
                 - Interact with objects by placing your 'X' cursor over "?" symbols.
                 - Travel between rooms by placing your 'X' cursor over "< > ^ v" symbols.
                 - Essential controls are always displayed at the top of the screen.
+                - Try not to spam ENTER because it can preemptively fill the input buffer and cause unusual behaviour. 
                 """);
 
             Console.Write("\nYou: ");
@@ -328,10 +331,16 @@ namespace JOSJA_Game
 
             while (isMoving && isInGame)
             {
-                if (currentLevel == "enemyEncounter")
+                HP(hp);
+
+                if (currentLevel == "enemyEncounter" && hp > 0)
                 {
                     isFighting = true;
 
+                }
+                else
+                {
+                    isFighting = false;
                 }
 
                 //this big block is for all of the information at the top of the screen
@@ -379,7 +388,7 @@ namespace JOSJA_Game
                     action = Console.ReadKey().KeyChar;
                     isInteracting = false;
                 }
-                else
+                else if (hp > 0)
                 {
                     //the ReadKey movement is great but it bugs out the combat system so I've added this here
                     Console.SetCursorPosition(0, 27);
@@ -590,9 +599,11 @@ namespace JOSJA_Game
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
 
-                if (enemyHP > 0)
+                if (enemyHP > 0 && hp > 0)
                 {
                     EnemyAIReaction(previousAction);
+
+                    HP(hp);
 
                     //Draws the input options 
                     if (isPlayerTurn)
@@ -612,7 +623,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(78, 19);
                         Console.Write("ENTER 3");
                     }
-                    else
+                    else if (hp > 0 && currentLevel == "enemyEncounter")
                     {
                         Console.SetCursorPosition(31, 18);
                         Console.Write("WHEN READY");
@@ -1702,8 +1713,6 @@ namespace JOSJA_Game
                 hp -= totalDamage;
             }
 
-            HP(hp);
-
             Console.SetCursorPosition(50, 3);
             Console.BackgroundColor = ConsoleColor.DarkYellow;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -1904,11 +1913,14 @@ namespace JOSJA_Game
             {
                 char Restore = 'n';
                 Console.Clear();
-                Console.SetCursorPosition(23, 10);
+                Console.SetCursorPosition(56, 13);
                 Console.WriteLine("You Died.");
-                Thread.Sleep(3000);
+                Console.Beep(400, 300);
+                Console.Beep(300, 300);
+                Console.Beep(250, 900);
+                Thread.Sleep(1500);
                 Console.Clear();
-                Console.WriteLine("Would you like re-spawn from last save? [y/n]");
+                Console.Write("Would you like re-spawn from last save? [y/n]: ");
                 string input = (Console.ReadLine().ToLower());
                 if (input.Length > 0)
                 {
@@ -1919,7 +1931,11 @@ namespace JOSJA_Game
                 {
                     SaveAndLoad(true);
                 }
-
+                else
+                {
+                    Console.Clear();
+                    isInGame = false;
+                }
             }
             else
             {

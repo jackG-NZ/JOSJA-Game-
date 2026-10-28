@@ -23,7 +23,7 @@ namespace JOSJA_Game
         static bool georgeEnemyDefeated = false;
         static bool level8GateOpen = false;
 
-        static double hp = 20;
+        static double hp = 1;
         const double RegenPerTurn = 0.5;
         const double PoisonEffectPerTurn = -2.0;
         const double HealthPotionRegen = 10.0;
@@ -128,14 +128,16 @@ namespace JOSJA_Game
         {
             GameIntro();
 
-            while (isInGame) //will eventually add some sort of condition here
+            do
             {
                 PlayerActions();
-            }
+            } while (isInGame);
 
             Console.Clear();
 
             Console.WriteLine("Thank you for playing our game!");
+
+            Console.WriteLine("Press [ENTER] to close the program.");
 
             Console.ReadLine();
         }
@@ -379,7 +381,7 @@ namespace JOSJA_Game
                     action = Console.ReadKey().KeyChar;
                     isInteracting = false;
                 }
-                else
+                else if (hp > 0)
                 {
                     //the ReadKey movement is great but it bugs out the combat system so I've added this here
                     Console.SetCursorPosition(0, 27);
@@ -597,6 +599,8 @@ namespace JOSJA_Game
                 {
                     EnemyAIReaction(previousAction);
 
+                    HP(hp);
+
                     //Draws the input options 
                     if (isPlayerTurn)
                     {
@@ -615,7 +619,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(78, 19);
                         Console.Write("ENTER 3");
                     }
-                    else
+                    else if (hp > 0)
                     {
                         Console.SetCursorPosition(31, 18);
                         Console.Write("WHEN READY");
@@ -1703,8 +1707,6 @@ namespace JOSJA_Game
                 hp -= totalDamage;
             }
 
-            HP(hp);
-
             Console.SetCursorPosition(50, 3);
             Console.BackgroundColor = ConsoleColor.DarkYellow;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -1905,11 +1907,14 @@ namespace JOSJA_Game
             {
                 char Restore = 'n';
                 Console.Clear();
-                Console.SetCursorPosition(23, 10);
+                Console.SetCursorPosition(56, 13);
                 Console.WriteLine("You Died.");
-                Thread.Sleep(3000);
+                Console.Beep(400, 300);
+                Console.Beep(300, 300);
+                Console.Beep(250, 900);
+                Thread.Sleep(1500);
                 Console.Clear();
-                Console.WriteLine("Would you like re-spawn from last save? [y/n]");
+                Console.Write("Would you like re-spawn from last save? [y/n]: ");
                 string input = (Console.ReadLine().ToLower());
                 if (input.Length > 0)
                 {
@@ -1920,7 +1925,11 @@ namespace JOSJA_Game
                 {
                     SaveAndLoad(true);
                 }
-
+                else
+                {
+                    Console.Clear();
+                    isInGame = false;
+                }
             }
             else
             {

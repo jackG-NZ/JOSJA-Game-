@@ -23,7 +23,7 @@ namespace JOSJA_Game
         static bool georgeEnemyDefeated = false;
         static bool level8GateOpen = false;
 
-        static double hp = 1;
+        static double hp = 20;
         const double RegenPerTurn = 0.5;
         const double PoisonEffectPerTurn = -2.0;
         const double HealthPotionRegen = 10.0;
@@ -330,10 +330,16 @@ namespace JOSJA_Game
 
             while (isMoving && isInGame)
             {
-                if (currentLevel == "enemyEncounter")
+                HP(hp);
+
+                if (currentLevel == "enemyEncounter" && hp > 0)
                 {
                     isFighting = true;
 
+                }
+                else
+                {
+                    isFighting = false;
                 }
 
                 //this big block is for all of the information at the top of the screen
@@ -595,7 +601,7 @@ namespace JOSJA_Game
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
 
-                if (enemyHP > 0)
+                if (enemyHP > 0 && hp > 0)
                 {
                     EnemyAIReaction(previousAction);
 
@@ -619,7 +625,7 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(78, 19);
                         Console.Write("ENTER 3");
                     }
-                    else if (hp > 0)
+                    else if (hp > 0 && currentLevel == "enemyEncounter")
                     {
                         Console.SetCursorPosition(31, 18);
                         Console.Write("WHEN READY");

@@ -440,10 +440,7 @@ namespace JOSJA_Game
                         {
                             Chests[2] = Interaction(Chests[2]);
                         }
-                        else if (currentLevel == "level4" && x == 46 && y == 10 && Inventory.ContainsValue(Items[26]))
-                        {
-                            GameEnd(false);
-                        }
+                        
                         else if (currentLevel == "level5" && x == 46 && y == 6)
                         {
                             Chests[3] = Interaction(Chests[3]);
@@ -1058,21 +1055,23 @@ namespace JOSJA_Game
                         Console.SetCursorPosition(105, 15);
                         Console.Write('?');
                     }
-                    if (x == 46 && y == 10) //Portal and end game
+                    if (x == 46 && y == 10) // Player is on the portal coordinates
                     {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("It looks like a broken portal, maybe if its fixed you could use it to get out of this place...");
-                        Console.BackgroundColor = ConsoleColor.Black;
-                    }
-                    else if (x == 46 && y == 10 && Inventory.ContainsValue(Items[17])) //Portal and end game
-                    {
-                        Console.SetCursorPosition(23, 9);
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Your Portal Component fits! Enter 'i' to interact.");
-                        Console.BackgroundColor = ConsoleColor.Black;
-
-                        GameEnd(false);
+                        if (!Inventory.ContainsValue(Items[26])) // Portal is broken
+                        {
+                            Console.SetCursorPosition(23, 9);
+                            Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            Console.WriteLine("It looks like a broken portal, maybe if its fixed you could use it to get out of this place...");
+                            Console.BackgroundColor = ConsoleColor.Black;
+                        }
+                        else // Portal is fixed
+                        {
+                            Console.SetCursorPosition(23, 9);
+                            Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            Console.WriteLine("Your Portal Component fits! Press 'E' to escape.");
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            GameEnd(false);
+                        }
                     }
                     else
                     {
@@ -1291,7 +1290,7 @@ namespace JOSJA_Game
             int inventorySlot = -1;
             int newItem = interactionID;
             string itemName = Items[interactionID];
-            if (interactionID >= 17 && interactionID <= 25 )
+            if (interactionID >= 17 && interactionID <= 25 || interactionID == 3)
             {
                 for (int slot = 1; slot <= InvisibleInventory.Count; slot++)
                 {
@@ -1930,13 +1929,13 @@ namespace JOSJA_Game
                 Console.SetCursorPosition(23, 10);
                 Console.Write(": ");
 
-                string input = Console.ReadLine().ToLower();
+                string input = Console.ReadLine().ToUpper();
                 if (input.Length > 0)
                 {
                     playerInteract = Convert.ToChar(input.Substring(0, 1));
                 }
 
-                if (playerInteract == 'i')
+                if (playerInteract == 'E')
                 {
                     Console.Clear();
                     Console.WriteLine("This is the end of the game. Press [ENTER] to proceed.");

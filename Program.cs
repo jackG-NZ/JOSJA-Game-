@@ -1200,9 +1200,9 @@ namespace JOSJA_Game
                         {
                             Console.SetCursorPosition(31, 9);
                             Console.BackgroundColor = ConsoleColor.DarkBlue;
-                            Console.WriteLine("There's a strange gap in the wall.");
+                            Console.WriteLine("It looks like he dropped something.");
                             Console.SetCursorPosition(31, 10);
-                            Console.WriteLine("Press E to get a closer look...");
+                            Console.WriteLine("Press E to pick it up.");
                             Console.BackgroundColor = ConsoleColor.Black;
                         }
                         else
